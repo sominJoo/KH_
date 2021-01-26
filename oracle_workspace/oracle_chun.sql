@@ -76,3 +76,4 @@ order by student_name;
 
 
 select * from tb_student;
+select * from tb_department;
