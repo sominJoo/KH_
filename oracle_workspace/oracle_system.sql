@@ -28,3 +28,12 @@ select * from dba_users;
  --생성, 연결 한번에 부여
  grant connect,resource to kh;
  
+ 
+ 
+ --chun 계정생성(실습용)
+ create user chun
+ identified by chun
+ default tablespace users;
+ 
+ grant connect, resource to chun;
+ 
