@@ -73,3 +73,6 @@ where absence_yn = 'N'                --재학생여부
     and instr(student_no,'A2') >0     -- 학번에 'A2'가 들어가는지 검사 들어가면 index값 출력되므로 0이상임
     and instr(student_address, '전주')>0 -- 학번과 마찬가지 방법
 order by student_name;
+
+
+select * from tb_student;
