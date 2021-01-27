@@ -37,3 +37,10 @@ select * from dba_users;
  
  grant connect, resource to chun;
  
+ 
+ --권한부여 확인
+ --DataDictionary db의 각 객체에 대한 메타정보를 확인할 수 있는 read only
+ select *
+ from dba_sys_privs
+ where grantee in ('CONNECT','RESOURCE');
+ 

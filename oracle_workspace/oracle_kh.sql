@@ -649,4 +649,102 @@ SELECT max(salary), min(salary)
 from employee;
 
 
+--===================================
+--GROUP BY
+--===================================
+--group by 구문 없이는 전체를 하나의 구룹으로 취금
+--group by 절에 명시한 컬럼만 select에 사용가능
+
+
+--부서코드별 사원수 조회
+select nvl(dept_code,'intern') 부서코드,
+    count(*) 사원수,
+    to_char(sum(salary),'fmL9,999,999,999') 급여합계,
+    to_char(trunc(avg(salary),1), 'fmL9,999,999,999.0') 급여평균
+from employee
+group by dept_code
+order by dept_code;
+
+--성별 인원수, 평균 급여 조회
+select  decode(substr(emp_no, 8, 1), '1', '남','3','남','여') 성별, 
+         count(*) 인원수,
+         to_char(trunc(avg(salary),1), 'fmL9,999,999,999.0') 급여평균
+from employee
+group by decode(substr(emp_no, 8, 1), '1', '남','3','남','여');
+
+
+
+--===================================
+--having
+--===================================
+
+select job_code, count(*)
+from employee
+group by job_code
+having count(*) >= 3
+order by job_code;
+
+
+select * from employee;
+
+--관리하는 사원이 2명이상인 manager의 아이디와 관리하는 사원수
+select manager_id, count(manager_id)
+from employee
+group by manager_id having count(manager_id) >=2;
+
+
+
+--role up
+--group by 절에 사용하는 함수
+--그룹핑결과에 대해 소계를 제공
+
+--rollup : 지정컬럼에 대해 단방향 소계
+--cube : 지정컬럼에 대해 양방향 소계
+--지정컬럼이 하나인 경우 rollup, cube 결과가 같다.
+
+select dept_code, count(*)
+from employee
+group by rollup(dept_code) -- cube(dept_code)
+order by 1;
+
+--grouping()
+-- 실제데이터 0 retrun | 집계데이터 1  컬럼을 구분하는 함수
+
+
+--두개이상 컬럼을 rollup|cube에 전달하는 경우
+select dept_code, job_code, count(*)
+from employee
+group by rollup(dept_code, job_code)
+order by 1,2;
+
+
+
+--=================================
+--JOIN
+--=================================
+--relation 만들기
+--가로방향 합치기 : join
+--세로방향 합치기 : union
+select *
+from employee e join department d
+    on e.dept_code = d.dept_id;
+    
+    
+--join 종류
+--1.EQUI-JOIN : 동등비교조건에 의한조인
+--2.NON-EQUI-JOIN : 동등비교조건이 아닌 조인(between, in, not in, !=)
+
+--join 문법
+--1. ANSI 표준문법 : 모든 DBMS 공통문법
+--2. Vendor별 문법 : DBMS별로 지원하는 문법. 오라클 전용문법
+
+
+
+
+
+
+
+
+
+
 
