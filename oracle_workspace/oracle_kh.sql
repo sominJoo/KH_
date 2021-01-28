@@ -738,13 +738,125 @@ from employee e join department d
 --1. ANSI 표준문법 : 모든 DBMS 공통문법
 --2. Vendor별 문법 : DBMS별로 지원하는 문법. 오라클 전용문법
 
+select E.emp_name,
+     J.job_code,
+     J.job_name
+from employee E join job J
+    on E.job_code = J.job_code;
+    
+--기준 컬럼명이 좌우 테이블에서 동일하다면 on대신 using 사용가능
+--using 사용경우 해당 컬럼에 별칭 사용 불가 (E.job_code 불가. ORA-25154: column part of USING clause cannot have qualifier)
+select job_code
+from employee E join job J
+    using(job_code);        --on 사용시 job_code 2개 column 생성되지만, using은 공통된컬럼이 되면서 1개만생성 => 별칭 사용불가
+    
+    
+/*
+euqi-join 종류
+1. inner join : 교집합
+2. outer join : 합집합
+    -left outer join : 좌측테이블 기준 합집합
+    -right outer join  : 우측테이블 기준 합집합
+    -full outer join : 양테이블 기준 합집합
+3. cross join 
+    두테이블간 조인할 수 있는 최대 경우의 수를 표현
+4. self join 
+    같은 테이블의 조인
+5. multiple join
+    3개이상테이블조인
+*/
 
 
+-------------------------------------------
+--INNER JOIN
+-------------------------------------------
+--A (inner) join B : 기본 join
+--1. 기준컬럼값이 null인경우, 결과집합에서 제외
+--2. 기준컬럼값이 상대 테이블에 존재하지 않는 경우, 결과 집합에서 제외.
+
+select count (*)
+from employee E join department D
+    on e.dept_code = d.dept_id; --emp에서 dept_code가 null 행 제외(인턴)
+    
+-------------------------------------------
+--OUTER JOIN
+-------------------------------------------
+--1. A left (inner) join B 
+--좌측테이블 기준. 좌측테이블 모든 행이 포함, 우측테이블에는 on조건절에 만족하는 행만 포함
+--24 = 22+2
+select *
+from employee E left outer join department D
+    on e.dept_code = d.dept_id;     -- e.dept_code에서 null데이터가 제외된게 아니라 null데이터가 dept_id에 포함되지 않아서 제외
+    
+--2. A right (inner) join B :
+--우측테이블 기준. 우측테이블 모든 행이 포함, 좌측테이블에는 on조건절에 만족하는 행만 포함
+--25 =22+3(right)
+select *
+from employee E right outer join department D
+    on e.dept_code = d.dept_id;     -- e.dept_id에서 null데이터가 제외된게 아니라 null데이터가 dept_code에 포함되지 않아서 제외
+
+--3. full (outer)join
+-- 완전조인. 좌우 테이블 모두 포함
+select *
+from employee E right outer join department D
+    on e.dept_code = d.dept_id;
+    
+-------------------------------------------
+--CROSS JOIN
+-------------------------------------------
+--상호조인. ON조건절없이, 좌측테이블 행, 우측테이블 행이 연결될 수 있는 모든 경우의 수를 포함한 결과 집합
+select *
+from employee E cross join department D;
+
+--일반컬럼, 그룹함수 결과를 함께 조회
+
+from emoployee e cross join ( select trunc(avg(salary)) from employee ) A;
 
 
+-------------------------------------------
+--SELF JOIN
+-------------------------------------------
+--조인시 같은 테이블을 좌/우측 테이블로 사용.
+
+--사번, 사원명, 관리자 사번, 관리자명 조회
+select *
+from employee E1 join employee e2
+    on e1.manager_id = e2.emp_id;
+    
+    
+-------------------------------------------
+--MULTIPLE JOIN
+-------------------------------------------
+--한번에 좌우 두테이블 씩 조인하여 3개이상의 테이블을 연결
+select *
+from employee e join department d
+    on e.dept_code = d.dept_id
+    join location L
+    on d.location_id = l.local_code;
 
 
+--직급이 대리, 과장이면서 asia지역에 근무하는 사원 조회
+select e.emp_id 사번, 
+       e.emp_name 이름, 
+       j.job_name 직급명,
+       d.dept_title 부서명,
+       e.salary 급여,
+       l.local_name 근무지역,
+       n.national_name 국가
+from employee e 
+    join department d
+      on e.dept_code = d.dept_id
+    join location l
+      on d.location_id = l.local_code
+    join job j
+      on e.job_code = j.job_code
+    join nation n
+      on l.national_code = n.national_code
+where j.job_name in('대리','과장') and
+      instr(l.local_name,'ASIA')>0
+order by e.emp_id;
 
-
-
-
+select * from employee;
+select * from job;
+select * from location;
+selction
