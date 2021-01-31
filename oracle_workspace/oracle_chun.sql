@@ -89,4 +89,37 @@ select * from tb_department;
 --4. 학과별로 과목을 구분했을때, 과목구분이 "전공선택"에 한하여 과목수가 10개 이상인 행의 학과번호, 과목구분(class_type), 과목수를 조회(전공선택만 조회)
 
 
+select department_no, class_type, count(*)
+from tb_class
+where class_type ='전공선택'
+group by department_no, class_type
+having count(*) >= 0;
+
+select *
+from tb_student s join tb_professor p
+    on s.coach_professor_no = p.professor_no;
+
+--담당교수 담당학생이 배정되지 않은 학생이나 교수 제외 inner
+--담당교수가 배정되지 않는 학생포함 left
+--담당학생이 없는 교수 포함 right
+--1. 교수 배치를 받지않은 학생조회
+select count(*)
+from tb_student
+where coach_professor_no is null;
+
+--2. 담당학생이 한명도 없는 교수
+--전체 교수 수(상황파악)
+select count(*) from tb_professor;
+
+--중복없는 담당교수 수(상황파악) - 담당교수 없는 학생이 1명 있음
+select count(distinct coach_professor_no)
+from tb_student;
+
+
+
+
+
+
+
+
 
