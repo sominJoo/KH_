@@ -1,1755 +1,937 @@
---==================================
---kh 계정
---==================================
-show user;
+select * from emp_bck;
 
---table sample 생성
-create table sample(
-    id number
+
+--modify 컬럼
+--자료형, 기본값, null 여부 변경 가능
+alter table tb_alter
+MODIFY name varchar2(500) default '홍길동' null;
+
+
+--행이 있다면, 변경 시 제한
+--존재하는 값보다는작은 크기로 변경 불가.
+--null값이 있는 컬럼을 not null로 변경 불가.
+
+--modify 제약조건은 이름 외 변경 불가. => 제약조건 삭제 후 재생성
+
+--rename 컬럼
+alter table tb_alter
+rename CONSTRAINT PK_TB_ALTER_NO to pk_tb_alter_num;
+
+--drop 컬럼
+alter table tb_alter
+drop column name;
+
+--drop 제약조건
+alter table tb_alter
+drop constraint pk_tb_alter_num;
+
+--테이블 이름 변경
+alter table tb_alter
+rename to tb_alter_new;
+
+rename tb_alter_new to tb_alter_all_new;
+
+
+
+-----------------------------------
+--DROP
+-----------------------------------
+--데이터베이스 삭제
+DROP TABLE TB_ALTER;
+
+
+
+--=====================================================
+--DCL
+--=====================================================
+--데이터 제어 언어
+--권한 부어/회수 관련 명렁어 : GRANT/ REVOKE
+--TCL(COMMIT, ROLLBACK, SAVEPOINT)를 포함
+
+--qwerty 계정생성 -system 관리자 계정으로 진행
+create user qwerty
+identified by qwerty
+default tablespace users;
+
+--접속 권한 부여
+--create session 권한 또는 connect roll을 부여
+grant connect to qwerty;
+
+
+grant RESOURCE to qwerty;
+
+--권한, 롤을 조회
+select *
+from user_sys_privs; --권한
+
+select *
+from user_role_privs; --롤
+
+select *
+from role_sys_privs; --부여받은 롤에 포함된 권한
+
+
+--커피테이블 생성
+create table tb_coffee(
+    cname varchar2(100),
+    price number,
+    brand varchar2(100),
+    
+    CONSTRAINT pk_cname primary key(cname)
 );
 
---사원 테이블 관리
-SELECT * FROM employee;
---부서테이블
-select * from department;
---직급테이블
-select * from job;
---지역테이블
-select * from location;
---국가테이블
-select * from nation;
---급여테이블
-select * from sal_grade;
 
-select JOB_NAME from job where job_code =(SELECT JOB_CODE FROM employee WHERE EMP_NAME = '송종기');  
+insert into tb_coffee
+values ('maxim',2000,'동서식품');
+insert into tb_coffee
+values ('kanu',3000,'동서식품');
+insert into tb_coffee
+values ('nescafe',2500,'네슬레');
 
---테이블 명세
---컬럼명 널여부 자료형
-DESCRIBE employee;
-DESC employee;
+select * from tb_coffee;
 
---===================================
---DATA TYPE
--- 1.문자형 : varchar, char
--- 2.숫자형 : number
--- 3.날짜,시간형 : date
---===================================
-
-
---===================================
---문자형
---===================================
---가변형 varchar2(byte) : 최대 4000바이트까지
--- varchar2(10) 'korea'(영소문자는 글자당 1byte이므로 실제 5byte => 가변형이므로 5byte로 저장됨)
---              '안녕'(한글은 글자당 3바이트이므로 실제 크기 6바이트 저장 => 가변형이므로  6byte로 저장됨)
-
---고정형 char(byte) : 최대 2000바이트까지
---  chara(10) 'korea'(영소문자는 글자당 1byte이므로 실제 5byte => 고정형이므로 10byte로 저장됨)
---            '안녕'(한글은 글자당 3바이트이므로 실제 크기 6바이트 저장 => 고정형이므로 10byte로 저장됨)
---고정형, 가변형 모두 지정한 크기 이상의 값은 추가할 수 없다.
---가변형 long : 최대 2GB까지
-
---LOB타입 (large Object) 중의 CLOB(character LOB)는 단일 컬럼 최대 4GB까지 지원함
-create table tb_datatype(
-    a char(10),
-    b VARCHAR2(10)
-);
-
-select * from tb_datatype;
-
-insert into tb_datatype(a,b) VALUES('hello', 'hello');
-
-insert into tb_datatype(a,b) VALUES('안녕', '안녕');
-
---데이터 변경(insert,delete,update)되는 경우 메모리상에서 먼저 처리된다 => commit을 통해 실제 database에 적용해야한다.
 commit;
 
---lengthb(컬럼명): number - 저장된 데이터의 실제 크기를 리턴
-select a, lengthb(a), b, lengthb(b) from tb_datatype;
 
+--qwerty계정에서 열람가능하도록 권한 부여
+grant select on tb_coffee to qwerty;
 
-insert into tb_datatype(a,b) VALUES('바보', '똥개');
+--수정권한 부여
+grant insert, update on tn_coffee to qwerty;
 
-
-
-
---===================================
---숫자형
---===================================
--- 정수, 실수를 구분하지 않는다.
--- number(p,s)
--- p: 표현가능한 전체 자리수
--- s: p중 소수점 이하 자리수
-
---값 1234.567
-/*
- number           1234.567
- number(7)        1234
- number(7,1)      1234.6 --반올림
- number(7,-2)     1200   --반올림
-*/
-
-create table tb_datatype_number(
-    a NUMBER,
-    b NUMBER(7),
-    c NUMBER(7,1),
-    d NUMBER(7,-2)
-);
-
-select * from tb_datatype_number;
-
-insert into tb_datatype_number VALUES(1234.567,1234.567,1234.567,1234.567);
-
-ROLLBACK;   --마지막 commit 시점 이후 변경사항을 취소 (commit한건 못지움)
-
-
-CREATE TABLE tb_datatype_date( 
-    a date,
-    b timestamp
-);
-
-
---to_char 날짜 숫자를 문자열로 표현
-select to_char(a, 'yyyy/mm/dd hh24:mi:ss') as a, b from tb_datatype_date;
-insert into tb_datatype_date values (sysdate,systimestamp);
-
-
--- 날짜형 - 날짜형 = 숫자(하루)
--- 날짜형 +(-) 숫자(하루) = 날짜형
-select to_char(a, 'yyyy/mm/dd hh24:mi:ss') as a, 
-       to_char(a-1, 'yyyy/mm/dd hh24:mi:ss') as a1, --하루 전 
-       b from tb_datatype_date;
-
-select sysdate-a from tb_datatype_date;
-
-select to_date('2021/01/23')-a as a from tb_datatype_date;
-
---dual 가상테이블
-select(sysdate +1)-sysdate from dual;
-
---data Query Language 데이터 조회를 위한 언어
---select
---쿼리 조회결과를 resultSet(결과 집합)라고 하며, 0행 이상을 포함
-
---from 절에 조회하고자 하는 테이블명시
---where 절에 의해 특정행을 filtering 기능 
---select절에 의해 컬럼을 filtering 또는 추가기능
---order by절에 의해 행 정렬
-
-/*
-select 컬럼명 -5
-from 테이블명 -1
-where 조건절 -2
-group by 그룹기준 컬럼-3
-having 그룹 조건절-4
-order by 정렬기준-6
-*/
-
-select *
-from employee;
-
-
---1. job table에서 job_name만 출력
-select job_name from job;
-
---2. department table에서 모든 컬럼 출력
-select * from department;
-
---3. employee table 에서 이름, 이메일,전화번호 입사일 출력
-select emp_name, email, phone, hire_date from employee;
-
---4. employee table에서 급여서 2,500,000이상인 사원 이름과 급여 출력
-select emp_name, salary from employee where salary >= 2500000;
-
---5.employee table에서 급여가 3,500,000이상이면서 직급코드가 'J3'인 사원 조회
-select * from employee where (salary>=3500000 and job_code = 'J3');
-
---6. employee table에서현재 근무중인 사원을 이름 오름차순으로 정렬
-select * from employee where quit_yn ='N' ORDER BY emp_name asc;
-
+--회수
+revoke insert, update on tn_coffee from qwerty;
 
 
 
 --===================================
--- 별칭 : 공백, 특수문자, 숫자로 시작하는 경우는 쌍따옴표 필수
---      : as와 쌍따옴표 생략가능
-
-
---nvl(col, null일때 값) : null 처리 함수, col이 null이 아니면 col값 리턴
---    : col이 null이면 (null일때 값)을 리턴
-select bonus, nvl(bonus,0)
-from employee;
---실급여 : salary +(salary*bonus)
-select emp_name,
-    salary,
-    bonus,
-    salary+(salary*nvl(bonus,0)) --bonus가 null이면 bonus 0으로 처리
-from employee;
-
-
---distinct 중복 제거용
---select절에 한번만 사용된다.
---여러 컬럼 사용 시 컬럼을 묶어서 고유한 값으로 처리
-select distinct job_code,dept_code from employee;
-
-
---문자연결 연산자 : ||
---  + 는 산술연산만 가능하다.
-select '안녕' || '하세요' ||123 as 인사말
-from dual;
-
-
---=================================================
--- where
---=================================================
---테이블의 모든 행 중 결과 집합에 포함될 행을 필터링한다.
---특정행에 대해 true | false 결과를 리턴한다.
-
-/*
-=               : 같은것
-!=, ^=, <>      : 다른것
-between, and    : 범위연산
-like, not like  : 문자패턴 연산
-is null, is not null : null여부
-in, not in           : 값 목록에 포함 여부
-
-and 
-or
-not     제시한 조건의 반전
-*/
-
-select email
-from employee
-where email like '___\_%' escape '\';
-
-
-select emp_name, dept_code
-from employee 
-where dept_code in ('D6','D8');
-
-
-select emp_name, dept_code
-from employee 
-where dept_code not in ('D6','D8');        -- where dept_code !='D6' and dept_code !='D8';
-
-
---인턴사원 조회
---null값은 산술, 비교 연산 불가능
-select emp_name, dept_code
-from employee
---where dept_code =null;
-where dept_code is null; --(is not null)
-
-
-
---D6, D8부서원이아닌 사원조회(인턴사원 포함)
-select emp_name, dept_code
-from employee
-where dept_code not in('D6','D8') or dept_code is null;
---nvl버전
-select emp_name, dept_code
-from employee
-where nvl(dept_code,'D0') not in('D6','D8');
-
-
-
---=========================================
---ORDER BY
---=========================================
---select 구문 중 가장 마지막에 처리
---지정한 컬럼 기준으로 결과 집합을 정렬
---number 0<10;
---string ㄱ<ㅎ,  a<z
---date 과거<미래
---asc 생략가능(오름차순)
---desc 내림차순
-
-
-
---=========================================
---FUNCTION
---=========================================
---일련의 실행 코드를 작성해두고 호출해서 사용함.
---리턴값이 무조건 존재함
-
---1.단일행 함수  : 각행마다 반복 호출되어서 호출된 수만큼의 결과를 리턴
---  a. 문자처리함수
---  b. 숫자처리함수
---  c. 날짜처리함수
---  d. 형변환 함수
---  e. 기타함수
-
---2.그룹함수    : 여러행을 그룹핑한 후 그룹당 하나의 결과를 리턴
-
-
-------------------------------------------------
---단일행함수
-------------------------------------------------
-
---**********************************************
--- a. 문자처리함수
---**********************************************
-
---문자열 길이 리턴 :length
-
---lengthb(col) : 값의 byte 수 리턴
-select emp_name, lengthb(emp_name) from employee;
-
-
---instr(string, search, position, occurence)
---string에서 search가 위치한 index 반환
---oracle에서는 index가 1에서부터 시작. 1부터 시작
-select instr('kh정보교육원 국가정보원 정보문화사','정보'),    -- 3(index 위치)
-       instr('kh정보교육원 국가정보원 정보문화사','안녕'),    -- 0(값없음)
-       instr('kh정보교육원 국가정보원 정보문화사','정보',5),  -- 11(5번지 부터 시작해서 '정보'가 있는 인덱스까지 )
-       instr('kh정보교육원 국가정보원 정보문화사','정보',1,3), -- 15(3번째 '정보'가 찾아지는 index)
-       instr('kh정보교육원 국가정보원 정보문화사','정보',-1)     -- 11(postion이 음수면 뒤에서부터 시작)
-from dual;
-
---email 컬럼값 중 '@'의 위치는:
-select email, instr(email,'@') from employee;
-
---substr(String, startIndex, length)
---string에서 startIndex부터 length개수만큼 잘라내어 리턴
---startIndex 음수면 뒤에서 출력
---length 생략시에는 문자열 끝까지 반환
-select substr('show me the moneu',6,2)
-from dual;
-
-
---@실습 : 사원명에서 성(1글자로 가정)만 중복없이 사전순으로 출력
-select DISTINCT  substr(emp_name,1,1) as 성
-from employee
-order by 성 asc;
-
---lpad|rpad(String, byte, padding_char)
---byte수의 공간에 String을 대입하고, 남은 공간은 padding_char를 왼쪽|오른쪽에 채울것.
---padding_char는 생략 시 공백문자
-select lpad(email,20,'#'),
-        rpad(email,20,'#'),
-        '[' || lpad(email,20,'#') || ']',
-        '[' || rpad(email,20,'#') || ']'
-from employee;
-
-
---@실습 :남자사원만 사번, 사원명, 주민번호(8번째 자리가 1이나 3), 연봉 조회
---주민번호는 뒤 6자리는 *
-select * from employee;
-select emp_id, emp_name, rpad(substr(emp_no,1,8),14,'*') ,salary
-from employee
-where substr(emp_no,8,1) in (1,3);
-
-
---**********************************************
--- b. 숫자처리 함수
---**********************************************
-
--- mod(피젯수, 젯수) : 나머지 return
--- 나머지함수, 나머지 연산자 %가 없다
-select mod(10,2) 
-from dual;
-
---입사년도가 짝수인 사원 조회
-select emp_name,
-      extract(year from hire_date) year
-from employee
-where mod(extract(year from hire_date),2) =0
---where mod(year,2)=0 불가 : year이 정의가 안되어 있음
-order by year;
-
---ceil(num) :  소수점 기준으로 반올림
-select ceil(123.456),
-       ceil(123.456*100)/100 -- 부동소수점 방식으로 처리
-from dual;
-
---floor(num): 소수점 기준으로 버림
-select floor(456.789),
-    floor(456.789*10)/10
-from dual;
-
---round(num,position) : position 기준으러(기본값 0, 소수점 기준) 반올림처리
-select round(234.567),
-       round(234.567,2),
-       round(234.567,-1)
-from dual;
-
---trunc(num,position) : 버림
-select trunc(123.456),
-       trunc(123.456,2)
-from dual;
-
-
---**********************************************
---c.날짜처리함수
---**********************************************
--- 날짜형 + 숫자 = 날짜형
--- 날짜형 - 날짜형 = 숫자
-
---add_months(date, number): date 기준으로 몇달(num) 전후의 날짜형을 리턴
-select sysdate+5,
-    add_months(sysdate,1),
-    add_months(sysdate,-1),
-    add_months(sysdate + 5,1)
-from dual;
-
---months_between(미래,과거) : 두 날짜형의 개월수 차이를 리턴.
-select sysdate,
-    to_date('2021/07/08'),
-    trunc(months_between(to_date('2021/07/08'),sysdate),1) diff
-from dual;
-
-
-
-
---이름, 입사일, 근무개월수(n개월), 근무개월수(n년 m개월) 조회
-select emp_name,
-    hire_date,
-    trunc(months_between(sysdate,hire_date)) ||'개월' as 근무개월수,
-    trunc(months_between(sysdate,hire_date)/12) ||'년' ||
-    trunc( mod(months_between(sysdate,hire_date),12) )||'개월' as 근무개월수
-from employee;
-
-
-
-
---**********************************************
---d.형변환 함수
---**********************************************
-/*
-        to_char     to_date
-        ---->       ---->
-    num      string     date
-        <----      <----
-        to_number   to_char
-*/
---trun(date) : 시분초 정보를 제외한 년원일 정보만 리턴
-select to_char(sysdate,'yyyy/mm/dd(day)'),
-    to_char(sysdate, 'fmyyyy/mm/dd(day)'),   --형식문자로 인한 앞글자 0을 제거
-    to_char(sysdate,'yyyy"년" mm"월" dd"일"')
-from dual;
-
-select to_char(1234567, 'fmL9,999,999,999') won, --L은 지역화폐 단위
-       to_char(1234567, 'fmL9,999') won, --자리수가 모자르면 오류
-       to_char(123.4, 'fm9999.99') won, --소수점이상의 빈자리는 공란, 소수점 이하 빈자리는 0처리
-       to_char(123.4, 'fm0000.00') won -- 빈자리는 0처리
-from dual;
-
---이름, 급여, 입사일 조회
-select emp_name,
-    to_char(salary, 'fm9,999,999') salary,
-    to_char(hire_date,'fmyyyy-mm-dd-(dy)') hire_date
-from employee;
-
---to_number(string, format)
-select to_number('1,234,567','9,999,999') +100,
-       to_number('￦3,000','L9,999')+100
-from dual;
-
---자동형변환 지원
-select '1000'+100,  
-    '99' +'1',
-    '99'||'1'
-from dual;
-
-
---to_date(String , format)
-select to_date('2020/09/09','yyyy/mm/dd')+1 from dual;
-
-
---2021/07/08 21:50:00의 2시간 후 정보를 출력
-select to_char(
-        to_date('2021/07/08 21:50:00','yyyy/mm/dd hh24:mi:ss')+(2/24),
-        'yyyy/mm/dd hh24:mi:ss') result
-from dual;
-
---현재시각 기준 1일 2시간 3분 4초후 날짜 정보를 출력
-select sysdate + 1 +(2/24) + (3 /(24*60)) + (4/(24*60*60))
-from dual;
-
-
---기간타입
---interval year to month : 년월 기간
--- interval date to second : 일 시 분 초 기간
-
---1년 2개월 3일 4시간 5분 6초후
-select to_char(
-    add_months(sysdate,14) +3 + (4/24) + (5/24/60) + (6/24/60/60), 'yyyy/mm/dd hh24:mi:ss')
-from dual;
-
-select to_char(
-        sysdate+to_yminterval('01-02') + to_dsinterval('3 04:05:06') )
-from dual;
-
---numtodsinterval(diff,unit)
---numtoyminterval(diff,unit)
---diff : 날짜 차이
---unit : year | month | day | hour | minute | second
-select extract(day from 
-    numtodsinterval(
-    to_date('20210708','yyyymmdd') - sysdate, 'day'))
-from dual;
-
-
-
-
-
---**********************************************
---e.기타 함수
---**********************************************
---null처리함수
--- nvl(col, nullvalue)
--- nvl2(col, notnullvalue, nullvalue) : 컬럼값이 null이 아니면 두번째 인자를 리턴, null이면 세번째 인자를 리턴
-select emp_name,
-    bonus,
-    nvl(bonus, 0) nvl1,
-    nvl2(bonus, '있음', '없음') nvl2
-from employee;
-
---선택함수 1
---decode(expr, 값1, 결과값1, 값2, 결과값2,...,기본값)
-select emp_name,
-    emp_no,
-    decode(substr(emp_no,8,1),'1','남','2','여','3','남','4','여') as 성별,
-    decode(substr(emp_no,8,1),'1','남','3','남','여') as 성별2
-from employee;
-
---J1은 대표 J2,J3은 임원 나머지는 평사원으로 출력(사원명, 직급코드, 직위)
-select * from employee;
-select emp_name,
-    job_code,
-    decode(job_code, 'J1','대표','J2','임원','J3','임원','평사원') as 직위
-from employee
-ORDER BY job_code;
-
-
---where절에서도 사용가능
---여사원만 조회
-select emp_name,
-    emp_no,
-    decode(substr(emp_no,8,1) ,'1','남','3','남','여') 성별
-from employee
-where decode(substr(emp_no,8,1) ,'1','남','3','남','여') ='여';
-
-
---선택함수2
---case
-/*
-type1(decode와 ;유사)
-
-- case 표현식
-    when 값1 then 결과 1
-    when 값2 then 결과2
-    ...........
-    else 기본값
-    end
-    
-type2
-- case
-    when 조건식1 then 결과 1
-    when 조건식2 then 결과2
-    ...........
-    else 기본값
-    end
-*/
---type1
-select emp_no,
-    case substr(emp_no, 8,1)
-        when '1' then '남'
-        when '3' then '남'
-        else '여'
-        end
-        as gender
-from employee;
-
-
---type2
-select emp_no,
-    case
-        when substr(emp_no,8,1) ='1' then '남'
-        when substr(emp_no,8,1) ='3' then '남'
-        else '여'
-        end
-        as gender,
-    case
-        when substr(emp_no,8,1) in ('1','3') then '남'
-        else '여'
-        end
-        as gender ,
-        
-    case job_code
-        when 'J1' then '대표'
-        when 'J2' then '임원'
-        when 'J3' then '임원'
-        else '평사원'
-        end jon
-from employee;
-
-
-
---=================================
--- GROUP FUNCTION
---=================================
---여러행을 그룹핑하고, 그룹당하나의 결과를 리턴하는 함수
---모든행을 하나의 그룹, 또는 GROUP BY를 통해서 세부 그룹 지정이 가능ㅎ다.
-
---SUM(COL)
-select sum(salary)
-from employee;
---그룹함수의 결과와 일반컬럼을 동시에 조회할 수 없다.
-
-
-
---avg(col) :평균
-select round(avg(salary),1) "평균",
-        to_char( round(avg(salary),1),'fm9,999,999,999') "평균2"
-from employee;
-
-
-select to_char( round(avg(salary),1),'fm9,999,999,999') "평균"
-from employee
-where dept_code ='D5';
-
-select to_char( round(avg(salary),1),'fm9,999,999,999') "평균" 
-from employee
-group by dept_code having dept_code ='D5';
-
-
---남자사원의 평균 급여
-select to_char( round(avg(salary),1),'fmL9,999,999,999') "평균" 
-from employee
-where substr(emp_no,8,1) in ('1','3');
-
-
-
---count(col)
--- null이 아닌 컬럼의 개수.  but,  * 은 null 포함 모든컬럼, 즉 하나의 행을 의미
-select count(*),
-    count(bonus),
-    count(dept_code)
-from employee;
-
-
-select sum(
-    case
-        when bonus is not null then 1
-        when bonus is null then 0
-        end
-        ) bonusman
-from employee;
-
-
---사원이 속한 부서 총수(중복 제거)
-select count(DISTINCT dept_code)
-from employee;
-
-
---max(col) | min(col)
--- 숫자, 날짜 (과거-> 미래), 문자 (ㄱ->ㅎ)
-SELECT max(salary), min(salary)
-from employee;
-
-
+--DATABASE OBJECT1
 --===================================
---GROUP BY
---===================================
---group by 구문 없이는 전체를 하나의 구룹으로 취금
---group by 절에 명시한 컬럼만 select에 사용가능
-
-
---부서코드별 사원수 조회
-select nvl(dept_code,'intern') 부서코드,
-    count(*) 사원수,
-    to_char(sum(salary),'fmL9,999,999,999') 급여합계,
-    to_char(trunc(avg(salary),1), 'fmL9,999,999,999.0') 급여평균
-from employee
-group by dept_code
-order by dept_code;
-
---성별 인원수, 평균 급여 조회
-select  decode(substr(emp_no, 8, 1), '1', '남','3','남','여') 성별, 
-         count(*) 인원수,
-         to_char(trunc(avg(salary),1), 'fmL9,999,999,999.0') 급여평균
-from employee
-group by decode(substr(emp_no, 8, 1), '1', '남','3','남','여');
-
-
-
---===================================
---having
---===================================
-
-select job_code, count(*)
-from employee
-group by job_code
-having count(*) >= 3
-order by job_code;
-
-
-select * from employee;
-
---관리하는 사원이 2명이상인 manager의 아이디와 관리하는 사원수
-select manager_id, count(manager_id)
-from employee
-group by manager_id having count(manager_id) >=2;
-
-
-
---role up
---group by 절에 사용하는 함수
---그룹핑결과에 대해 소계를 제공
-
---rollup : 지정컬럼에 대해 단방향 소계
---cube : 지정컬럼에 대해 양방향 소계
---지정컬럼이 하나인 경우 rollup, cube 결과가 같다.
-
-select dept_code, count(*)
-from employee
-group by rollup(dept_code) -- cube(dept_code)
-order by 1;
-
---grouping()
--- 실제데이터 0 retrun | 집계데이터 1  컬럼을 구분하는 함수
-
-
---두개이상 컬럼을 rollup|cube에 전달하는 경우
-select dept_code, job_code, count(*)
-from employee
-group by rollup(dept_code, job_code)
-order by 1,2;
-
-
-
---=================================
---JOIN
---=================================
---relation 만들기
---가로방향 합치기 : join
---세로방향 합치기 : union
-select *
-from employee e join department d
-    on e.dept_code = d.dept_id;
-    
-    
---join 종류
---1.EQUI-JOIN : 동등비교조건에 의한조인
---2.NON-EQUI-JOIN : 동등비교조건이 아닌 조인(between, in, not in, !=)
-
---join 문법
---1. ANSI 표준문법 : 모든 DBMS 공통문법
---2. Vendor별 문법 : DBMS별로 지원하는 문법. 오라클 전용문법
-
-select E.emp_name,
-     J.job_code,
-     J.job_name
-from employee E join job J
-    on E.job_code = J.job_code;
-    
---기준 컬럼명이 좌우 테이블에서 동일하다면 on대신 using 사용가능
---using 사용경우 해당 컬럼에 별칭 사용 불가 (E.job_code 불가. ORA-25154: column part of USING clause cannot have qualifier)
-select job_code
-from employee E join job J
-    using(job_code);        --on 사용시 job_code 2개 column 생성되지만, using은 공통된컬럼이 되면서 1개만생성 => 별칭 사용불가
-    
-    
-/*
-euqi-join 종류
-1. inner join : 교집합
-2. outer join : 합집합
-    -left outer join : 좌측테이블 기준 합집합
-    -right outer join  : 우측테이블 기준 합집합
-    -full outer join : 양테이블 기준 합집합
-3. cross join 
-    두테이블간 조인할 수 있는 최대 경우의 수를 표현
-4. self join 
-    같은 테이블의 조인
-5. multiple join
-    3개이상테이블조인
-*/
-
+--DB를 효율적으로 관리하고, 작동하게하는 단위
 
 -------------------------------------------
---INNER JOIN
+-- DATA DICTIONARY
 -------------------------------------------
---A (inner) join B : 기본 join
---1. 기준컬럼값이 null인경우, 결과집합에서 제외
---2. 기준컬럼값이 상대 테이블에 존재하지 않는 경우, 결과 집합에서 제외.
+--일반사용자 관리자로부터 열람권한을 얻어 사용하는 정보조회테이블
+--읽기전용.
+--객체 관련 작업을 하면 자동으로 그 내용이 반영.
 
-select count (*)
-from employee E join department D
-    on e.dept_code = d.dept_id; --emp에서 dept_code가 null 행 제외(인턴)
-    
--------------------------------------------
---OUTER JOIN
--------------------------------------------
---1. A left (inner) join B 
---좌측테이블 기준. 좌측테이블 모든 행이 포함, 우측테이블에는 on조건절에 만족하는 행만 포함
---24 = 22+2
-select *
-from employee E left outer join department D
-    on e.dept_code = d.dept_id;     -- e.dept_code에서 null데이터가 제외된게 아니라 null데이터가 dept_id에 포함되지 않아서 제외
-    
---2. A right (inner) join B :
---우측테이블 기준. 우측테이블 모든 행이 포함, 좌측테이블에는 on조건절에 만족하는 행만 포함
---25 =22+3(right)
-select *
-from employee E right outer join department D
-    on e.dept_code = d.dept_id;     -- e.dept_id에서 null데이터가 제외된게 아니라 null데이터가 dept_code에 포함되지 않아서 제외
-
---3. full (outer)join
--- 완전조인. 좌우 테이블 모두 포함
-select *
-from employee E right outer join department D
-    on e.dept_code = d.dept_id;
-    
--------------------------------------------
---CROSS JOIN
--------------------------------------------
---상호조인. ON조건절없이, 좌측테이블 행, 우측테이블 행이 연결될 수 있는 모든 경우의 수를 포함한 결과 집합
-select *
-from employee E cross join department D;
-
---일반컬럼, 그룹함수 결과를 함께 조회
-
-from emoployee e cross join ( select trunc(avg(salary)) from employee ) A;
+--1. user_xxx : 사용자가 소유한 객체에 대한 정보
+--2. all_xxx : user_xxx를 포함. 다른 사용자로부터 사용권한을 부여받은 객체에 대한 정보
+--3. dba_xxx : 관리자전용. 모든 사용자의 모든 객체에 대한 정보
 
 
--------------------------------------------
---SELF JOIN
--------------------------------------------
---조인시 같은 테이블을 좌/우측 테이블로 사용.
+--이용가능한 모든  DD 조회
+select * from dict; --dictionary
+select * from tabs;
+select * from users;
 
---사번, 사원명, 관리자 사번, 관리자명 조회
-select *
-from employee E1 join employee e2
-    on e1.manager_id = e2.emp_id;
-    
-    
--------------------------------------------
---MULTIPLE JOIN
--------------------------------------------
---한번에 좌우 두테이블 씩 조인하여 3개이상의 테이블을 연결
-select *
-from employee e join department d
-    on e.dept_code = d.dept_id
-    join location L
-    on d.location_id = l.local_code;
+--user_sys_privs : 권한
+--user_role_privs : 롤
+--role_sys_privs : 사용자가 가진 롤에 포함된 모든 권한
+
+--user_sequences
+--user_views
+--user_indexs
+--user_constraints
 
 
---직급이 대리, 과장이면서 asia지역에 근무하는 사원 조회
-select e.emp_id 사번, 
-       e.emp_name 이름, 
-       j.job_name 직급명,
-       d.dept_title 부서명,
-       e.salary 급여,
-       l.local_name 근무지역,
-       n.national_name 국가
-from employee e 
-    join department d
-      on e.dept_code = d.dept_id
-    join location l
-      on d.location_id = l.local_code
-    join job j
-      on e.job_code = j.job_code
-    join nation n
-      on l.national_code = n.national_code
-where j.job_name in('대리','과장') and
-      instr(l.local_name,'ASIA')>0
-order by e.emp_id;
+--all_tables
+--all_indexs
 
-select * from employee;
-select * from job;
-select * from location;
-selction
+--------------------------------
+--DBA_
+---------------------------------
 
 
---=============================
---NON-EQUI-JOIN
---=============================
+--특정사용자의 테이블 조회
 select * 
-from employee E
-    join sal_grade s
-        on e.salary between s.min_sal and S.max_sal;
-        
--- 조인 조건절에 따라 1행이 여러행이 연결된 결과를 얻을 수 있다.
+from dba_tables
+where owner in ('KH', 'QWERTY');
+
+--특정사용자의 권한 조회
 select *
-from employee E 
-    join department D
-      on e.dept_code != d.dept_id;
-      
-      
-      
---================================
---SET OPERATOR
---================================
--- 집합 연산자 : 개체를 컬럼수가 동일하다는 조건하에 상하로 연결한 것.
--- SELECT 절의 컬럼수가 동일.
---컬럼별 자료형이 상호호환이 가능해야한다(문자형끼리 가능, 날짜형+문자형 => ERROR)
---컬럼영이 다른 경우, 첫번째 개채의 컬럼명을 결과집합에 반영
+from dba_sys_privs
+where grantee = 'KH';
 
---UNION 합집합
---UNION ALL 합집합
---INTERSECT 교집합
---MINUS 차집합
+select *
+from dba_role_privs
+where grantee = 'KH';
+
+--테이블 관련 권한 확인
+select *
+from dba_tab_privs
+where owner = 'KH';
+
+--관리자가 kh.tb_coffee 읽기 권한을 qwerty에게 부여
+grant select, insert, update, delete on kh.tb_coffee to qwerty;
 
 
-----------------------------------------
---UNION | UNION ALL
-----------------------------------------
--- A: D5  부서원의사변, 사원명, 부서코드, 급여
-select emp_id, emp_name, dept_code, salary
+-----------------------------------------------
+-- STORED VIEW
+-----------------------------------------------
+-- 저장뷰.
+-- inlineview는 일회성이었지만, 이를 객체로 저장해서 재사용이 가능.
+-- 가상테이블처럼 사용하지만, 실제로 데이터를 가지고 있는 것은 아니다.
+-- 실제 테이블과 링크개념.
+
+-- 뷰객체를 이용해서 제한적인 데이터만 다른 사용자에게 제공하는 것이 가능하다.
+-- create view 권한을 부여 받아야한다.
+
+--옵션
+--1. 실제 컬럼 뿐 아니라 가공된 컬럼 사용가능
+--2. join 사용 가능
+--3. or replace 사용가능
+--4. with read only 옵션 : insert,update등 dml명령어 사용 불가
+
+
+
+create OR replace view view_emp
+as
+select emp_id, 
+        emp_name,
+        substr(emp_no, 1, 8) || '******' emp_no,
+        email,
+        phone,
+        d.dept_title
+from employee e 
+    left join department d
+        on e.dept_code = d.dept_id
+with read only;
+
+--view 생성 권한 부여(system 계정에서 부여해줌)
+grant create view to kh;
+
+select * from view_emp;
+
+
+--성별,나이 등 복잡한 연산이 복잡하고 필요한 것을 미리 view로 지정해두면 편하다.
+create or replace view view_employee_all
+as
+select E.*,
+    decode(substr(emp_no,8,1),'1','남','3','남','여') gender
+from employee e;
+
+select * from view_employee_all where gender ='여';
+
+
+
+
+
+--------------------------------------------
+--SEQUENCE
+--------------------------------------------
+--정수값을 순차적으로 자동생성하는 객체.
+
+/*
+create sequence 시퀸스명
+
+start with 시작값 ------------기본값
+increment by 증가값 ----------기본값
+maxvalue 최대값 | nomaxvalue ---- 기본값은 nomaxvalue. 
+                                최대값 도달 시 다시 시작값을 혹인 에러 유말
+minvalue 최소값 | nominvalue ---- 기본값은 nominvalue. 
+                                 최소값 도달 시 다시 시작값을 혹인 에러 유말    
+cycle | no cycle ----------------순환여부. 기본갑 nocycle
+cache 캐싱개수 | nocaeche---------기본값 cache 20. 시퀸스 객체로 부터 20개씩 가져와서 ㅔㅁ모리에 채번
+                                 
+*/
+
+create table tb_names(
+    no number,
+    name varchar2(100) not null,
+    constraints pk primary key(no)
+);
+
+
+create sequence seq_tb_names_no
+start with 1000
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+cache 20;
+
+insert into tb_names
+values(seq_tb_names_no.nextval,'j');
+select * from tb_names;
+
+
+--복합 문자열에 시퀸스 사용
+--주문번호 kh-2020-01000
+create table tb_order(
+    order_id varchar2(50),
+    cnt number,
+    constraints pk_order_id primary key(order_id)
+);
+
+select * from tb_order;
+
+
+create sequence seq_order_id;
+
+insert into tb_order
+values('kh-' ||to_char(sysdate,'yyyymmdd') ||'-' || to_char(seq_order_id.nextval,'fm0000'), 100);
+
+--alter문을 통해 시작값 start with값은 절대 변경 불가 => 시퀸스객체 삭제 후 재생성 필요
+
+
+
+
+----------------------------------
+--index
+----------------------------------
+--색인
+--sql문 처리 속도 향상을 위해 컬럼에 대해 생성하는 객체
+--key : 컬럼값, values :레코드의 논리적 주소값 rowid
+
+--장점
+--검색속도 향상. 시스템 부하를 줄여 성능 향상
+
+--단점
+--인덱스를 위한 추가 저장공간이 필요함.
+--인덱스 생성/수정 시 별도의 시간 소요
+
+--단순조회 업무보다 변경 작업이 많다 면 index생성을 주의해야함
+
+--인덱스로 사용하면 좋은 컬럼
+--1. 선택도가 좋은컬럼. 중복 데이터가 적은 컬럼.
+--      id| 주민번호| email | 전화번호 > 이름> 부서코드 >>>>>>>>>>>>>>>성별
+--2.where절에 자주 사용되어지는 경우. 조인 기준 컬럼인 경우
+--3.입력된 데이터의 변경이 적은 컬럼.
+
+select *
+from user_indexes;
+
+--job_code 인덱스가 없는 컬럼 => table의 모든 row를 검색(full scan)
+select *
 from employee
-where dept_code = 'D5';
+where job_code ='J1'; --F10으로 실행 계획을 볼수 있음
 
---B : 급여가 300만이 넘는 사원 조회
-select emp_id, emp_name, dept_code, salary
+--emp_id 인덱스가 있는 컬럼 => unique scan by index rowid
+select *
 from employee
-where salary >3000000;
-
-
--- A UNION B : 중복 미포함    
-select emp_id, emp_name, dept_code, salary
-from employee
-where dept_code = 'D5'
-UNION
-select emp_id, emp_name, dept_code, salary
-from employee
-where salary >3000000;
---ORDER BY는 마지막 ENTITY에서만 사용 가능
-
-
--- A UNION ALL B : 중복 포함
-select emp_id, emp_name, dept_code, salary
-from employee
-where dept_code = 'D5'
-UNION ALL
-select emp_id, emp_name, dept_code, salary
-from employee
-where salary >3000000;
-      
-      
----------------------------
--- INTERSECT | MINUS
----------------------------
--- A INTERSECT B
-select emp_id, emp_name, dept_code, salary
-from employee
-where dept_code = 'D5'
-INTERSECT
-select emp_id, emp_name, dept_code, salary
-from employee
-where salary >3000000;
+where emp_id = '201';
 
 
 
-select emp_id, emp_name, dept_code, salary
-from employee
-where salary >3000000
-MINUS
-select emp_id, emp_name, dept_code, salary
-from employee
-where dept_code = 'D5';
+--========================================
+--PL/SQL
+--========================================
+--procedural laguage/sql
+--sql의 한계를 보완해서  sql문 안에서 변수 정의/조건처리/반복 처리 등 문법을 지원함
+
+--유현
+--1.익명 블럭(Anonymous Block) :P;/SQL 실행가능한 1회용 블럭
+--2.Procedure : 특정 구문을 모아둔 서브 프로그램. DB서버에 저장하고, 클라이언트에 의해 호출/ 실행
+--3.Function : 반드시 하나의 값을 리턴하는 서브 프로그램. DB서버에 저장하고, 클라이언트에 의해 호출/실행
+
+--4.TRIGGER
+--5.SCHEDULER
+
+/*
+declare     --1.변수 선언부(선택)
+
+begin       --2. 실행부 (필수) - 조건,반목,출력문....
+
+exception   --3.예외처리부(선택)
+
+end;        --4.블럭종료 선언(필수)
+/
+--종료 /에 라인 주석 금지
+*/
+
+--세션별로 설정
+--서버콘솔 출력 모드 지정 on
+set serveroutput on;
+
+begin
+    --DBMS_OUTPUT패키지의 PUT_LINE 프로시져 : 출력문
+    dbms_output.put_line('hellow PL/SQL');
+end;
+/
 
 
+--PL/SQL를 통한 사원 조회
 
-
-
---=====================================
---SUB QUERY
---=====================================
---하나의 SQL문안에 종속된 또 다른 SQL문
---존재하지 않는 값, 조건에 근거한 검색 등을 실행할 때
-
---반드시 소괄호로 묶어서 처리
---SUB QUERY 내에는 ORDER BY 문법 지원 안함.
---연산자 오른쪽에서 사용할 것. WHERE cel =()
-
---서브쿼리 조회결과가 1행 1열인 경우
-select emp_name, salary
-from employee
-where salary >(
-    select avg(salary) from employee); 
+declare
+    v_id number;
+begin
+    select emp_id
+    into v_id                --select된 emp_id를 v_id에 대입
+    from employee
+    where emp_name ='&사원명'; --사용자에게 사원명을 입력받음
     
---'차태연', '전지연'사원의 급여등급(sal_level)과 같은 사원 조회
-select emp_name 사원명,
-    job_name 직급명,
-    sal_level 급여 등급
-from employee join job using(job_code)
-where sal_level in(
-        select sal_level
-        from employee
-        where emp_name in('차태연','전지현')
-    )
-    and emp_name not in ('차태연','전지현');
+    dbms_output.put_line('사번 = ' ||v_id);
+exception
+    when no_data_found then dbms_output.put_line('해당이름을 가진 사원이 없습니다.');
+end;
+/
 
+
+----------------------------
+--변수선언/대입
+----------------------------
+--변수명 [constant] 자료형 [not null] [:= 초기값];
+
+declare
+    num constant number :=100;
+    name varchar2(100) not null := '홍길동';   --not null 사용시 초기값 지정 필수
+    result number;
+begin
+    dbms_output.put_line('num = ' ||num);
+    --num :=200;      -- constant 사 값변경 불가 / PLS-00363: expression 'NUM' cannot be used as an assignment target
+    name := '&이름';
+    dbms_output.put_line('name = ' ||name);
+end;
+/
+
+--PL/SQL 자료형
+--1.기본자료형
+--      문자형 : varchar2, char, clob
+--      숫자형 : number
+--      날짜형 : date
+--      논리형 : boolean(true|false|null)
+--2.복합자료형
+--      레코드
+--      커서
+--      컬렉션
+
+--참조형은 다른 테이블의 자료형을 차용해서 사용 가능
+--1.%type
+--2.%rowtype
+--3.record
+
+declare
+--    v_emp_name varchar2(100);
+--    v_emp_no   varchar2(100);
+    --테이블 해당컬럼 타입 지정
+    v_emp_name employee.emp_name%type;
+    v_emp_no employee.emp_no%type;
+begin
+    select emp_name, emp_no
+    into v_emp_name, v_emp_no
+    from employee
+    where emp_id = '&사번';
+    
+    dbms_output.put_line('v_emp_name = ' ||v_emp_name);
+    dbms_output.put_line('v_emp_no = ' ||v_emp_no);
+end;
+/
+
+--%rowtype: 테이블 한행을 타입으로 지정
+declare
+    v_emp employee%rowtype;
+begin
+    select*
+    into v_emp
+    from employee
+    where emp_id = '&사번';
+    
+    dbms_output.put_line('v_emp_name = ' ||v_emp.emp_name);
+    dbms_output.put_line('v_emp_no = ' ||v_emp.dept_code);
+end;
+/
+
+
+--record
+--사원명, 부서명등 존재하지 않는 컬럼 조합을 레코드로 선언
+
+declare
+    type my_emp_rec is record(
+        emp_id employee.emp_id%type,
+        emp_name employee.emp_name%type,
+        dept_title department.dept_title%type
+    );
+    my_row my_emp_rec;
+begin
+    select e.emp_id, 
+        e.emp_name, 
+        d.dept_title
+    into my_row
+    from employee e
+        left join department d
+            on e.dept_code = d.dept_id
+    where emp_id = '&사번';
+    
+    dbms_output.put_line('v_emp_name = ' ||my_row.emp_name);
+    dbms_output.put_line('v_emp_no = ' ||my_row.emp_id);
+    dbms_output.put_line('v_dept_title = ' ||my_row.dept_title);
+end;
+/
+
+
+--사원명을 입력받고 사번, 사워명, 직급명, 부서명을 참조형 변수를 통해 출력하세요
+
+declare
+    type my_emp_rec is record(
+        emp_id employee.emp_id%type,
+        emp_name employee.emp_name%type,
+        job_name job.job_name%type,
+        dept_title department.dept_title%type
+    );
+    my_row my_emp_rec;
+begin
+    select e.emp_id, 
+        e.emp_name, 
+        j.job_name,
+        d.dept_title
+    into my_row
+    from employee e
+        left join department d
+            on e.dept_code = d.dept_id
+        join job j
+            on e.job_code = j.job_code
+    where emp_name = '&사원명';
+    
+    dbms_output.put_line('v_emp_name = ' ||my_row.emp_name);
+    dbms_output.put_line('v_emp_no = ' ||my_row.emp_id);
+    dbms_output.put_line('v_dept_title = ' ||my_row.dept_title);
+    dbms_output.put_line('v_dept_title = ' ||my_row.job_name);
+end;
+/
+
+
+-------------------------------------
+--PL/SQL 안의 DML
+----------------------------------
+--이 안에서 COMMIT/ROLLBACK 트랜젝션(더 쪼갤수 없는 작업 단위) 처리까지 해줄것.
+
+create table member(
+    id varchar2(30),
+    pwd varchar2(50) not null,
+    name varchar2(100) not null,
+    constraint member_id_pk primary key(id)
+);
+
+desc member;
+
+begin
+    insert into member
+    values ('joh','12344','홍');
+    
+    --트랜젝션 처리
+    commit;
+end;
+/
+
+
+--사용자 입력값을 받아서 id, pwd, name을 새로운 행으로 추가하는 익명 블럭을 작성
+
+begin
+    insert into member
+    values ('&id','&pwd','&name');
+    
+    --트랜젝션 처리
+    commit;
+end;
+/
+
+select * from member;
+
+
+
+
+-------------------------------------
+--조건문
+-------------------------------------
+--1.if 조건식 then ---- end if;
+--2.if 조건식 then ---- else ---- end if;
+--3.if 조건식 then ---- elseif 조건식 ---- then ---- end if;
+declare
+    name varchar2(100) := '&이름';
+begin
+    if name = '홍길동' then
+        dbms_output.put_line('반갑습니다. 홍길동님');
+    end if;
+    
+    dbms_output.put_line('------------끝-------------');
+end;
+/
+declare
+    num number := '&숫자'
+begin
+    if mod(num,3) = 0 then
+        dbms_output.put_line('3배수 입력');
+    elsif mode(num,3) =1 then
+        dbms_output.put_line('3으로 나눈 나머지가 1입니다.');
+    elsif mode(num,3) =2 then
+        dbms_output.put_line('3으로 나눈 나머지가 2입니다.');
+    end if;
+    
+    dbms_output.put_line('------------끝-------------');
+end;
+/
+
+
+--사번을 입력받고, 해당사원 직급이 j1이라면 '대표' 출력
+--j2라면 '임원'
+--그외 평사원
+declare
+    v_job_code employee.job_code%type;
+begin
+    select job_code
+    into v_job_code
+    from employee
+    where emp_id = '&사번';
+    
+    if v_job_code  = 'J1' then
+        dbms_output.put_line('대표');
+    elsif v_job_code  = 'J2' then
+        dbms_output.put_line('임원');
+    else
+        dbms_output.put_line('평사원');
+    end if;
+end;
+/
 
 select * from employee;
-select * from job;
+
+--------------------------------
+--반복문
+--------------------------------
+--1. 기본 loop : 무한 반복. exit 구문 필수
+--2. while loop : 조건에 따른 반복
+--3. for loop : 지정횟수만큼 반복
+
+declare
+    n number := 0;
+begin 
+    loop
+        dbms_output.put_line(n);
+        n := n+1;
+        exit when n>50;
+    end loop;
+end;
+/
+
+--난수 출력
+declare
+   rnd number;
+   num number := 0;
+begin 
+    --start 이상, end 미만 난수
+    loop 
+        rnd := trunc(dbms_random.value(1,11)); -- 1~10사이 난수
+        num := num +1;
+        dbms_output.put_line(rnd);
+        exit when num =10;
+    end loop;
+end;
+/
+
+--while lopp
+declare
+    n number := 0;
+begin
+    while n<10 loop
+        dbms_output.put_line(n);
+        n := n+1;
+    end loop;
+end;
+/    
 
 
---직급명이 대표, 부사장이 아닌 사원 조회
-select emp_id 사번,
-    emp_name 사원명,
-    job_code 직급코드
-from employee e
-where e.job_code not in(
-        select job_code
-        from job
-        where job_name in ('대표','부사장')
-    );
+--for in loop
+--증감변수를별도로 선언하지 않아도 된다.
+--자동 증가 처리
+--reverse 1씩 감소
+begin
+    for n in 1..5 loop
+    end loop;
+end;
+/
 
 
-select emp_name 사원명,
-    dept_code 부서코드
-from employee 
-where dept_code in (
-        select d.dept_id
-        from department d JOIN location l
-            on d.location_id =  l.local_code
-        where L.local_name like 'ASIA1' 
-    );
-select * from department;
-select * from location;
 
 
------------------------------------
---다중열 서브쿼리
------------------------------------
-select emp_name
-from employee
-where(dept_code,job_code)  in (
-    select dept_code,job_code
-    from employee
-    where manager_id is null
-    );
-
---부서별 최대급여를 받는 사원 조회
-select emp_name,nvl(dept_code,'인턴'), salary
-from employee
-where (nvl(dept_code,'인턴'), salary) in (
-    select nvl(dept_code,'인턴') 부서코드
-        ,max(salary) 급여
-    from employee
-    group by dept_code
-    );
-    
-    
-    
--------------------------------------------
---상관 서브쿼리
--------------------------------------------
---상호연관 서브쿼리
---메인 - 서브쿼리간 관계
---메인쿼리 값을 서브쿼리에 전달, 서브 쿼리 수행 후 결과를 다시 메인쿼리에 반환.
-
---직급별 평균급여보다 많은 급여를 받는사원조회
-select emp_name, salary
-from employee E
-where  salary > (
-    select avg(salary)
-    from employee 
-    where job_code = e.job_code
-    );
-select * from job;
-select * from sal_grade;
 
 
---부서별 평균 급여보다 적은 급여를 받는 
-select emp_name, salary,nvl(dept_code,'인턴')
-from employee E
-where  salary < (
-    select avg(salary)
-    from employee 
-    where nvl(dept_code,'인턴') = nvl(e.dept_code,'인턴')
-    );
-    
-    
---exists : 서브쿼리에 행이 존재하면 참 
-select *
-from employee
-where 1=0; -- 거짓 : 결과행 존재 x
+---------------------------------------------
+-- FUNCTION
+---------------------------------------------
+--문자열 앞뒤에 d...b 헤드폰 씌우기 함수
+--매개변수, 리턴선언시 자료형 크기지정하지 말것.
+create or replace function db_func (p_str varchar2)
+return varchar2
+is
+    --사용할 지역변수 선언
+    result varchar2(32767);
+begin
+    --실행로직
+    result := 'd' || p_str || 'b';
+    return result;
+end;
+/
 
---행이 존재하는 서브쿼리 -> exists 참
-select *
-from employee
-where exists(
-    select *
-    from employee
-    where 1=1
-    );
-    
---관리하는 직원이 한명이라도 존재하는 관리자 사원 조회
---emp_id값이 누군가의 maager_id로 사용된다면 관리자
-select emp_id, emp_name
-from employee E
-where exists(
-    select *
-    from employee
-    where e.emp_id = ma
-    nager_id
-    );
-    
-    
---부서테이블에서 실제 사원이 존재하는 부서만 조회
-select dept_id, dept_title
-from department d
-where exists(
-    select *
-    from employee
-    where d.dept_id = dept_code
-);
---부서테이블에서 실제 사원이 존재하지 않는 부서만 조회
-select dept_id, dept_title
-from department d
-where not exists(
-    select *
-    from employee
-    where d.dept_id = dept_code
-);
-    
-    
---최대/최소값 구하기(not exists)
---가장 많은 급여를 받는 사원 조회
--- 가장 많은 급여를 받는다 : 본인보다 많은급여를 받는 사원이 존재하지 않는다.
-select *
-from employee E
-where not exists(
-    select salary
-    from employee
-    where salary > e.salary
-    );
-    
-    
---------------------------------------------------
---SCALA SUBQUERY
---------------------------------------------------
---서브 쿼리의 실행 결과가 단일행,단일 컬럼인 SELECT절에 사용된 상관 서브쿼리를 의미
+--실행
+--1. 일반 sql문
+select db_func(emp_name)
+from employee;
 
---관리자이름 조회
+--2. 익명블럭/다른 pl/sql객체에서 호출가능
+set serveroutput on;
+begin
+    dbms_output.put_line(db_func('&이름'));
+end;
+/
+
+--3. exec | execute 프로시져/함수 호출하는 명령
+var text varchar2;
+exec :text := db_func('신사임당');
+print text;
+
+--Data Dictionary에서 확인
+select * 
+from user_procedures
+where object_type = 'FUNCTION';
+
+--성별구하기 함수
+create or replace function fn_get_gender(
+    p_emp_no employee.emp_no%type
+)
+return varchar2
+is
+    gender varchar2(3);
+begin
+--    if substr(p_emp_no, 8, 1) in ('1', '3') then
+--        gender := '남';
+--    else 
+--        gender := '여';
+--    end if;
+    
+    --type1 : when 조건식을 여러개 나열
+--    case 
+--        when substr(p_emp_no, 8, 1) = '1' then
+--            gender := '남';
+--        when substr(p_emp_no, 8, 1) = '3' then
+--            gender := '남';
+--        else
+--            gender := '여';
+--    end case;
+
+    --type2 : decode와 비슷. 단하나의 계산식만 제공.
+    case substr(p_emp_no, 8, 1)
+        when '1' then gender := '남';
+        when '3' then gender := '남';
+        else gender := '여';
+    end case;
+    
+    return gender;
+end;
+/
+
 select emp_name, 
-    (
-        select emp_name
-        from employee
-        where emp_id = e.manager_id
-    ) 매니저
-from employee E;
+            fn_get_gender(emp_no) gender
+from employee;
+
+--주민번호를 입력받아 나이를 리턴하는 함수 fn_get_age를 작성하고,
+--사번, 사원명, 주민번호, 성별, 나이 조회(일반 sql문)
+create or replace function fn_get_age(p_emp_no employee.emp_no%type)
+return number
+is
+    v_birth_year number;
+    v_age number;
+begin
+    case 
+        when substr(p_emp_no, 8, 1) in ('1', '2') then v_birth_year := 1900;
+        when substr(p_emp_no, 8, 1) in ('3', '4') then v_birth_year := 2000;
+    end case;
+    v_birth_year := v_birth_year + substr(p_emp_no, 1, 2); --출생년도
     
-    
-    
-select emp_name,
-         nvl ( (
-                select dept_title
-                from department
-                where dept_id = E.dept_code
-            ),'인턴' )부서명, 
-            (
-                select job_name
-                from job
-                where job_code = E.job_code
-            ) 직급명     
-from employee E;
+    v_age := extract(year from sysdate) - v_birth_year + 1;
+    return v_age;
+end;
+/
+
+
+select emp_id,
+            emp_name,
+            emp_no,
+            fn_get_gender(emp_no) gender,
+            fn_get_age(emp_no) age 
+from employee;
 
 
 
 
+----------------------------------
+--PROCEDURE
+----------------------------------
+--일련의 작업 절차를 작성해 객체로 저장해둔것
+--함수와 달리 리턴값이 없다.
+--OUT 매개변수를 사용하면 호출부쪽으로 결과를 전달가능. 여러개의 값을 리턴하는 효과연출.
+
+--1.매개변수 X
+select *from member;
+
+create or replace procedure proc_del_member
+is
+    --지역변수 선언
+begin
+    --실행구문
+    delete from member;
+    commit;
+end;
+/
+
+--1.익명블럭 | 타 프로시져 객체에서 호출 가능
+begin
+    proc_del_member;
+end;
+/
+--2.execute 실행
+execute proc_del_member;
+
+
+
+--2.매개변수 o
+create or replace procedure proc_del_emp_by_di(
+    p_emp_id emp_copy.emp_id%type
+)
+is
+    --지역변수 선언
+begin
+    --실행구문
+    delete from emp_copy
+    where emp_id = p_emp_id;
+    commit;
+    dbms_output.put_line(p_emp_id ||'번 사원 삭제');
+end;
+/
+
+execute proc_del_emp_by_di(211);
+select * from emp_copy;
+
+
+--out 매개변수 사용하기
+--사번 전달해 사원명, 전화번호를 리턴( out매개변수)받을 수 있는 프로시저
+create or replace procedure proc_select_emp_by_id(
+    p_emp_id in emp_copy.emp_id%type,
+    p_emp_name out emp_copy.emp_name%type,
+    p_emp_no out emp_copy.emp_no%type
+)
+is
+    --지역변수 선언
+begin
+    --실행구문
+    select emp_name, emp_no
+    into p_emp_name, p_emp_no
+    from emp_copy
+    where emp_id = p_emp_id;
+end;
+/
+
+declare
+    v_emp_name emp_copy.emp_name%type;
+    v_emp_no emp_copy.emp_no%type;
+begin
+    proc_select_emp_by_id('&사번',v_emp_name,v_emp_no);
+    dbms_output.put_line('v_emp_name : '||v_emp_name);
+    dbms_output.put_line('v_emp_phone : '||v_emp_no);
+end;
+/
+
+create table job_copy
+as
+select* from job;
+
+select *from job_copy;
+
+
+--pk 제약조건, not null추가
+alter table job_copy
+add constraints pk_job_copy primary key(job_code)
+modify job_name not null;
+
+--직급정보를 추가하는 프로시져
+create or replace procedure proc_man_job_copy(
+    p_job_code in job_copy.job_code%type
+    ,p_job_name in job_copy.job_name%type
+)
+is
+    isExist job_copy.job_code%type;
+begin
+    --1. 존재여부 확인(입력하려는 job_code가 기존 table에 존재하는지..
+    select job_code
+    into isExist
+    from job_copy
+    where job_code = p_job_code;
+--2. 분기처리
+    --존재하지 않으면 insert
+    --존재하면 update
+    case 
+        when isExist is null then
+            insert into job_copy
+            values(p_job_code, p_job_name);
+        when isExist is not null then
+             update job_copy
+             set job_name = p_job_name
+             where job_code = p_job_code;
+    end case;
+    commit;
+end;
+/
+
+select * from job_copy;
 
 
 
 
 
 ---------------------------------------
---INLINE VIEW
-----------------------------------------
---from절에 사용된 서브쿼리. 가상테이블
+-- CURSOR
+---------------------------------------
+-- SQL의 처리결과 ResultSet을 가리키고 있는 포인터객체
+-- 하나이상의 row에 순차적으로 접근가능
 
---여사원의 사번, 사원명, 성별 조회
-select emp_id, emp_name, 
-    decode(substr(emp_no,8,1),'1','남','3','남','여') gender -- 처리순서 때문에 where절에 사용한 문장을 한번 더 써줘야함
-from employee
-where decode(substr(emp_no,8,1),'1','남','3','남','여') = '여';
+--1.암묵적 커서 : 모든 sql실행시 암묵적 커서가 만들어져 처리됨.
+--2.명시적 커서 : 변수로 선언 후, open~fetch~close 과정에 따라 행에 접근 가능
 
 
-select *
-from (
-    select emp_id, emp_name, 
-    decode(substr(emp_no,8,1),'1','남','3','남','여') gender
-    from employee
-)
-where gender ='여';
+declare
+     v_emp emp_copy%rowtype;
+     
+     cursor my_cursor(p_dept_code emp_copy.dept_code%type)
+     is
+     select * from emp_copy 
+     where dept_code = p_dept_code
+     order by emp_id;
+begin       
+    open my_cursor('&부서코드');
+    loop
+        fetch my_cursor into v_emp;
+        exit when my_cursor%notfound;
+        dbms_output.put_line('사번 : '|| v_emp.emp_id);        
+        dbms_output.put_line('사원명 : '|| v_emp.emp_name);  
+        dbms_output.put_line('부서명 : '|| v_emp.dept_code);
+    end loop;
+    close my_cursor;
+end;
+/
 
 
---나이가 30-50사이 여사원 조회
-select  *
-from (
-    select emp_id
-        , emp_name
-        , dept_code 
-        , extract(year from sysdate) - (decode(substr(emp_no,8,1), '1',1900,'2',1900,2000) + substr(emp_no,1,2)) +1 나이
-        , decode(substr(emp_no,8,1),'1','남','3','남','여') gender
-    from employee 
-    )
-where (나이 between 30 and 50)
-       and gender ='여';
-
-
---======================
---고급쿼리
---======================
-
----------------------------
---TOP-N 분석
----------------------------
---rownum : 테이블에 레코드 추가시 1부터 1씩 증가하면서 부여된 일련번호. 부여된 번호는 변경불가.
---        : inline view 생성시, where절 사용시 rownum 새로 부여
---rowid: 테이블 특정 레코드에 접근하기 위한 논리적 주소값
-select rownum, rowid, E.*
-from employee E;
-
---급여를 많이받는 TOP-5, 입사일이 가장 최근인 TOP-10 조회
-select *
-from (
-    select emp_name, salary
-    from employee
-    order by salary desc
-    )
-where rownum <= 5; --5까지 출력(inline view를 사용해 정렬된 data에 새로운 rownum 부여됨)
-
-select * from employee;
---입사일이 빠른 10명
-select *
-from (
-    select emp_name, salary, hire_date
-    from employee
-    order by hire_date
-    )
-where rownum <= 10; 
-
---직급이 대리인 사원중에 연봉 top 3
-select rownum, E.*
-from(
-    select e1.emp_name,
-           j.job_name,
-           (e1.salary + e1.salary*nvl(e1.bonus,0))*12 연봉
-    from employee e1 join job j
-        on e1.job_code = j.job_code
-    where j.job_name ='대리'
-    order by salary*12 desc
-)E
-where rownum <=3;
-
---부서별 평균급여 Top-3조회(순위, 부서명, 평균급여)
-select rownum, E.*
-from(
-    select d.dept_title 부서명
-        , avg(e.salary) 평균급여
-    from employee e join department d
-        on e.dept_code = d.dept_id
-    group by d.dept_title, e.salary
-    order by 평균급여 desc
-)E
-where rownum <=3;
-
-
-select E.*
-from (
-    select rownum rnum, E.*
-    from (
-        select emp_name, 
-                    hire_date
-        from employee
-        order by hire_date asc
-    ) E
-) E        
-where rnum between 6 and 10;
-
-
-/*
-select E.*
-from (
-            select rownum rnum, E.*
-            from (
-                        <<정렬된 ResultSet>>
-                    ) E
-            ) E        
-where rnum between 시작 and 끝;
-*/
-
---with구문
---inlineview서브쿼리에 별칭을 지정해서 재사용하게 함.
-with emp_hire_date_asc as (
-        select emp_name, 
-                hire_date
-        from employee
-        order by hire_date asc
-)
-select E.*
-from (
-    select rownum rnum, E.*
-    from emp_hire_date_asc E
-) E        
-where rnum between 6 and 10;
-
-
-
---==============================
---WINDOW 함수
---==============================
---1.순위함수
---2.집계함수
---3.분석함수
-/*
-WINDOW_FUNCTION(ARGS) OVER([PARTITION BY 절][ORDER BY 절][WINDOWING 절])
-
-1. ARGS :윈도우 함수 인자(0~N개) 지정
-2. PRARTITION BY : 그룹핑 기준컬럼
-3. ORDER BY절 : 정렬 기준 컬럼
-4. WINDOWING 절 : 처리할 행의 범위를 지정.
-*/
-
-
---RANK() OVER() : 순위 부여
---dense_rank() : 빠진숫자 없이 순위 지정.(동률 무시)
-select emp_name,
-    salary,
-    rank() over(order by salary desc) rank
-from employee;
-
---그룹핑에 따른 순위 지정
-select E.*
-from (
-        select emp_name,
-                    dept_code,
-                    salary,
-                    rank() over(partition by dept_code order by salary desc) rank_by_dept
-        from employee
-        ) E
-where rank_by_dept between 1 and 3;
-
-
---sum() over()
---일반컬럼과같이 사용 불가
-select emp_name
-     , dept_code
-     , sum(salary) over() "전체사원급여 합계"
-     , sum(salary) over(partition by dept_code) "부서별 급여합계"
-     , sum(salary) over(partition by dept_code order by salary) "부서별 급여누계"
-from employee;
-
-
-
---============================
---DML
---===========================
---Date Manipulation Language 데이터 조작어
---CRUD 테이블행에 대한 명령어
---INSERT, UPDATE, DELECT, SELECT(DQL)
-
-
-------------------------------
---INSERT
-------------------------------
---1.insert into 테이블 values (값1, 값2) 
---  : 모든 컬럼을 빠짐없이 순서대로 작성
---2.insert into 테이블() valuse ()
---  : 컬럼은 생략 가능
---  : not null컬럼이면서, 기본값이 없다면 생략 불가.
-
-create table dml_samle(
-    id number,
-    nick_name varchar2(100) default '홍길동',
-    name varchar2(100) not null,
-    enroll_date date default sysdate not null
-);
-
-select * from dml_samle;
-
-insert into dml_samle
-values(100,default,'신사임당',default);
-
---nullable한 컬럼은 생략 가능. 기본값 존재하면 기본값으로 적요.
---not null이면서 기본값 없으면 생략 불가
-insert into dml_samle(name) values ('신사임당'); --id는 null /nick_name은 기본값  / enroll_date는 기본값
-
---서브쿼리를 이용한 insert
-create table emp_copy
-as 
-select *
-from employee
-where 1 =2; -- 테이블 구조만 복사해서 테이블 생성(data는 없다)
-
-insert into emp_copy(emp_id, emp_name, emp_no, job_code, sal_level)(
-    select emp_id, emp_name, emp_no, job_code, sal_level
-    from employee
-);
-
---기본값 확인
-select *
-from user_tab_cols
-where table_name = 'EMP_COPY';
-
---기본값 추가
-alter table emp_copy
-modify quit_yn default 'N'
-modify hire_date default sysdate;
-
-
-
-
---insert all을 이용한 여러테이블에 동시에 데이터 추가
---서브쿼리를 이용해서 2개 이상 테이블에 데이터를 추가. 조건부 추가 가능
---입사일 관리테이블
-create table emp_hire_date
-as
-select emp_id, emp_name, hire_date
-from employee
-where 1=2;
-
-
---매니저 관리 테이블
-create table emp_manager
-as
-select emp_id, emp_name, manager_id, emp_name manager_name
-from employee
-where 1=2;
-
-select * from emp_hire_date;
-select * from emp_manager;
-
---manager_name 속성 변경(not null -> null)
-alter table emp_manager
-modify manager_name null;
-
-
---from 테이블과 to테이블의 컬럼명이 같아야한다.
-insert all
-into emp_hire_date values(emp_id, emp_name, hire_date)
-into emp_manager values(emp_id, emp_name, manager_id, manager_name)
-select e.*
-    , (select emp_name from employee where emp_id = e.manager_id) manager_name
-from employee e;
-
+--보통 for..in문을 통해 처리
+--1. open-fetch-close 작업 자동
+--2.행변수는 자동으로 선언
+declare
+     cursor
+     is
+     select * from employee;
+begin       
+   for my_row in my_cursor loop
+        dbms_output.put_line(my_row.emp_id || ' : '||my_row.emp_name);
+    end loop;
+end;
+/
 
 -------------------------------------
---UPDATE
+--TIRGGER
 -------------------------------------
---update 실행 후 행의 수에는 변화가 없다.
---0행, 1행 이상을 동시에 수정
---dml 처리된행의 수를 반환.
+--
 
-create table emp_copy2
-as
-select *
-from employee
-where 1=2;
 
-insert into emp_copy2 (select *  from employee);
 
-select * from emp_copy2;
 
-commit;
 
-update emp_copy2 set dept_code = 'D7', job_code ='J3'
-where emp_id='202';
 
-rollback;
---서브쿼리를 이용한 update
---방명수 사원의 급여를 유재식 사원과 동일하게 수정
-update emp_copy2
-set salary = (select salary from emp_copy2 where emp_name ='유재식')
-where emp_name = '방명수';
-
-
---임시환 사원의 직급을 과정, 부서를 해외영업3부로 수정
-update emp_copy2
-set job_code = (select job_code from job where job_name = '과장'), --j5
-    dept_code = (select dept_id from department where dept_title ='해외영업3부') --d7
-where emp_name ='임시환';
-
-
-
-------------------------------------------
--- DELETE
-------------------------------------------
-select * from emp_copy;
-
---delete from emp_copy
---where emp_id = '211';
-
---delete from emp_copy;
-
-
-
--------------------------------------
---TRUNCATE(DDL명령어)
--------------------------------------
---테이블 행을 자르는 명령
---자동 커밋(DDL명령어 특징 - CREATE, ALTER, DROP, TRUNCATE)
---BEFORE IMAGE 생성 작업이 없으므로, 실행속도가 빠름
-
-
-
---==========================
---DDL
---=============================
---데이터 정의어
---데이터베이스 객체를 생성/수정/삭제할 수 있는 명령어
---CREATE
---ALTER
---DROP
---TRUNCATE
---객체 종류 : TABLE, INDEX, VIEW ....
-
---주석 comment
---테이블, 컬럼에 대한 주석을 달 수 있다. (필수)
-select *
-from user_tab_comments;
-
-select *
-from user_col_comments
-where table_name = 'TBL_FILES';
-
-desc tbl_files;
---테이블 주석
-comment on table tbl_files is '파일경로테이블';
-
---컬럼 주석
-comment on column tbl_files.fileno is '파일 고유번호';
-comment on column tbl_files.filepath is '파일 경로';
-
---수정/삭제 명령은 없다.
---.... is ''; --삭제
-
---============================
---제약조건 CONSTRAINT
---============================
---테이블 생성, 수정 시 컬럼값에 대한 제약조건 설정
---데이터에 대한 무결성(INTEGRITY)을 보장하기 위한 것
---무결성은 데이터를 정확하고, 일관되게 유지하는 것
-/*
-1. NOT NULL : NULL 허용 불가
-2. UNIQUE : 중복 허용 X
-3. PK : NOT NULL + UNIQUE 레코드 식별자로 테이블당 1개 허용
-4. FK : 데이터 참조 무결성 보장. 부모테이블의 데이터만 허용
-5. CHECK : 저장가능한 값의 범위/조건을 제한
-*/
-
---제약조건 확인
---USER_CONSTRAINTS(컬럼명이 없음)
---USER_CONS_COLUMNS
-
-select *
-from user_constraints
-where table_name = 'EMPLOYEE';
-
---C : check | not null
---U : unique 
---P : pk
---R : fk
-
-select *
-from user_cons_columns
-where table_name = 'EMPLOYEE';
-
-
---제약조건 검색
-select constraint_name,
-    uc.table_name,
-    ucc.column_name,
-    uc.constraint_type,
-    uc.search_condition
-from user_constraints uc
-    join user_cons_columns ucc
-        using(constraint_name)
-where uc.table_name = 'EMPLOYEE';
-
-
--------------------------------
---NOT NULL
--------------------------------
---필수 입력 컬럼에 not null제약조건 지정.
---default값 다음에 컬럼 레벨에 작성한다.
---보통 제약조건명을 지정하지 않는다.
-create table tb_cons_nn(
-    id varchar2(20) not null, --컬럼레벨
-    name varchar2(100)
-    --테이블레벨
-);
-
-insert into tb_cons_nn values(null, '홍길동');--ORA-01400: cannot insert NULL into ("KH"."TB_CONS_NN"."ID")
-
-
-
--------------------------------
---UNIQUE
--------------------------------
---데이터값 중복를 허용하지 않음
-CREATE TABLE TB_CONS_UQ(
-    EMAIL VARCHAR2(50), 
-    NO NUMBER NOT NULL,
-    
-    --테이블 레벨
-    CONSTRAINT UQ_EMAIL UNIQUE(EMAIL)
-);
-
-
-INSERT INTO TB_CONS_UQ VALUES( 'abc@naver.com',1);
-INSERT INTO TB_CONS_UQ VALUES( '가나다@naver.com',2);
-INSERT INTO TB_CONS_UQ VALUES( 'abc@naver.com',3); --ORA-00001: unique constraint (KH.UQ_EMAIL) violated
-INSERT INTO TB_CONS_UQ VALUES(null,3);              -- null 허용
-
-
--------------------------------
---PK
--------------------------------
---레코드 식별자
---not null+ unique
-
-create table tb_cons_pk(
-    id varchar2(50),
-    name varchar2(100) not null,
-    email varchar2(200),
-    
-    constraint pk_id primary key(id),
-    constraint uq_email2 unique(email)
-);
-
-insert into tb_cons_pk
-values('h','홍길동', 'alskdf@google.com');
-
-
-insert into tb_cons_pk
-values(null,'홍길동', 'alskdf@google.com');--ORA-01400: cannot insert NULL into ("KH"."TB_CONS_PK"."ID")
-
---제약조건 검색
-select constraint_name,
-    uc.table_name,
-    ucc.column_name,
-    uc.constraint_type,
-    uc.search_condition
-from user_constraints uc
-    join user_cons_columns ucc
-        using(constraint_name)
-where uc.table_name = 'TB_CONS_PK';
-
-
-
-
---복합기본키
---여러컬럼을 조합하여 하나의 pk로 사용
---사용된 컬럼 하나라도 null이여서는 안되다.
-create table tb_order_pk(
-    user_id varchar2(50),
-    order_date date,
-    amount number default 1 not null,
-    constraint pk_user_id_order_date primary key(user_id, order_date)
-);
-
-insert into tb_order_pk
-values('h', sysdate,3);
-
-insert into tb_order_pk
-values(null, sysdate,3);    --ORA-01400: cannot insert NULL into ("KH"."TB_ORDER_PK"."USER_ID")
-
-
--------------------------------
---FK
--------------------------------
---참조무결성을 유지하기 위한 조건
---참조하고 있는 부모테이블의 지정 컬럼 값 중에서만 값을 ㅜ치할 수 있게 하는 것
---참조하고 있는 부모테이블의 지정컬럼은 Pk, uq 제약조건이 걸려있다.
---department.dept_id(pk) :부모테이블 <----------------- employee.dept_code :자식테이블
---자식테이블의 컬럼에 외래키 제약 조건을 지정한다.
-create table shop_member(
-    member_id varchar2(20),
-    member_name varchar2(30) not null,
-    constraint pk_shop_member_id primary key(member_id)
-);
-
-insert into shop_member values('hon','홍길동');
-insert into shop_member values('sin','신사임당');
-insert into shop_member values('se','세종');
-
-create table shop_buy(
-    buy_no number,
-    member_id varchar2(20),
-    product_id varchar2(20),
-    buy_date date default sysdate,
-    constraint pk_shop_buy_no primary key(buy_no),
-    constraint fk_shop_buy_member_id foreign key(member_id)
-                                        references shop_member(member_id)
-                                        on delete restricted --삭제 제한조건
-);
-insert into shop_buy values(1, 'hon','신발', default);
-insert into shop_buy values(2, 'sin','신발', default);
-insert into shop_buy values(3,'sdsfsde','세종',default); --ORA-02291: integrity constraint (KH.FK_SHOP_BUY_MEMBER_ID) violated - parent key not found
-
-
---fk 기준으로 join
--- 구매번호 회원아이디, 회원이 구매한 아이디 구매 시간
-select *
-from shop_member join shop_buy using(member_id);
-
-
---정규화 Normalization
---이상현상 방지(anormaly)
-select *
-from employee;
-
-select *
-from department;
-
---삭제 옵션
---on delete restricted : 기본값. 참조하는 자식행이 있는 경우, 부모행 삭제불가 
---on delete set null : 부모행 삭제시 자식컬럼은 null로 변경
---on delete cascade : 부모행 삭제시 자식행 삭제
-
-
-
-
-
-
---식별관계 | 비식별관계
---비식별관계 : 참조하고 있는 부모컬럼값을 PK로 사용하지 않는 경우. 여러행에서 참조가 가능(중복) 1:N관계
---식별관계 : 참조하고 있는 부모컬럼을 PK로 사용하는 경우. 부모행 - 자식행사이에 1:1관계
-
-create table shop_nickname(
-    member_id varchar2(20),
-    nickname varchar2(100),
-    constraints fk_member_id foreign key(member_id) references shop_member(member_id),
-    constraints pk_member_id primary key(member_id)
-);
-
-insert into shop_nickname 
-values('sinsa', '신솨112');
-
-select *
-from shop_nickname;
-
-
-
-
-
-
-
-
---------------------------------------
--- CHECK
---------------------------------------
---해당 컬럼의 값의 범위를 지정.
---null 입력 가능
-
---drop table tb_cons_ck
-create table tb_cons_ck(
-    gender char(1),
-    num number,
-    constraints ck_gender check(gender in ('M', 'F')),
-    constraints ck_num check(num between 0 and 100)
-);
-
-insert into tb_cons_ck
-values('M', 50);
-insert into tb_cons_ck
-values('F', 100);
-insert into tb_cons_ck
-values('m', 50);--ORA-02290: check constraint (KH.CK_GENDER) violated
-insert into tb_cons_ck
-values('M', 1000);--ORA-02290: check constraint (KH.CK_NUM) violated
