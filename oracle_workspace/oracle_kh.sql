@@ -925,13 +925,196 @@ begin
 end;
 /
 
--------------------------------------
---TIRGGER
--------------------------------------
---
+
+
+
+-------------------------------------------
+-- TRIGGER
+-------------------------------------------
+--방아쇠, 연쇄반응
+--특정이벤트(DDL, DML, LOGON)가 발생했을때,
+--실행될 코드를 모아둔 데이터베이스 객체.
+
+--종류
+--1. DDL Trigger
+--2. DML Trigger
+--3. LOGON/LOGOFF Trigger
+
+--게시판테이블의 게시물삭제 
+-- 1. 삭제여부컬럼 : del_flag 'N' -> 'Y'
+-- 2. 삭제테이블 : 삭제된 행 데이터를 삭제테이블에 insert 
+
+/*
+create or replace trigger 트리거명
+    before | after                                  -- 원 DML문 실행 전 | 실행 후에 trigger 실행
+    insert | update | delete on 테이블명
+    [for each row]                                 -- 행 level 트리거, 생략하면 문장 level 트리거
+begin
+    --실행코드
+end;
+/
+
+- 행레벨 트리거 : 원DML문(10행)이 처리되는 행마다 trigger실행(10번)
+- 문장레벨 트리거 : 원DML문이 실행시 trigger 한번 실행
+
+의사 pseudo 레코드 (행레벨트리거에서만 유효)
+- :old 원DML문 실행전 데이터
+- :new  원DML문 실행후 데이터
+
+insert 
+    :old null
+    :new 추가된 데이터
+    
+update
+    :old 변경전 데이터
+    :new 변경후 데이터
+    
+delete
+    :old 삭제전 데이터
+    :new null
+
+**트리거내부에서는 transaction처리 하지 않는다. 원DML문의 트랜잭션에 자동포함된다.
+
+*/
+
+create or replace trigger trig_emp_salary
+    before
+    insert or update of salary on emp_copy
+    for each row
+begin
+    dbms_output.put_line('변경전 salary : ' || :old.salary);
+    dbms_output.put_line('변경후 salary : ' || :new.salary);
+    
+    insert into emp_copy_salary_log (emp_id, before_salary, after_salary)
+    values(:new.emp_id, :old.salary, :new.salary);
+    --commit과 같은 트랜잭션 처리를 하지 않는다.
+end;
+/
+
+--재컴파일 명령어
+alter trigger trig_emp_salary compile;
+
+update emp_copy 
+set salary  = salary + 1000000
+where dept_code = 'D5';
+
+rollback; --trigger에서 실행된 dml문도 함께 rollback된다.
+
+--PK 추가
+alter table emp_copy
+add constraints pk_emp_copy_emp_id primary key(emp_id);
+
+--급여변경 로그테이블
+create table emp_copy_salary_log (
+    emp_id varchar2(3),
+    before_salary number,
+    after_salary number,
+    log_date date default sysdate,
+    constraint fk_emp_id foreign key(emp_id) references emp_copy(emp_id)
+);
+
+select * from emp_copy;
+select * from emp_copy_salary_log;
+
+--@실습문제 :
+--emp_copy 에서 사원을 삭제할 경우, emp_copy_del 테이블로 데이터를 이전시키는 trigger를 생성하세요.
+--quit_date에 현재날짜를 기록할 것.
+create table emp_copy_del
+as
+select E.*
+from emp_copy E
+where 1 = 2;
+
+create or replace trigger trig_emp_quit
+    before delete on emp_copy
+    for each row
+begin
+    insert into emp_copy_del
+    (emp_id, emp_name, emp_no, email, phone, dept_code, job_code, sal_level, salary, bonus, manager_id, hire_date, quit_date, quit_yn)
+    values (:old.emp_id, :old.emp_name, :old.emp_no, :old.email, :old.phone, :old.dept_code, :old.job_code, :old.sal_level, :old.salary, :old.bonus, :old.manager_id, :old.hire_date, sysdate, 'Y');
+    
+    dbms_output.put_line(:old.emp_id||'사원이 퇴사자 테이블로 이동했음');
+end;
+/
+
+select * from emp_copy;
+select * from emp_copy_del;
+
+delete from emp_copy
+where quit_yn = 'Y';
+
+
+
+--상픔 재고 관리
+create table product(
+    pcode number,
+    pname varchar2(100),
+    price number,
+    stock_cnt number default 0,
+    
+    constraint pk_product_pcode primary key(pcode)
+);
 
 
 
 
+create table product_io(
+    iocode number,
+    pcode number,
+    amount number,
+    status char(1),
+    io_date date default sysdate,
+    
+    constraint pk_product_io_iocode primary key(iocode),
+    constraint fk_product_io_pcode foreign key(pcode)
+                                   references product(pcode)
+);
+
+alter table product_io
+add constraints ck_product_io_status check(status in ('I','O'));
+
+create sequence seq_product_pcode;
+create sequence seq_product_io_iocode
+start with 1000;
+
+insert into product
+values (seq_product_pcode.nextval, '아이폰12',1500000,0);
+
+insert into product
+values (seq_product_pcode.nextval, '갤럭시21',1300000,0);
+
+insert into product
+values (seq_product_pcode.nextval, '아이폰12',1500000,0);
+
+select *from product;
+select *from product_io;
 
 
+--입출고 데이터가 insert 되면 해당 상품의 재고 사량을 변경하는 트리서
+create or replace trigger trg_product
+    before
+    insert on product_io      
+    for each row
+begin
+    --입고
+    if :new.status = 'I' then
+        update product
+        set stock_cnt = stock_cnt + :new.amount
+        where pcode = :new.pcode;
+    --출고
+    else
+        update product
+        set stock_cnt = stock_cnt - :new.amount
+        where pcode = :new.pcode;
+    end if;
+end;
+/
+
+insert into product_io
+values (seq_product_io_iocode.nextval, 1,5,'I',sysdate);
+
+commit;
+
+
+--1.원 dml문의 대상테이블에 접근 불가
+--2.트리거 안에서는 원dml문 제어 불가
