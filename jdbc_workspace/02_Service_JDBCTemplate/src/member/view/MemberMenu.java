@@ -88,12 +88,10 @@ public class MemberMenu {
 				+ "9.메인메뉴 돌아가기\n" 
 				+ "----------------------------------\n"
 				+ "선택 : "; 
-	int result =0;
 	while(true) {
 		System.out.print(menu);
 		String choice = sc.nextLine();
-		 
-		String msg= null;
+		int result =0;
 		Member member = new Member();
 		member.setMemberId(memberId);
 		switch(choice) {
@@ -122,7 +120,7 @@ public class MemberMenu {
 				check(result);
 				break; 
 			case "9": 
-				System.out.print("돌아가시겠습니까?(y/n) : ");
+				System.out.print("메인 메뉴로 돌아가시겠습니까?(y/n) : ");
 				if(sc.nextLine().charAt(0) == 'y')
 					return;	//현재 메소드를 호출한 곳으로 돌아감
 				break;
@@ -131,7 +129,7 @@ public class MemberMenu {
 		}
 	}
 	private void check(int result) {
-		String msg = result >0 ? "성공" : "실패";
+		String msg = result >0 ? "정보 변경 성공" : "정보 변경 실패";
 		displayMsg(msg);
 	}
 	private Member inputMemberId_Pw() {
