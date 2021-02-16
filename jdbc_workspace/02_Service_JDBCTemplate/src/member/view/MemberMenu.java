@@ -99,25 +99,25 @@ public class MemberMenu {
 				System.out.print("변경할 암호를 입력하세요 : ");
 				member.setPassword(sc.nextLine());
 				result = memberController.updateMember(member);
-				check(result);
+				check(result,memberId);
 				break;
 			case "2":  
 				System.out.print("변경할 이메일를 입력하세요 : ");
 				member.setEmail(sc.nextLine());
 				result = memberController.updateMember(member);
-				check(result);
+				check(result,memberId);
 				break;
 			case "3": 
 				System.out.print("변경할 전화번호를 입력하세요(-제외) : ");
 				member.setPhone(sc.nextLine());
 				result = memberController.updateMember(member);
-				check(result);
+				check(result,memberId);
 				break;
 			case "4":  
 				System.out.print("변경할 주소를 입력하세요 : ");
 				member.setAddress(sc.nextLine());
 				result = memberController.updateMember(member);
-				check(result);
+				check(result,memberId);
 				break; 
 			case "9": 
 				System.out.print("메인 메뉴로 돌아가시겠습니까?(y/n) : ");
@@ -128,9 +128,11 @@ public class MemberMenu {
 			}
 		}
 	}
-	private void check(int result) {
+	private void check(int result,String memberId) {
 		String msg = result >0 ? "정보 변경 성공" : "정보 변경 실패";
 		displayMsg(msg);
+		List<Member>list = memberController.selectId(memberId);
+		displayMemberList(list);
 	}
 	private Member inputMemberId_Pw() {
 		Member member = new Member();
