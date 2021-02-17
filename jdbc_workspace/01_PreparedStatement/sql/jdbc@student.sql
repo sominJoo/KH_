@@ -73,3 +73,32 @@ SELECT
 FROM member;
 
 commit;
+
+
+--탈퇴회원 관리 TABLE
+create table member_del
+as
+select member.*, sysdate del_date 
+from member
+where 1=0;
+
+alter table member_del modify (del_date default sysdate);
+
+--탈퇴 시 MEMBER_DEL테이블 삽입 트리거
+create or replace trigger trig_member_del
+    after
+    delete on member
+    for each row
+begin
+    insert into member_del(member_id, password, member_name, gender, age, email, phone, address, hobby, enroll_date, del_date)
+    values (:old.member_id, :old.password, :old.member_name, :old.gender, :old.age, :old.email, :old.phone, :old.address, :old.hobby, :old.enroll_date, DEFAULT);
+end;
+/
+select *from member_del;
+select *from member;
+
+delete from member_del;
+
+commit;
+
+
