@@ -208,6 +208,38 @@ public class MemberDAO extends JDBCTemplate{
 		return result;
 	}
 	
+/*	
+ * 	다른 코드	
+	public int updateMember(Connection conn, Member m) {
+		int result = 0;
+		PreparedStatement pstmt = null;
+		
+		String query = "update member set "
+					 + " password=?"
+					 + ",email=?"
+					 + ",phone=?"
+					 + ",address=?"
+					 + " where member_id=?";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, m.getPassword());
+			pstmt.setString(2, m.getEmail());
+			pstmt.setString(3, m.getPhone());
+			pstmt.setString(4, m.getAddress());
+			pstmt.setString(5, m.getMemberId());
+			result = pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+*/	
+	
 	
 	public int doPstmt(Connection conn, String sql, String str, String memberId) {
 		int result = 0;
