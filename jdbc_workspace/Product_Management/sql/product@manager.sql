@@ -20,8 +20,13 @@ insert into PRODUCT_STOCK
 values ('nb_macbook_air','맥북에어',1200000,'애플 울트라북',0);
 
 insert into PRODUCT_STOCK
+values ('nb_macbook_pro','맥북프로',2200000,'애플 프로',0);
+
+insert into PRODUCT_STOCK
 values ('pc_ibm','ibmPC',750000,'windows 8',10);
 
+insert into PRODUCT_STOCK
+values ('nb_gram','lg그램',1600000,'그램 7',20);
 --==============================
 --상품 입출고 테이블
 --==============================
@@ -47,13 +52,17 @@ create sequence seq_product_io_no;
 --상품정보 삭제 트리거
 --==============================
 create or replace trigger trg_del_product
-    after
+    before
     delete on PRODUCT_STOCK    --상품테이블에서 delete 시
     for each row
 begin
-    delete from product_io where :old.product_id = :new.product_id;
+    delete from product_io where product_id = :old.product_id;
 end;
 /
+
+
+
+
 
 --==============================
 --재고테이블 수량 변경 트리거
@@ -72,11 +81,18 @@ begin
         set stock = stock - :new.AMOUNT
         where product_id = :new.product_id;   
     end if;
+    
+    
 end;
 /
+select * from product_io;
 
+select * from product_stock;
 
 insert into product_io
 values(seq_product_io_no.nextval, 'nb_macbook_air',sysdate,10,'I');
 
+delete from product_io where product_id ='nb_macbook_pro';
+
+delete from product_stock where product_id ='nb_macbook_pro';
 commit;
