@@ -44,3 +44,13 @@ select * from dba_users;
  from dba_sys_privs
  where grantee in ('CONNECT','RESOURCE');
  
+ 
+ 
+ 
+ --manager 계정생성
+ create user manager
+ identified by manager
+ default tablespace users;
+ 
+grant connect,resource to manager;
+ 
