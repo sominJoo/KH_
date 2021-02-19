@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import manage.controller.ProductController;
+import manage.exception.InsufficientOutputAmountException;
 import manage.model.vo.Product;
 import manage.model.vo.ProductIO;
 
@@ -325,9 +326,11 @@ public class ProductMenu {
 		
 		//출고될 수량이 기존 수량보다 적으면 에러
 		if(stock < amount) {
-			System.err.println("수량 부족. 프로그램 중지");
-			System.exit(0);;
+			// 강제 예외 발생 (throw)
+			throw new InsufficientOutputAmountException("현 재고 : "+stock + ", 출고 수량 : "+amount);
 		}
+		
+		
 	}
 
 }
