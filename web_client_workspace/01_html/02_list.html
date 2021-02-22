@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>목록관련</h1>
+    <!--순서 없는 목록 unordered list-->
+    <ul>
+        <li>html5</li>
+        <li>css</li>
+        <li>javascript</li>
+    </ul>
+
+    <!--순서 있는 목록 ordered list-->
+    <ol>
+        <li>html</li>
+        <li><css/li>
+        <li>javascript</li>
+    </ol>
+
+    <!-- 중첩된 목록 -->
+    <ol>
+        <li>안녕 
+            <ul>
+                <li>Hellow</li>
+                <li>ni~hao</li>
+            </ul>
+        </li>
+        <li>잘가
+            <ul>
+                <li>
+                    가버려
+                    <ul>
+                        <li>다시는 오지마러</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li>반가웠어
+            <ul>
+                <li> 
+                    ㅔ헿ㅎ
+                    <ol>
+                        <li>바이</li>
+                        <li>바이</li>
+                    </ol>
+                </li>
+            </ul>
+        </li>
+    </ol>
+
+
+    <!-- ^: 부모테그로 올라가기 -->
+    <!-- ul>li>ul>li*2^^li>ul>li -->
+    <ul>
+        <li>
+            <ul>
+                <li></li>
+                <li></li>
+            </ul>
+        </li>
+        <li>
+            <ul>
+                <li></li>
+            </ul>
+        </li>
+    </ul>
+
+
+    <!-- 설명목록 -->
+    <!-- dl>dt+dd  -->
+    <dl>
+        <dt>제목1</dt>
+        <dd>설명을 적으세요</dd>
+        <dd>설명을 적으세요</dd>
+        <dt>제목2</dt>
+        <dd>설명을 적으세요</dd>
+        <dd>설명을 적으세요</dd>
+    </dl>
+</body>
+</html>
