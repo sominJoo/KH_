@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+</head>
+<body>
+    <h1>Form 관련</h1>
+
+    <!--
+        action : 폼이 제출될 server 측 주소. 미작성 시 현재 주소로 제출
+        method : get(기본값) | post
+            1. GET http://127.0.0.1:5500/07_form.html?userEmail=js06m12%40naver.com
+                url에 덧붙여 전송
+            2. POST http 메세지에 body 영역에 작성. url이 노출되지 않느느다.
+            즉 get은 url로 전송되고 post는 메시지 바디에 작성되어 전송된다.\
+
+            *inpiut 태그의 name 속성이 제출되는 key 값이다.
+    -->
+    <form     action=""    method="POST">
+        <label for="userEamil">이메일 </label>
+        <input type="text" name ="user-Email" id ="userEamil">
+
+        <br>
+        <label for="userName">이름 </label>
+        <input type="text" name ="user-Name" id ="userName">
+
+        <br>
+        <input type="submit" value ="제출">
+    </form>
+
+
+    <h2>text 관련</h2>
+    <form action="">
+        <!-- form 하위에서 grouping 목적 -->
+        <fieldset>
+            <!-- 한줄짜리 사용자입력을 처리 -->
+            <input type="text" name="memberName" id="memberName" placeholder="회원명"
+            readonly
+            required>
+            <br>
+            <input type="password" name="memberPwd" id="memberPwd"
+            maxlength="8">
+        </fieldset>
+        
+
+        <fieldset>
+            <legend>기타정보</legend>
+            <input type="search" name="searchKeyword" id ="searchKeyword" placeholder="검색어를 입력하세요">
+            <br><br>
+            <!--이메일 형식 검사 @포함 여부-->
+            <input type="email" name="memberEmail" id="memberEmail">
+            <br><br>
+            <!-- url 형식 검사 -->
+            <input type="url" name="memberHomepage" id="memberHomepage">
+            <br><br>
+            <!-- 핸드폰에서 숫자 키보드를 제공 -->
+            <input type="tel" name="memberTel" id="memberTel">
+
+        </fieldset>
+
+
+        <fieldset>
+            <!-- 여러줄 입력 가능 -->
+            <legend>자기소개</legend>
+            <textarea name="selfIntroduce" id="selfIntroduce" cols="30" rows="10"></textarea>
+        </fieldset>
+
+
+        <br><br>
+        <!-- 1. input 태그 button 생성 -->
+        <!-- 
+        <input type="submit" value="제출">
+        <input type="reset" value="초기화">
+        <input type="button" value="그냥버튼"> 
+        -->
+
+        <!-- 2. button태그 type 속성 반드시 작성. type은 submit이 기본값 -->
+        <button type="submit">제출</button>
+        <button type="reset">초기화</button>
+        <button type="button">그냥 버튼</button>
+    </form>
+
+
+    <h2>숫자관련</h2>
+    <form action="">
+        <fieldset>
+            <legend>숫자</legend>
+            <input type="number" name="point" id="point">
+            <input type="range" name="userAmount" id="userAmount" max="100" min="1">
+        </fieldset>
+    </form>
+    <button type="submit"></button>
+
+</body>
+</html>

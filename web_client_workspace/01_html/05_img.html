@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMG</title>
+
+    <style>
+        img{
+            width: 200px; /*w,h 하나만 지정하면 원이미지와 같은 비율로 줄어듬*/
+        }
+    </style>
+</head>
+<body>
+    <h1>이미지</h1>
+    <img src="sample/image/flower1.PNG" alt="꽃사진"/>
+    <img src="https://cdn.crowdpic.net/detail-thumb/thumb_d_8440EFF23B9AE77574B5666A4FB091AA.jpg" alt="꽃">
+
+    <hr>
+    <h2> 절대값 | 상대값</h2>
+    <div>
+        <!-- px : 절대값이므로, 화면(viewport)가 변해도 너비/높이가 변하지 않는다. -->
+        <img src="sample/image/flower1.PNG" style="width: 250px;">
+        <img src="sample/image/flower2.PNG" style="width: 250px;">
+        <img src="sample/image/flower3.PNG" style="width: 250px;">
+        <img src="sample/image/flower4.PNG" style="width: 250px;">
+    </div>
+
+    <hr>
+    <div>
+        <!-- % : 상대값이므로, 화면(viewprot())대비 너비/높이값이 변한다. -->
+        <img src="sample/image/flower1.PNG" style="width : 23%;">
+        <img src="sample/image/flower2.PNG" style="width:  23%;">
+        <img src="sample/image/flower3.PNG" style="width:  23%;">
+        <img src="sample/image/flower4.PNG" style="width:  23%;">
+    </div>
+
+
+    <h2>이미지링크</h2>
+    <a href="http://w3schools.com" title="와삼스쿨로 이동하기">
+        <img src="sample/image/tiger.jpg" alt="강">
+    </a>
+
+    <!-- 사진을 영역별로 나눠서 연결 가능 -->
+    <h3>Image Map</h3>
+    <img src="sample/image/river1.PNG" style="width: 500px;" alt="사진" usemap="#mymap">
+    <map name="mymap">
+        <!-- shap = rect | circle | poly -->
+        <!-- coords = left-top(x,y), bottom-right(x,y) 알아야함 -->
+        <area shape="rect" coords="0,0,250,333" href="http://google.com" alt="구글 이동">
+        <area shape="rect" coords="250,0,500,333" href="http://naver.com" alt="네이버 이동">
+    </map>
+
+
+    <h2>이미지 배치 </h2>
+    <div>
+        <img src="sample/image/forest1.PNG" style="float:left;">
+        <p><span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus doloribus excepturi quam quasi asperiores, quis nobis, totam non soluta assumenda similique exercitationem? Dolorem modi exercitationem quae consequatur omnis odio autem!</span><span>Animi provident aliquam fugiat laudantium, praesentium veritatis tenetur dolore. Eligendi, ipsum! Sed facilis, porro quis reiciendis cum sit maiores id consequatur ipsam? Eaque molestiae magni numquam eos! Doloremque, rerum quas?</span><span>Nam exercitationem voluptates esse eveniet sint odit voluptas ipsa deserunt aliquid distinctio quo, eius, reprehenderit porro eligendi, quibusdam obcaecati tenetur deleniti eos architecto. Eligendi deserunt velit magnam facere dolorum debitis!</span></p>
+        <p><span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis rerum autem voluptas ipsam vero, quae tempora blanditiis quaerat illum quas nesciunt cum obcaecati tenetur quisquam commodi vitae animi at eos!</span><span>Rerum dolorem voluptates fuga quae dicta asperiores consequuntur eveniet temporibus dolores, laborum illo sequi molestias consequatur a. Quae iste voluptatum itaque sunt! Obcaecati ex excepturi quisquam minus expedita voluptas sed.</span><span>Aliquid, molestias vel alias est laborum tenetur placeat possimus corporis commodi dolorem suscipit recusandae dignissimos ea consectetur. Temporibus et vel quasi laborum fugit corporis qui. Assumenda tenetur ducimus atque cumque?</span><span>Eius expedita perferendis impedit consequuntur, ad, fuga quo incidunt nam illum ex, eligendi non molestiae maxime natus eveniet repellat quam laborum suscipit ipsa. Eum est assumenda qui exercitationem aspernatur non.</span><span>Incidunt iure similique commodi, asperiores vel tenetur laboriosam nemo et magnam harum maxime nihil voluptatum aspernatur atque, consectetur ducimus doloribus esse ipsum deserunt eaque temporibus soluta! Est, exercitationem animi. Quas!</span><span>Fugiat, accusantium architecto? Nostrum harum aliquam non unde nulla perspiciatis dolorum dolores natus sequi blanditiis consectetur ut reiciendis veritatis voluptatum minus provident aut, in, voluptatem corrupti quaerat necessitatibus voluptatibus quis?</span><span>Esse pariatur blanditiis, deleniti obcaecati iure, voluptates ratione ea non cupiditate, natus ab repellat eligendi sit laboriosam ipsum vel dicta sunt architecto nihil qui hic maxime perferendis. Quia, ut possimus!</span><span>Cupiditate, culpa beatae possimus quia necessitatibus dolorum vel aperiam voluptatibus magnam dolor voluptatem? Unde atque voluptatem tenetur non aperiam expedita provident voluptate nobis sapiente neque, rerum maxime alias eligendi nisi.</span><span>Sequi vitae numquam eos vero ratione sed at, perspiciatis nesciunt sunt neque alias unde sit tempora aut beatae qui veritatis optio dicta repellat quaerat aspernatur illum accusantium magni? Cupiditate, delectus?</span><span>Asperiores aliquam suscipit ratione dolores, dicta perferendis laudantium eius doloremque ipsa odit sit unde quibusdam provident voluptas dolore, rem, nostrum doloribus repellendus architecto. Veritatis ratione laboriosam est, dolor vitae quasi!</span></p>
+    </div>
+
+    <div>
+        <img src="sample/image/forest1.PNG" style="float:right;">
+        <p><span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus doloribus excepturi quam quasi asperiores, quis nobis, totam non soluta assumenda similique exercitationem? Dolorem modi exercitationem quae consequatur omnis odio autem!</span><span>Animi provident aliquam fugiat laudantium, praesentium veritatis tenetur dolore. Eligendi, ipsum! Sed facilis, porro quis reiciendis cum sit maiores id consequatur ipsam? Eaque molestiae magni numquam eos! Doloremque, rerum quas?</span><span>Nam exercitationem voluptates esse eveniet sint odit voluptas ipsa deserunt aliquid distinctio quo, eius, reprehenderit porro eligendi, quibusdam obcaecati tenetur deleniti eos architecto. Eligendi deserunt velit magnam facere dolorum debitis!</span></p>
+        <p><span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis rerum autem voluptas ipsam vero, quae tempora blanditiis quaerat illum quas nesciunt cum obcaecati tenetur quisquam commodi vitae animi at eos!</span><span>Rerum dolorem voluptates fuga quae dicta asperiores consequuntur eveniet temporibus dolores, laborum illo sequi molestias consequatur a. Quae iste voluptatum itaque sunt! Obcaecati ex excepturi quisquam minus expedita voluptas sed.</span><span>Aliquid, molestias vel alias est laborum tenetur placeat possimus corporis commodi dolorem suscipit recusandae dignissimos ea consectetur. Temporibus et vel quasi laborum fugit corporis qui. Assumenda tenetur ducimus atque cumque?</span><span>Eius expedita perferendis impedit consequuntur, ad, fuga quo incidunt nam illum ex, eligendi non molestiae maxime natus eveniet repellat quam laborum suscipit ipsa. Eum est assumenda qui exercitationem aspernatur non.</span><span>Incidunt iure similique commodi, asperiores vel tenetur laboriosam nemo et magnam harum maxime nihil voluptatum aspernatur atque, consectetur ducimus doloribus esse ipsum deserunt eaque temporibus soluta! Est, exercitationem animi. Quas!</span><span>Fugiat, accusantium architecto? Nostrum harum aliquam non unde nulla perspiciatis dolorum dolores natus sequi blanditiis consectetur ut reiciendis veritatis voluptatum minus provident aut, in, voluptatem corrupti quaerat necessitatibus voluptatibus quis?</span><span>Esse pariatur blanditiis, deleniti obcaecati iure, voluptates ratione ea non cupiditate, natus ab repellat eligendi sit laboriosam ipsum vel dicta sunt architecto nihil qui hic maxime perferendis. Quia, ut possimus!</span><span>Cupiditate, culpa beatae possimus quia necessitatibus dolorum vel aperiam voluptatibus magnam dolor voluptatem? Unde atque voluptatem tenetur non aperiam expedita provident voluptate nobis sapiente neque, rerum maxime alias eligendi nisi.</span><span>Sequi vitae numquam eos vero ratione sed at, perspiciatis nesciunt sunt neque alias unde sit tempora aut beatae qui veritatis optio dicta repellat quaerat aspernatur illum accusantium magni? Cupiditate, delectus?</span><span>Asperiores aliquam suscipit ratione dolores, dicta perferendis laudantium eius doloremque ipsa odit sit unde quibusdam provident voluptas dolore, rem, nostrum doloribus repellendus architecto. Veritatis ratione laboriosam est, dolor vitae quasi!</span></p>
+    </div>
+</body>
+</html>s

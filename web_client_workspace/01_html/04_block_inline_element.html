@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block | Inline</title>
+    <style>
+        div{
+            width: 100px;
+            height: 100px;
+            border : 1px solid rgb(0,0,0);
+            background-color :blanchedalmond;
+        }
+        span{
+            width: 100px;
+            height: 100px;
+            border : 1px solid rgb(0,0,0);
+            background-color : magenta;
+        }
+    </style>
+</head>
+<body>
+    <h1>Block 요소</h1>
+    <!-- 화면 너비를 전체 사용하므로, 테그를 나열 했을때, 줄바꿈으로 세로로 배치됨  -->
+    <div>div1</div>
+    <div>div2</div>
+    <div>div3</div>
+    
+    <!--p>lorem-->
+    <p style="background-color: maroon;">Lorem ipsum dolor, sit amet consectetur 
+        adipisicing elit. Odit rerum culpa fugiat nemo quasi. Ad sint eius soluta. 
+        Eius voluptatum commodi quae itaque ex inventore soluta fugiat, 
+        necessitatibus cupiditate rerum.
+    </p>
+
+
+
+    <h1>Inline 요소</h1>
+    <!-- 컨텐츠 영역만을 너비로 사용하므로, 테그 나열시, 줄바꿈되지 않고, 옆으로 배치됨 -->
+    <!-- 넓이, 높이가 무시됨 -->
+    <span>span1</span>  <span>span2</span>  <span>span3</span>
+    <span style="background-color: aqua;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quidem repudiandae vel sint quis optio nihil quia quas pariatur harum. Culpa repellat ipsum iusto distinctio voluptas voluptatibus inventore pariatur, aperiam qui!</span>
+</body>
+</html>

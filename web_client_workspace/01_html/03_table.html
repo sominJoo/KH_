@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table</title>
+    <style>
+        /* css코드 작성 */
+        table{
+            border: 1px solid black;
+            border-collapse: collapse;       /* 칸 사이 공간 없이 하나로 */
+            
+        }
+
+        th,td{
+            border: 1px solid black;
+            padding : 3px;              /*칸에 여백을 줌*/
+        }
+    </style>
+</head>
+<body>
+    <h1>table</h1>
+    <!-- 행,열이 있는 db에서 보는 테이블-->
+    <!--
+        - table : table관련 최상위 태그
+            -tbody | thead | tfoot - 써줘야하지만 안써줘도 써준거로 침
+                -tr : 행
+                    -th : 제목셀(한칸을 나타냄) 머릿말 느낌
+                    -td : 내용셀. 실제 내용
+    -->
+    <table>
+        <thead>
+            <tr>
+                <th>브라우저명</th> 
+                <th>제조사</th>
+                <th>홈페이지</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>크롬</td>
+                <td>구글</td>
+                <td><a href="http://google.com">http://google.com</a></td>
+            </tr>
+
+            <tr>
+                <td>사파리</td>
+                <td>애플</td>
+                <td><a href="http://apple.com">http://apple.com</a></td>
+            </tr>
+            <tr>
+                <td>파이어폭스</td>
+                <td>모질라</td>
+                <td><a href="http://mozilla.org">http://mozilla.com</a></td>
+            </tr>
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td>총개수</td>
+                <!-- colspan : 행을 합침 -->
+                <td colspan="2">3</td>  
+            </tr>
+        </tfoot>
+    </table>
+
+
+    <hr>
+    <!--열이 4개짜리 Table-->
+    <table>
+        <tr>
+            <th colspan="4"> 이력서 </th>
+        </tr>
+        <tr>
+            <td colspan="2" rowspan="2" style="width: 130px; height: 150px;">사진</td>
+            <td style="width: 80px;">이름</td>
+            <td style="width: 200px;"></td>
+        </tr>
+
+
+        <tr>
+            <td>연락처</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td style="width: 70px; height: 50px;">주소</td>
+            <td colspan="3"></td>
+        </tr>
+
+        <tr>
+            <td style="height: 100px;">자기소개</td>
+            <td colspan="3"></td>
+        </tr>
+    </table>
+
+
+
+
+</body>
+</html>
