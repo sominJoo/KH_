@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <style>
+        /* 선택자 : 태그 */
+        li{
+            color: cornflowerblue;
+        }
+        h1{
+            color: crimson;
+        } 
+
+
+        /* 선택자 : id  */
+        #li-html5{
+            font-size:  32px;
+            color: darkmagenta;
+        }
+
+
+        /* 선택자 : class  */
+        .favor{
+            background-color: coral;
+        }
+
+        /* 복수개 */
+        h1, .favor{
+            text-decoration: underline;
+        }
+
+        /* 복수개 이상의 클래스 선택자 */
+        .favor.special{
+            color : slateblue;
+            font-size: 48px;
+        }
+    </style> -->
+</head>
+<body>
+    <h1>선택자</h1>
+    <div>
+        <ul>
+            <li id="li-html5">html5</li>
+            <li>css3</li>
+            <li id="li-js" class="favor">javascript</li>
+            <li>python</li>
+            <li class="favor">jquery</li>
+            <li class="favor">jsp</li>
+            <li class="favor special">node.js</li>
+        </ul>
+    </div>
+
+    <hr>
+    <div class="wrapper">
+        <h4>머리글 h4</h4>
+        <ul id="first-ul">
+            <li>에라이1</li>
+            <li>에라이2</li>
+        </ul>
+
+        <div id="second-div">
+            <h4>머리글 h4</h4>
+            <ul>
+                <li>에라이3</li>
+                <li>에라이4</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <style>
+        /* 자식태그 */
+        div.wrapper > h4{
+            color:slateblue
+        }
+        .wrapper>ul>li{
+            background-color:  tomato;
+        }
+
+        /* 후손태그 - wrapper안의 모든 h4에 모두 적용*/
+        div.wrapper h4{
+            text-decoration: line-through;
+        }
+        .wrapper ul li{
+            background-color:  tomato;
+        }
+    </style>
+
+
+
+    <div>
+        <p id="p-test1">안녕1</p>
+        <p id="p-test2">안녕2</p>
+        <p id="p-test3">안녕3</p>
+        <p id="p-test4">안녕4</p>
+        <p id="p-test5">안녕5</p>
+        <pre id="pre-test6">안녕6</pre>
+    </div>
+
+    <style>
+        /* 다음 형제요소 하나 */
+        p#p-test2 + p{
+            background: violet;
+        }
+
+        /* 다음 형제요소 모두(*) 또는 선택자 일치하는 태그 */
+        p#p-test2 ~ p{
+            font-size: 48px;
+        }
+
+        p#p-test2 ~ *{
+            font-size: 48px;
+        }
+
+        /* 이전형제요소를 가리키는 선택자는 존재하지 않음 */
+        /* https://www.w3schools.com/cssref/css_selectors.asp css selectors 참고페이지 */
+    </style>
+
+
+
+    <form action="">
+        <fieldset>
+            <legend>속성관련 선택자</legend>
+            <input type="text"><br>
+            <input type="text" name="user-name" ><br>
+            <input type="email" name="user-email"><br>
+            <input type="text" name="petname" >
+        </fieldset>
+    </form>
+
+    <style>
+        /* 속성선택자 */
+        [name]{
+            background: yellow;
+        }
+        [name = user-name]{
+            background: teal;
+        }
+
+        /* 속성이름에 er을 포함하는가*/
+        [name*=er]{
+            background: tan;
+        }
+
+        /* 속성이름이 user로 시작하는가*/
+        [name ^=user]{
+            background: steelblue;
+        }
+
+        /* 속성이름이 name으로 끝나는가 */
+        [name$=name]{
+            background: springgreen;
+        }
+    </style>
+
+
+    <br><br>
+    <h2>가상선택자 ::</h2>
+    <div class="box click">click me!</div>
+    <div class="box over">커서를 이동하세요</div>
+    <style>
+        .box {
+            cursor: pointer;
+            border:  2px solid;
+            padding : 10px;
+            margin: 10px;
+        }
+
+        /* 클릭했을때 속성을 정의 */
+        .click:active{
+            background-color:  teal;
+            color : white;
+        }
+
+        /* 커서가 올라왔을때 */
+        .over:hover{
+            color: tomato;
+            border : 2px dashed;
+        }
+    </style>
+    <a href="http://www.innerbody.com/htm/body.html">어떤 사이트(방문전 | 방문후 | 커서)</a>
+    <style>
+        /* 링크를 표현 - 링크는 text데코가 기본으로 underline*/
+        a:link{
+            color:teal; 
+            text-decoration: none;
+        } 
+
+        /* 방문했으면 */
+        a:visited {
+            color: red;
+        }
+        
+        /* 커서가 위에 있으면 */
+        a:hover{
+            text-decoration: underline;
+        }
+
+        /* 클릭시 */
+        a:active{
+            color: sandybrown;
+        }
+    </style>
+
+    <br><br>
+    <input type="checkbox" name="smsOk" id="smsOk">
+    <label for="smsOk">문자수신</label>
+
+    <style>
+        /* input[type=checkbox]:checked{
+            width: 200;
+            height: 200px;
+        } */
+
+
+
+        /* check시 label를 변경 */
+        input[type=checkbox]:checked + label{
+            font-size: 48px;
+        }
+    </style>
+
+
+
+    <h2>구조선택자</h2>
+    <div class="test">
+        <pre>테스트0</pre>
+        <p>테스트1</p>
+        <p>테스트2</p>
+        <p>테스트3</p>
+        <p>테스트4</p>
+        <p>테스트5</p>
+        <p>테스트6</p>
+        <p>테스트7</p>
+        <p>테스트8</p>
+        <p>테스트9</p>
+        <p>테스트10</p>
+    </div>
+
+    <style>
+        /* p테그이면서 첫번째 자식인 태그 -첫째자식이 pre여서 적용ㅇ안됨*/
+        div.test p:first-child{
+            color:seagreen;
+        }
+        div.test p:last-child{
+            color: slategray;
+        }
+
+        /* 인덱스로 사용가능 */
+        p:nth-child(2n){
+            text-decoration: underline;
+        }
+
+        /* p태그중에서 첫번째 태그 */
+        p:first-of-type{
+            color:springgreen;
+        }
+
+        /* 부정선택지 :not(선택자) */
+        div.test> :not(p){
+            background-color: violet;
+        }
+
+        /* 최상위선택자 : root-> html */
+        :root{
+            background-color: turquoise;
+        }
+    </style>
+
+<br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>
