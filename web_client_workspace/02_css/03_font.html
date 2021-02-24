@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS_font</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Roboto:wght@500&display=swap" rel="stylesheet">
+   
+</head>
+<body>
+    <h1>Font</h1>
+    <div class="wrapper">
+        <p id="ff1">가나다라마바사 abcdefg ABCDEFG 1234567</p>
+        <p id="ff2">가나다라마바사 abcdefg ABCDEFG 1234567</p>
+        <p id="ff3">가나다라마바사 abcdefg ABCDEFG 1234567</p>
+    </div>
+ 
+    <style>
+        .wrapper{
+            font-size:  24px;
+        }
+        #ff1{
+            /* 폰트 여러개 지정, 왼쪽부터 우선순위가 높다. 오른쪽끝에는 generic-family 라는 기본서체를 적어준다. */
+            /* serif | sans-serif | cursive | monospace */
+            font-family:  "궁서체", "휴먼모음T",serif;
+            /* px : 절대단위 */
+            font-size: 32px;
+        }
+        #ff2{
+            font-family: 'Roboto', sans-serif;
+            /* em : 상대값단위(가장가까운 부모요소 기준. 기본(설정x시) : 1em = 16px) */
+            /* 24px 기본 설정시(div 기본 폰트크기 설정) 1em = 24px */
+            font-size: 2em;
+        }
+        #ff3{
+            font-family: 'DotGothic16', sans-serif;
+            /* % : 상대값 단위(가장 가까운 부모요소 기준. 기본(설정x시) : 100% =16px) */
+            font-size: 150%;
+        }
+
+        /* cascade 부모태그에 적용한 속성이 자식 태그로 전이되어서 처리됨 */
+        body{
+            font-family: "휴먼모음T",serif;
+        }
+    </style>
+
+    <hr>
+    <ul>
+        <li id="li1">글꼴 얇게</li>
+        <li id="li2">글꼴 두껍게</li>
+        <li id="li3">글꼴 더 두껍게</li>
+    </ul>
+
+    <style>
+        /* 중요한 내용 전달 시 스크린리더가 읽을 수 있도록 strong태그를 사용하는게 맞음 */
+        ul{
+            font-family: "고딕", monospace;
+            font-weight: 800;
+        }
+        #li1{
+            font-weight: lighter;
+        }
+        #li2{
+            font-weight: bold;
+        }
+        #li3{
+            /* 상대적 */
+            font-weight: bolder;
+        }
+    </style>
+
+
+    <span id="font">안녕하세요 ABCDEFG abcdefg 1234556</span>
+    <style>
+        span#font{
+            /* font-style font-variant font-weifht font-size/line-height font-family  */
+            font : italic bold 24px/30px  'Noto sans KR';
+        }
+    </style>
+
+
+</body>
+</html>

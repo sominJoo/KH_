@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS text</title>
+</head>
+<body>
+    <h1>Text 관련</h1>
+    <p id="sample"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam saepe, doloribus suscipit similique rerum eaque at accusantium placeat inventore earum ullam tempora aliquam quam, dicta atque necessitatibus, blanditiis labore numquam?</p>
+    <style>
+        #sample{
+            color:springgreen;
+            text-decoration: underline;
+        }
+    </style>
+
+
+
+    <h1 id="shadow">그림자</h1>
+    <style>
+        #shadow{
+            /* 가로offset 세로offset 번짐 color  */
+            text-shadow: 3px 3px 7px gray;
+        }
+    </style>
+
+
+    <!-- 실습문제 :text-shadow -->
+    <div id="bg">
+        <span id="ts1" class="common">HTML5</span><br>
+        <span id="ts2" class="common">HTML5</span><br>
+        <span id="ts3" class="common">HTML5</span><br>
+        <span id="ts4" class="common">HTML5</span><br>
+        <span id="ts5" class="common">HTML5</span>
+    </div>
+
+    <style>
+        #bg{
+            background-color: black;
+            padding: 50px;
+            font : bold 48px/48px  'Noto sans KR';
+        }
+        #ts1{
+            color:orangered;
+            text-shadow: 3px 3px yellow;
+        }
+        
+        #ts2{
+            color: white;
+            text-shadow:  0px 0px 10px white;
+        }
+        
+        #ts3{
+            color: white;
+            text-shadow:  0px 0px 10px yellowgreen;
+        }
+        
+        #ts4{
+            color: black;
+            text-shadow: 0px -3px 5px yellow, 0px -5px 5px red;
+        }
+    </style>
+    <br><br>
+
+    <hr>
+
+
+    <div class="wrapper">
+        <Lorem>ipsum dolor sit amet consectetur adipisicing elit. Ad, hic architecto debitis, nulla rerum aliquam asperiores consequuntur provident nisi repudiandae repellendus! Alias veniam officia ullam est laudantium tempore nostrum doloremque!</Lorem>
+    </div>
+
+    <style>
+        div.wrapper{
+            width:300px;
+            border: 1px solid #000;
+            /* 줄바꿈없음 */
+            white-space: nowrap;
+            /* 부모영역을 넘어서는 자식요소를 처리한다. */
+            /* overflow: auto; */
+
+            /* 말줄임표 */
+            text-overflow: ellipsis;
+        }
+    </style>
+</body>
+</html>

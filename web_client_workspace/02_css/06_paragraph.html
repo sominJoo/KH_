@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS paragraph</title>
+</head>
+<body>
+    <h1>문단</h1>
+    <div class="wrapper">
+        <p> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium aspernatur soluta ea tempora natus veniam fugit eum quidem. Quis nostrum quae error deleniti impedit temporibus omnis ad illo molestias culpa!</p>
+        <p> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium aspernatur soluta ea tempora natus veniam fugit eum quidem. Quis nostrum quae error deleniti impedit temporibus omnis ad illo molestias culpa!</p>
+        <p> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium aspernatur soluta ea tempora natus veniam fugit eum quidem. Quis nostrum quae error deleniti impedit temporibus omnis ad illo molestias culpa!</p>
+        <p> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium aspernatur soluta ea tempora natus veniam fugit eum quidem. Quis nostrum quae error deleniti impedit temporibus omnis ad illo molestias culpa!</p>
+        <p> Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium aspernatur soluta ea tempora natus veniam fugit eum quidem. Quis nostrum quae error deleniti impedit temporibus omnis ad illo molestias culpa!</p>
+    </div>
+
+
+    <style>
+        .wrapper p::first-letter{
+            font-size: 2em;
+        }
+
+        .wrapper p::first-line{
+            text-decoration: underline;
+        }
+
+        /* 이모티콘 : win + .  */
+        .wrapper p::before{
+            content :"😊";
+        }
+
+        .wrapper p::after{
+            content: "💕";
+        }
+
+        /* 카운터 */
+        /* 부모요소에서 선언 */
+        .wrapper{
+            counter-reset: num;
+        }
+
+        .wrapper p::before{
+            counter-increment: num;
+            content: counter(num);
+        }
+
+
+        /* 문장 드래그 시 색변경 */
+        ::selection{
+            background-color: thistle;
+            color:#fff;
+        }
+
+
+    </style>
+</body>
+</html>

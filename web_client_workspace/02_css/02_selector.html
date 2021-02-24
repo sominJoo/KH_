@@ -265,11 +265,40 @@
         }
 
         /* 최상위선택자 : root-> html */
-        :root{
+        /* :root{
             background-color: turquoise;
-        }
+        } */
     </style>
 
+    <br>
+    <br>
+
+    <h2>선택자 우선순위</h2>
+    <div id="mydiv" class="test">우선순위 테스트</div>
+    <style>
+        /* 태그 -> 속성 -> 클래스 -> 아이디 -> Inline 속성 -> !important*/
+        /* 오른쪽이 가장 상위 */
+        #mydiv {
+            background-color: thistle;
+        }
+        .test {
+            background-color: bisque;
+            font-size: 24px;
+        }
+        .wrapper .test {
+            font-size: 36px;
+        }
+        div {
+            width: 500px;
+            height: 500px;
+            background-color: aquamarine !important;
+        }
+  
+
+
+    </style>
+
+    
 <br><br><br><br><br><br><br><br><br><br>
 </body>
 </html>

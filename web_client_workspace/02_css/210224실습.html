@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>css실습</title>
+</head>
+<body>
+    <h2>이미지에 마우스 hover 그림자효과 만들기</h2>
+
+
+    <div>
+        <img src="resources/test/sun/sun1.jpg" alt="태양이미지1">
+        <img src="resources/test/sun/sun2.jpg" alt="태양이미지2">
+        <img src="resources/test/sun/sun3.jpg" alt="태양이미지3">
+    </div>
+
+
+    <style>
+        div img{
+            height: 200px;
+            margin: 50px 20px;
+        }
+        div{
+            text-align: center;
+            margin: auto;
+            width: 1600px;
+            height: 300px;
+            background-color: lightgray;
+        }
+
+        div img:hover{
+            box-shadow: 10px 10px 15px 5px gray;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS - box model</title>
+</head>
+<body>
+    <h1>Box Model</h1>
+    <div class="test">컨텐츠컨텐츠컨텐츠</div>
+    <div class="test" id="m-collapse">컨텐츠컨텐츠컨텐츠</div>
+    <!--
+        content : 시작/종료태그 사이의 내용물(width)
+        padding : 컨텐츠와 경계선 사이의 여백
+        border : 경계선. 너비를 가짐
+        margin : 경계선과 다른 요소와의 거리
+    -->
+    <style>
+        /* 마주하는 요소간의 margin값은 큰값으로 처리한다. 즉, div 두개의 위치 차이는 50px */
+        #m-collapse{
+            margin-top : 50px;
+        }
+        .test{
+            background-color: teal;
+            width: 200px;
+            height: 200px;
+            border:  10px solid gray;
+            margin:  10px auto;
+            padding : 5px;
+            /* padding-top :5px
+                padding-right :10px
+                padding-bottom: 15px
+                padding-left : 15px 
+            */
+        }
+    </style>
+
+</body>
+</html>
