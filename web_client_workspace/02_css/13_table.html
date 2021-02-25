@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS table</title>
+</head>
+<body>
+    <h1>table</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>브라우저명</th> 
+                <th>제조사</th>
+                <th>홈페이지</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>크롬</td>
+                <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid enim impedit, animi eius, dolorem, vero illum officia rem repellendus cum molestias sint? Nemo, reiciendis consequatur voluptas possimus explicabo ipsa vero.</td>
+                <td><a href="http://google.com">http://google.com</a></td>
+            </tr>
+
+            <tr>
+                <td>사파리</td>
+                <td>애플</td>
+                <td><a href="http://apple.com">http://apple.com</a></td>
+            </tr>
+            <tr>
+                <td>파이어폭스</td>
+                <td>모질라</td>
+                <td><a href="http://mozilla.org">http://mozilla.com</a></td>
+            </tr>
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td>총개수</td>
+                <!-- colspan : 행을 합침 -->
+                <td colspan="2">3</td>  
+            </tr>
+        </tfoot>
+    </table>
+
+
+    <style>
+        table{
+            border: 1px solid black;
+            border-collapse: collapse;
+            width: 800px;
+            height: 500px;
+
+            white-space: nowrap;
+            /* table-layout: fixed; */
+        }
+
+        th, td{
+            border : 1px solid black;
+            padding: 10px;
+            text-align: center;
+            vertical-align: middle; /*top | middle | bottom*/
+            
+        }
+    </style>
+
+
+    <!-- 일반요소(div)를 display table 속성으로 바꾸고, 정렬할 자식의 display를 table-cell속성으로 변경하여 vertical-align을 적용함 -->
+
+    <h2>일반요소의 vertical-align</h2>
+    <div class="test">
+        <span>안녕</span>
+    </div>
+    <style>
+        .test{
+            display: table;
+            text-align: center;
+            width: 100px;
+            height: 100px;
+            background-color: steelblue;
+            color : black;
+            margin: 0 auto;
+        }
+        .test span{
+            display: table-cell;
+            vertical-align: middle;
+        }
+    </style>
+
+
+
+</body>
+</html>

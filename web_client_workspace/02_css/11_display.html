@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Display</title>
+</head>
+<body>
+    <h1>display</h1>
+
+    <h2>BLOCK -> INLINE</h2>
+    <div class="box box1 inline-block">테스트1</div>
+    <div class="box box2 inline-block">테스트2</div>
+    <div class="box box3 inline-block">테스트3</div>
+    <div class="box box4 inline-block">테스트4</div>
+    <div class="box box5 inline-block">테스트5</div>
+
+    <style>
+        .box{
+            width:  150px;
+            height: 150px;
+            border: 1px solid black;
+            color: white;
+        }
+
+        .box1{background-color: darkblue;}
+        .box2{background-color: blue;}
+        .box3{background-color: dodgerblue ;}
+        .box4{background-color: cornflowerblue;}
+        .box5{background-color: cadetblue;}
+
+
+        /* display 인라인요소로 변경 */
+        .inline{
+            display: inline;
+        }
+
+        /* display 블럭요소로 변경 */
+        .block{
+            display: block;
+        }
+
+
+        .inline-block{
+            /* block처럼 width/height적용 가능. inline 요소처럼 한행으로 배치 */
+            /* block과 inline요소를 합친것 */
+            display: inline-block;
+        }
+    </style>
+
+
+    <h2>INLINE -> BLOCK</h2>
+    <span class="box box1 block">span1</span>
+    <span class="box box2 block">span2</span>
+    <span class="box box3 block">span3</span>
+    <span class="box box4 block">span4</span>
+    <span class="box box5 block">span5</span>
+
+    <hr>
+
+    <h2>숨김처리</h2>
+    <div class="box box1"></div>
+    <div class="box box2"></div>
+    <div class="box box3"></div>
+    <hr>
+
+    <style>
+        /* 디스플레이 속성 - 사라지면 공간까지 사라짐*/
+        .display-none{
+            display: none;
+        }
+        /* 보이는 속성 - 사라져도 있던 공간은 남아있음*/
+        .visibility-hidden{
+            visibility:  hidden;
+        }
+        /* 투명도 속성 -사라져도 있던 공간은 남아있음(0~1사이로 투명도 조절가능)*/
+        .opacity-0{
+            opacity: 0;
+        }
+    </style>
+
+
+
+
+</body>
+</html>

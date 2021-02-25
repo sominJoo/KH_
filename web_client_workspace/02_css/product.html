@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+​
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CSS3 애니메이션</title> 
+
+    <style>
+        ul{
+            list-style-type: none;
+        }
+        ul li:nth-child(1){
+            transform : translateY(0);
+            position: relative;
+            overflow: hidden;
+            top: 0;
+            float: left;
+        }
+        ul li:nth-child(2){
+            position: relative;
+            overflow: hidden;
+            top: 0;
+            left: 40px;
+            float: left;
+        }
+        ul li:nth-child(3){
+            position: relative;
+            overflow: hidden;
+            top: 0;
+            left: 80px;
+            float: left;
+        }
+
+
+        img{
+            margin-left: 40px;
+            width: 400px;
+            height: 350px;
+        }
+        .caption{
+            position: absolute;
+            
+            /* 변경 시작,설정 */
+            transform : translateY(0);
+            opacity: 0;
+            transition: all .6s  ease-out;
+
+            display: table;
+            width: 400px;
+            height: 350px;
+            background-color: #2a2a2a;
+            text-align: center;
+            margin-left: 40px;
+            color: white;
+        }
+
+        .caption h1, .caption p{
+            /* 요소 가운데 정렬 */
+            text-align: center; 
+        }        
+
+        img:hover{
+            box-shadow: 0px 15px 30px -7px rgba(0,0,0,.8);
+        }
+        
+
+        ul li:hover .caption{
+            /* 변경 */
+            transform : translateY(-350px);
+            opacity: .8;
+        }
+
+
+    </style>
+</head>
+<body>
+    <h1>신상품 목록</h1>
+    <div id="container">
+        <ul class="prod-list">
+            <li>
+                <img src="resources/test/prod/prod_color_eggs.jpg">
+                <div class="caption">
+                    <h1>칼라달걀</h1>
+                    <p>신선한 무항생제 달걀</p>
+                    <p>가격 : 12,345원</p>
+                </div>
+            </li>
+            <li>
+                <img src="resources/test/prod/prod_potatoes.jpg">
+                <div class="caption">
+                    <h1>감자</h1>
+                    <p>css의 감을 잡자</p>
+                    <p>가격 : 12,345원</p>
+                </div>
+            </li>
+            <li>
+                <img src="resources/test/prod/prod_tomato.jpg">
+                <div class="caption">
+                    <h1>방토</h1>
+                    <p>건강식품의 끝판왕</p>
+                    <p>가격 : 12,345원</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

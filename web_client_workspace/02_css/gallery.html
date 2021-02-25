@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko">
+ <head>
+  <meta charset="UTF-8">
+  <title>갤러리 만들기</title>
+  <style>
+    div#gallery{
+        width: 480px;
+        height: 240px;
+        margin: 0px auto;
+        text-align: center;
+        background-color : #2a2a2a;
+        border: 15px solid black;
+    }
+    ul{
+        list-style-type: none;
+    }
+    
+    /* li요소를 가로로 배열 */
+    ul li{
+        float: left;
+        margin-left: 10px;
+    }
+
+
+
+    /* li요소마다 position relative를 부여해 위치설정 */
+    ul li:nth-child(1){
+        position: relative;
+        top:0; 
+        float: left;
+    }
+
+    ul li:nth-child(2){
+        position: relative;
+        top:0; 
+        left: 130px;
+        float: left;
+    } 
+
+    ul li:nth-child(3){
+        position: relative;
+        top:0; 
+        left: 260px;
+        float: left;
+    }
+
+    ul li:nth-child(4){
+        position: relative;
+        top: 100px; 
+        left: 0px;
+        float: left;
+    }
+
+    ul li:nth-child(5){
+        position: relative;
+        top: 100px; 
+        left: 130px;
+        float: left;
+    }
+
+    ul li:nth-child(6){
+        position: relative;
+        top: 100px; 
+        left: 260px;
+        float: left;
+    }
+
+    /* li 하위 요소에서 absolute를 부여해 부모 요소(li) 기준 각각 동일한 오프셋값 제공 */
+    ul li img:nth-child(1){
+        position: absolute;
+        z-index: 1;
+    }
+    ul li img:nth-child(2){
+        position: absolute;
+        visibility: hidden;
+        top: 63px;
+        left: 80px;
+        z-index: 5;
+    }
+    
+    .pic{
+        /* visibility: hidden; */
+        width: 240px;
+        border: 3px solid black;
+    }
+
+    ul li:hover img:nth-child(2){
+        visibility: visible;
+    }
+
+  </style>
+
+</head>
+<body>
+    <h2>사진 갤러리 만들기</h2>
+    <hr/>
+    <div id="gallery">
+        <ul>
+            <li> 
+                <img src="resources/image/flower1.PNG" class="small" width="120" height="90"> 
+                <img src="resources/image/flower1.PNG" class="pic" > 
+            </li>
+            <li>
+                <img src="resources/image/flower2.PNG" class="small" width="120" height="90"> 
+                <img src="resources/image/flower2.PNG" class="pic"> 
+            </li>
+            <li>
+                <img src="resources/image/flower3.PNG" class="small" width="120" height="90"> 
+                <img src="resources/image/flower3.png" class="pic"> 
+            </li>
+            <li>
+                <img src="resources/image/flower4.png" class="small" width="120" height="90"> 
+                <img src="resources/image/flower4.png" class="pic"> 
+            </li>
+            <li>
+                <img src="resources/image/flower5.png" class="small" width="120" height="90">
+                <img src="resources/image/flower5.png" class="pic"> 
+            </li>
+            <li>
+                <img src="resources/image/forest1.png" class="small" width="120" height="90">
+                <img src="resources/image/forest1.png" class="pic"> 
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

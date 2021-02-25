@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS transform_transition</title>
+</head>
+<body>
+    <!--
+        1. transform : A->B로 변할때를 표현. 변화된 상태. 소요시간 없음
+        2. transition: A->B로 변할때를 표현. 변화된 상태. 소요시간 있음(동영상 느낌)
+        3. animation : 여러 상태를 만들어두고 변화는 과정을 표현.
+    -->
+    <h1>transform</h1>
+    <div class="wrapper">
+        <img src="resources/image/flower1.PNG" class="transform-translate">
+        <hr>
+        <img src="resources/image/flower2.PNG" class="transform-scale">
+        <hr>
+        <img src="resources/image/flower3.PNG" class="transform-rotate">
+        <hr>
+    </div>
+
+    <style>
+        .wrapper{
+            text-align: center;
+        }
+        .wrapper img{
+            width: 250px;
+            border : 5px solid yellow;
+        }
+
+        /* 하나의 상태를 표현. 이동*/
+        .transform-translate:hover{
+            transform: translateX(30px);
+        }
+
+        /* 크기변경 */
+        .transform-scale:hover{
+            transform:scale(1.5, 1.5); /*1.5배*/
+        }
+
+        /* 회전 */
+        .transform-rotate:hover{
+            transform: rotate(90deg);   /*90도 회전*/
+        }
+    </style>
+    
+
+    <br><br><br><br><br><br><br><br><br><br>
+    <h1>transition</h1>   
+    <div class="wrapper">
+        <img src="resources/image/flower1.PNG" class="transition transform-translate">
+        <hr>
+        <img src="resources/image/flower2.PNG" class="transition transform-scale">
+        <hr>
+        <img src="resources/image/flower3.PNG" class="transition transform-rotate">
+        <hr>
+    </div>
+
+    <style>
+        .transition{
+            /* 1초동안 변화하는 모습을 보여줌 */
+            transition-duration: 1s;
+
+            /* transition을 적용할 속성을 지정할 수 있다. 기본 값: all  */
+            /* transition-property: border; */
+
+            /* transition을 delay 가능 */
+            transition-delay: 5s;
+
+            transition-timing-function: ease-in;
+        }
+    </style>
+
+<br><br><br><br><br><br><br><br><br><br>
+
+    <div class="tile">
+        <h1>코로나19바이러스</h1>
+        <h2 class="text-transition">코로나19 드디어 백신으로 잠재우다.</h2>
+        <p class="text-transition">Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni molestiae quasi blanditiis necessitatibus nam expedita veniam inventore, velit nostrum error aspernatur optio accusamus sit impedit, omnis perferendis! Quibusdam, blanditiis odio?</p>
+    </div>
+    <style>
+        .tile{
+            width: 380px;
+            height: 380px;
+            margin:  10px;
+            padding : 30px;
+            background-color: steelblue;
+            box-shadow: 0px 35px 76px -17px rgba(0,0,0,.4);
+            color: white;
+            overflow: hidden;
+        }
+
+
+        .tilte h1{
+            font-weight: 200;
+            text-shadow: 2px 2px 10px rgba(0,0,0,.4);
+        }
+
+
+        .tile h2{
+            font-weight: 200;
+            margin: 20px 0 0 0;
+            font-style: italic;
+            transform : translateX(380px);
+        }
+        .tile p{
+            font-weight: 200;
+            margin: 20px 0 0 0;
+            transform : translateX(-380px);
+            transition-delay: .2s;
+        }
+
+
+
+        .text-transition{
+            opacity: .2;
+            transition: all .6s  ease-out;
+        }
+
+        .tile:hover{
+            box-shadow: 0px 35px 76px -17px rgba(0,0,0,.8);
+        }
+        .tile:hover .text-transition{
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+    </style>
+
+
+<br><br><br><br><br><br><br><br><br><br>
+
+    <div class="img-wrapper"><img src="resources/image/hyunta.jpg" alt=""></div>
+    <style>
+        .img-wrapper{
+            width: 300px;
+            padding: 5px;
+            border : 1px solid gray;
+            overflow: hidden;
+        }
+        .img-wrapper img{
+            width: 100%;
+            transition:  .8s;
+        }
+
+        .img-wrapper:hover img{
+            transform: scale(1.2,1.2);
+        }
+    </style>
+</body>
+</html>
