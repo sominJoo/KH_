@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>실습문제 html5_layout</title>
+
+    <style>        
+        div{
+            padding : 10px;
+            background-color: #f0f0f0;
+            width: 960px;
+            margin: 0 auto;
+        }
+
+
+        header{
+            position: relative;
+            background-color: #908886;
+            height: 100px;
+        }
+        nav{
+            position: absolute;
+            top: 53px;
+            left: 567px;
+        }
+        nav ul li{
+            float :left;
+            list-style-type: none;
+            margin-left: 10px;
+        }
+
+        nav ul li a{
+            text-decoration: none;
+            color: black;
+        }
+
+        nav ul li a:hover{
+            cursor: pointer;
+            color: white;
+        }
+
+
+
+        section{
+            float: left;
+            background-color: white;
+            width: 660px;
+            height: 480px;
+        }
+
+        aside{
+            float: right;
+            background-color:  #dcdad9;
+            width: 300px;
+            height: 480px;
+        }
+
+        
+        footer{
+            /* footer위에 항목들이 떠있기때문에 footer가 위로 말림(but 글자는 두고감...ㅎ) */
+            /* float을 끝낸다는 것을 명시해줘야함 */
+            clear: both;
+            background-color: #555;
+            height: 100px;
+        }
+        footer p{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <header id="header">
+            <h2>Header</h2> 
+            <nav>
+                <ul>
+                    <li><a href="#"> Home</a></li>
+                    <li><a href="#"> HTML5</a></li>
+                    <li><a href="#"> CSS3</a></li>
+                    <li><a href="#"> JQuery</a></li>
+                    <li><a href="#"> Moblie</a></li>
+                    <li><a href="#"> Profile</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <section>
+            <article>
+                <h3>Article 1</h3>
+                <p>동력은 역사를 끝까지 사라지지 생명을 사막이다. 귀는 풀이 맺어, 산야에 안고, 아니다. 아니한 가치를 끓는 어디 같은 간에 희망의 커다란 이것이다. 인생을 가장 어디 아니한 사랑의 석가는 몸이 교향악이다</p>
+            </article>
+            <article>
+                <h3>Article 2</h3>
+                <p>동산에는 살았으며, 반짝이는 불어 곳이 그들은 것이다.보라, 영원히 것이다. 행복스럽고 낙원을 옷을 하였으며, 살았으며, 아름다우냐</p>
+            </article>
+        </section>
+         
+        <aside>
+            <h3>Aside</h3>
+        </aside>
+        
+        <footer>
+            <h3>Footer</h3>
+            <p> &lt;Copyright 2017. KH정보교육원. All rights reserved&gt; </p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS layout</title>
+    <style>
+        div{
+            padding : 10px;
+        }
+        #container{
+            background-color: #f0f0f0;
+            width: 960px;
+            margin: 0 auto;
+        }
+
+        #header{
+            background-color: #908886;
+            height: 100px;
+        }
+
+        #content{
+            float: left;
+            background-color: white;
+            width: 640px;
+            height: 400px;
+        }
+        #sideinfo{
+            float: right;
+            background-color:  #dcdad9;
+            width: 280px;
+            height: 400px;
+        }
+        #footer{
+            /* footer위에 항목들이 떠있기때문에 footer가 위로 말림(but 글자는 두고감...ㅎ) */
+            /* float을 끝낸다는 것을 명시해줘야함 */
+            clear: both;
+            background-color: #555;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <!-- html5이전의 페이지 레이아웃 -->
+    <div id="container">
+        <div id="header">Header</div>
+        <div id="content">Content</div>
+        <div id="sideinfo">Side Info</div>
+        <div id="footer">Footer</div>
+    </div>
+</body>
+</html>

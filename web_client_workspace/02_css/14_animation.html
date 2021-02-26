@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS animation</title>
+</head>
+<body>
+    <h1>animation</h1>
+    <div class="box">  
+    </div>
+
+    <hr>
+
+    <div class="wrapper">
+        <img src="resources/image/hyunta.jpg" id="img-hyunta">
+    </div>
+    <style>
+        .wrapper{
+            text-align: center;
+        }
+        #img-hyunta{
+            width: 200px;
+            animation-name: my-first-animation;
+            animation-iteration-count: 2;
+            animation-duration: 2s;
+        }
+
+        .box{
+            width: 100px;
+            height: 100px;
+            background-color: blueviolet;
+            border: 3px solid black;
+            margin: 0 auto;
+
+            animation-name: my-first-animation;
+            animation-duration: 5s;
+            animation-iteration-count: infinite; /*무한*/
+            animation-direction: alternate;
+        }
+
+
+        /*         
+        animation 속성
+        @keyframes 이름 : 각각의 상태를 작성 (0~100%)
+        animation
+            -name : @keyframes의 이름 지정
+            -delay : 지연시간
+            -direction : 진행방향
+                normal | reverse| alternate(정방향 ->역방향) | alternate-reversse
+            -iteration-count :반복횟수
+                infinite(무한)
+            -duration: 실행시간
+            -timing-function: 속도곡선
+            -fillmode: 시작전후 상태 지정
+                forwards | backwards | both 
+        */
+
+        @keyframes my-first-animation {
+            25%{
+                transform: translate(100px, 0);
+            }
+            50%{
+                transform: translate(100px, 100px);
+            }
+            75%{
+                transform: translate(0,100px);
+            }
+            100%{
+                transform: translate(0,0);
+                width: 300px;
+                height: 300px;
+            }
+        }
+    </style>
+
+</body>
+</html>
