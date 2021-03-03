@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS - Datatype</title>
+</head>
+<body>
+    <h1>Data Type</h1>
+    <input type="button" value="실행1"  onclick="test1();">
+
+    <script>
+        // 변수 선언시 var 키워드 사용
+        function test1(){
+            var i;
+            console.log(i, typeof(i));
+            //값대입이 일어날때, 변수 타입이 결정된다.
+            i=100; //i는 숫자형 변수(정수,실수를 다 포함한다.)
+            console.log(i, typeof(i));
+            i=3.14;
+            console.log(i, typeof(i));
+
+            i=true;
+            console.log(i, typeof(i)); //boolean형
+
+            i="zzzzz" //i는 문자열변수("", ''감싸서 문자형 표현)
+            console.log(i, typeof(i));
+
+            //객체
+            //배열도 하나의 객체
+            // List<object>와 비슷. 크기/타입 제한이 없음
+            i = [1,2,3];
+            console.log(i, typeof(i));//object
+
+            // 속성명 : 속성값(any)
+            i={
+                name : '홍길동',
+                age: 30
+                
+            };
+            console.log(i, typeof(i));
+
+            // 자바스크립트 함수 매개변수 선언부는 자료형을 사용하지 않는다
+            i=function(x,y){
+                return x+y;
+            }
+            console.log(i, typeof(i));  //i는 function 타입
+            console.log(i(3,7));
+
+            i=new Date();
+            console.log(i, typeof(i));//object
+        }
+    </script>
+
+
+</body>
+</html>

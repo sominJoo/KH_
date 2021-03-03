@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+    <style>
+        h3{
+            color: blue;
+            font-weight: bolder;
+            text-align: center;
+        }
+        table{
+            border:  1px solid black;
+            text-align: center;
+        }
+        th,td{
+            border:  1px solid black;
+        }
+        .b{
+            font-weight: bold;
+        }
+        #last{
+            text-align: center;
+            color: green;
+        }
+        .wrapper{
+            width: 360px;
+            height: 300px;
+        }
+
+        thead{
+            background-color: red;
+            color: white;
+        }
+
+        tbody{
+            background-color: yellow;
+        }
+
+        tfoot{
+            background-color: orangered;
+        }
+
+        button{
+            background-color: green;
+            border: 1px solid white;
+            color : white;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <h3>KH 요가학원</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>    </th>
+                    <th>담당강사</th>
+                    <th>기간</th>
+                    <th>시간</th>
+                </tr>
+            </thead>
+    
+            <tbody>
+                <tr>
+                    <td rowspan="6">요가</td>
+                    <td rowspan="2">홍길순</td>
+                    <td rowspan="2">1개월권</td>
+                    <td> 
+                        <span class="b">월, 수, 금</span>  
+                        <span> 2시간씩<span>
+                        <button type="submit">신청</button>
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td> 
+                        <span class="b">화, 목</span>  
+                        <span> 2시간씩<span>
+                        <button type="submit">신청</button>
+                    </td>
+                </tr>
+    
+                
+                <tr>
+                    <td rowspan="2">김말녀</td>
+                    <td rowspan="2">2개월권</td>
+                    <td> 
+                        <span class="b">월, 수, 금</span>  
+                        <span> 2시간씩<span>
+                        <button type="submit">신청</button>
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td> 
+                        <span class="b">화, 목</span>  
+                        <span> 2시간씩<span>
+                        <button type="submit">신청</button>
+                    </td>
+                </tr>
+    
+                
+                <tr>
+                    <td rowspan="2">강개순</td>
+                    <td rowspan="2">3개월권</td>
+                    <td> 
+                        <span class="b">월, 수, 금</span>  
+                        <span> 2시간씩<span>
+                        <button type="submit">신청</button>
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td> 
+                        <span class="b">토, 일</span>  
+                        <span> 3시간씩<span>
+                        <button type="submit">신청</button>
+                    </td>
+                </tr>
+            </tbody>
+    
+            <tfoot>
+                <tr id="last"> 
+                    <td colspan="4"> 
+                        <span class="b"> 곧 모집 마감! 서둘러서 신청해주세요</span>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    
+</body>
+</html>

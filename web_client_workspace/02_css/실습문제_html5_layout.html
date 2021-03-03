@@ -16,14 +16,11 @@
 
 
         header{
-            position: relative;
             background-color: #908886;
             height: 100px;
         }
         nav{
-            position: absolute;
-            top: 53px;
-            left: 567px;
+            float: right;
         }
         nav ul li{
             float :left;
@@ -39,6 +36,9 @@
         nav ul li a:hover{
             cursor: pointer;
             color: white;
+        }
+        nav ul li:not(:last-of-type)::after{
+            content: "|";
         }
 
 

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IO</title>
+    <script>
+        function init() {
+            alert("DOM작업이 완료");
+        }
+    </script>
+</head>
+<!-- html문서 내 태그는 브라우저가 모두 DOM document으로 등록한다  -->
+<!-- 모든 태그가 등록되고 나면, load이벤트가 발생 -->
+<body onload="init();">
+    <h1>Input | Output</h1>
+    <input type="button" value="confirm" onclick="test1();">    
+    <input type="button" value="prompt" onclick="test2();">
+
+    <script>
+        // 확인/취소버튼을 통해 논리식 처리를 지원
+        function test1(){
+            var bool = confirm("이 파일을 삭제하시겠습니까?");
+            console.log(bool);      //확인 : true. 취소 : false
+
+            if(bool)
+                alert("파일 삭제 완료");
+        }
+        // prompt는 사용자로부터 문자열 입력값을 처리가능
+        function test2(){
+            var name = prompt("당신의 이름은 : ")
+            console.log(name); //확인 : name 리턴. 아무것도 입력 x: 빈문자열 리턴. 취소 : null
+
+            // 값이 존재하는 경우 true. 값이 없는 경우(null, "", undefined) false 
+            if(name == null || name == ""){
+                //if(!name)으로 대체 가능 
+                //취소 | 아무것도 입력 안했을 시
+                alert("올바른 이름을 입력하세요");
+            }
+            else{
+                alert("당신의 이름은 "+ name+ "입니다.");
+            }
+        }
+    </script>
+
+    <h2>innerHTML | innerText | outerHTML</h2>
+    <input type="button" value="innerHTML" onclick="test3();">
+    <input type="button" value="innerText" onclick="test4();">
+    <input type="button" value="outerHTML" onclick="test5();">
+    <div class="wrapper"> </div>
+
+    <script>
+        /**
+         * innerHTML : 실제 태그의 content 부분. (텍스트, 자식태그)
+         *  - getter : html이 포함된 content 리턴
+         *  - setter : 주어진 문자열을 html로 파싱해 처리
+         * */
+         function test3(){
+             var str = prompt(".wrapper태그 내용을 입력하세요");
+             var wrapper = document.querySelector(".wrapper");
+             wrapper.innerHTML = str;   //setter
+                //str이 html태그 "<h1>안녕</h1>"작성시 html로 파싱되어 머릿말 "안녕"이 div안에 쓰여짐
+             console.log(wrapper.innerHTML);
+         }
+         /**
+          * innerText : 태그안의 content. only text
+          *  - getter : html태그 무시. text만 가져옴
+          *  - setter : html태그로 parsing 처리 없음. 단순 text 처리
+         */
+         function test4(){
+            var str = prompt(".wrapper태그 내용을 입력하세요");
+             var wrapper = document.querySelector(".wrapper");
+             wrapper.innerText = str; setter
+             console.log(wrapper.innerText); //getter
+         }
+
+         /**
+          * outerHTML : 컨텐츠 뿐 아니라 태그 자신도 포함
+         */
+         function test5(){
+            var wrapper = document.querySelector(".wrapper");
+             console.log(wrapper.outerHTML); //getter
+         }
+    </script>
+
+</body>
+</html>
