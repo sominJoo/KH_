@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>실습_구매정보</title>
+    <style type="text/css">
+        #area {
+            width: 400px;
+            height: 150px;
+            background: #ffff99;
+            border: 1px solid #6666ff;
+        }
+    </style>
+
+    <script>
+        function printValue() {
+            var area = document.getElementById("area");
+            var text = document.querySelectorAll("input");
+            var str= ("구입자 : " + text[0].value+"님<br>") 
+                + ("구입상품 : "+ text[1].value +"<br>")
+                + ("구매가격 : "+ text[2].value +"만원")
+            area.innerHTML = str;
+
+        }
+    </script>
+</head>
+<body>
+    <h2>@실습문제 1</h2>
+	<label>구매자 : </label>
+	<input type="text" placeholder="구매자의 이름을 입력하세요.">
+	<br><br>
+
+	<label>상품명 : </label>
+	<input type="text" id="pname" placeholder="구매 상품명을 입력하세요">
+	<br><br>
+
+	<label>가격 : </label>
+	<input type="text" name="price" placeholder="구매 가격을 입력하세요.">만원
+	<br><br>
+
+	<button onclick="printValue();">입력값 출력하기</button>
+	<br><br>
+
+	<div id="area"></div>
+
+</body>
+</html>
