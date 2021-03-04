@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>06_hoisting</title>
+</head>
+<body>
+    <h1>Hoisting - 끌어올리다.</h1>
+    <script>
+        // var a; //var 키워드로 선언된 변수는 hoisting 된다.
+        console.log(a);
+        var a= "안녕";
+
+        //fuctiong foo; 함수선언식 hositing
+        foo();
+        //함수선언식은 hoisting 된다.
+        function foo() {
+            console.log("foo");
+        }
+
+
+        //함수 표현1. bar 변수에 익명함수를 대입
+        var bar = function() {
+            console.log("익명함수");
+        }
+    </script>
+</body>
+</html>

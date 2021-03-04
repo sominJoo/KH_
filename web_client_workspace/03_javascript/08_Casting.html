@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casting</title>
+</head>
+<body>
+    <h1>Casting</h1>
+    <input type="button" value="실행" onclick="test1();">
+
+    <script>
+        function test1() {
+            console.log(7+ "7");
+            console.log(typeof(7+ "7"));    //string
+
+            console.log(7 - "7"); //0 숫자로 자동 형변환
+            console.log(7 * "7"); //49
+            console.log(7 / "7"); //1
+            console.log(7 % "4"); //3
+            
+            console.log(7 % "a"); //nan 숫자로 자동형변환 불가한 우항
+        }
+    </script>
+
+    <h2>Number | parseInt | parseFloat</h2>
+    <input type="button" value="실행" onclick="test2();">
+    <script>
+        function test2(){
+            var num = "1234.577";
+            
+            console.log(Number(num));  // 정수/실수로 변환
+            console.log(parseInt(num)); // 정수 변환. 문자가 있어도 좌측부터 최대한 변환. 
+            console.log(parseFloat(num)); // 실수 변환. 문자가 있어도 좌측부터 최대한 변환. 
+        }
+    </script>
+    <br><br>
+
+    <input type="number" id="num1" placeholder="숫자1">
+    <input type="number" id="num2" placeholder="숫자2">
+    <input type="button" value="합 계산" onclick="test3();">
+
+    <script>
+        //input 태그의 value는 type 속성과 관계없이 모두 string
+        function test3() {
+            var total = Number(num1.value) + Number(num2.value);
+            alert(total);
+        }
+    </script>
+</body>
+</html>

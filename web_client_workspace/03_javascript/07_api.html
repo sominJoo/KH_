@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API_String,Math,Date</title>
+
+</head>
+<body>
+    <H1>API</H1>
+    <h2>String</h2>
+    <input type="button" value="실행" onclick="test1();">
+    <input type="button" value="실습문제" onclick="test2();">
+    <script>
+        //String 내장 객체 : 문자열 관련 메소드를 제공
+        var test1 = function () {
+            var str = "samsung Apple Xiomi";
+
+            console.log(str.length); // 19
+            console.log(str.toUpperCase()); // SAMSUNG APPLE XIOMI
+            console.log(str.toLowerCase()); // samsung apple xiomi
+            console.log(str.indexOf('ms')); // 2
+            console.log(str.lastIndexOf('i')); // 18
+            console.log(str.charAt(8)); // A
+            console.log(str[8]); // 문자열 -> 문자배열 취급
+
+            //문자열 일부를 리턴 : 3번지 ms잘라오기
+            //substring(start, end)
+            console.log(str.substring(2,4)); //ms
+            console.log(str.substring(2));  //msung Apple Xiomi
+
+            //substr(start, length)
+            console.log(str.substr(2,2)); //ms
+            console.log(str.substr(2));  //msung Apple Xiomi
+
+            //split
+            var arr = str.split(" ");
+            console.log(arr);
+        };
+
+        //두개 인자 문자열과 문자를 입력받고, 문자열에서 문자가 몇번 출현하는지 출력하는 함수
+        function test2() {
+            var result = countStr("hahaha", "a");
+            console.log(result);
+        }
+
+        function countStr(str, ch) {
+            var count =0;
+            for(var i = 0 ; i<str.length ;i++){
+                if(str[i] == ch)
+                    count++;
+            }
+            return count;
+        }
+    </script>
+
+    <h2>Math</h2>
+    <input type="button" value="실행" onclick="test3();">
+    <input type="button" value="실습문제" onclick="test4();">
+    <ul id="test_rnd">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <script>
+        var test3 =function(){
+            var num = 123.456;
+            console.log(Math.round(num)); //123
+            console.log(Math.round(num*100)/100); //123.46
+            console.log(Math.ceil(num)); //123.46
+            console.log(Math.floor(num)); //123.46
+
+            //랜덤 : 올림, 반올림 금지! 0.0~1.0
+            console.log(Math.trunc(Math.random()*10 +1)); //1-10 사이 난수
+        };
+
+        //#test-rnd 하위 li 태그에 난수 (1~100사이) 대입. 짝수시 색 ㅕㄴ경
+        function test4(){
+            var lis = document.querySelectorAll("#test_rnd li");
+
+            for(var i = 0 ;i<lis.length ;i++){
+                var num = Math.trunc(Math.random()*100 +1);
+                lis[i].innerText =  num;
+                //컬러 초기화 필수!
+                lis[i].style.color = "black";
+                if(num%2 == 0)
+                    lis[i].style.color = "orangered";
+            }
+        }
+    </script>
+    <h2>Date</h2>
+    <input type="button" value="실행" onclick="test5();">
+    <input type="button" value="실습문제" onclick="test6();">
+    <script>
+        function test5() {
+            var now = new Date();
+            var time1 = new Date(2000,0,1); // 월은 0이 베이스 인덱스
+            var time2 = new Date(2000,0,1,15,30,50);
+            var time3 = new Date("1999/01/01 15:34:20"); //날짜형식의 문자열도 처리가능
+        }
+        function test6() {
+            var now = new Date();
+            displayDate(now);
+        }
+        function displayDate(dt) {
+            var y = dt.getFullYear();
+            var m = get2digit(dt.getMonth()+1);
+            var d = get2digit(dt.getDate());
+            var day = dt.getDay(); // 일(0) ~ 토(6)
+            var dayArr = ['일','월','화','수','목','금','토']
+
+            var h = get2digit(dt.getHours());
+            var m = get2digit(dt.getMinutes());
+            var s = get2digit(dt.getSeconds());
+
+            alert(y+"/"+m+"/"+d+"(" +dayArr[day]+")  " + h +":" + m + ":"+s);
+        }
+        function get2digit(n) {
+            return n <10 ? '0'+n : n;
+        }
+    </script>
+
+
+</body>
+</html>

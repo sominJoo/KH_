@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>varianle_scope</title>
+</head>
+<body>
+    <h1>varianle | scope</h1>
+
+    <input type="button" value="전역변수" onclick="test1();">
+    <input type="button" value="scope" onclick="test2();">
+    <input type="button" value="USE STRICT" onclick="test3();">
+    <script>
+        //함수 밖 script 태그에 작성된 var 변수는 전역변수로 등록.
+        //탭의 최상위 객체 window의 속성으로 등록된다.
+        var a;
+        a=100; //변수의 타입이 결정
+
+
+        //함수 안 변수는 지역변수로 등록 -> 함수 밖에서 절대 접근 불가
+        function test1() {
+            var a= "아";    //전역변수와 이름이 겹쳤을 경우 가까운게 먼저 실행
+            var b=123;
+            console.log("a = "+a);
+            console.log("b = "+b);
+
+            //this 용법2 : 일반 함수 안에서 this는 window 객체를 가리킨다.(java와 다른점)
+            console.log("전역변수 a = "+window.a);
+            console.log("전역변수 a = "+this.a);
+
+            
+            var b=바보;      //중복선언 가능 
+            c = 1 ;         //var 선언없이 선언된 변수는 전역변수로 등록 => 사용 금지
+        }
+
+
+        //scope : 유효범위
+        //c-family언어가 가진 block scope 아닌, js에서는 function scope를 가진다.
+        // 즉, while 문안에 선언 했더라도 상관x. 함수 밖인지 아닌지만 중요함
+        function test2() {
+            var x =10;
+            if(true){
+                var x=100;
+            }
+            console.log(x);
+        }
+
+
+        //use strict  엄격모드 지원
+
+        //ES6 지원
+        //let - block scope를 가진 변수 키워드
+        //const - block scope를 가진 상수 키워드
+        function test3() {
+            "use strict";
+
+            // foo =100; =>  오류발생!
+
+            // let foo =100;
+            // const bar = "상수";
+        }
+    </script>
+
+
+</body>
+</html>
