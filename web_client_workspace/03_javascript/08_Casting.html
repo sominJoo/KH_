@@ -48,5 +48,53 @@
             alert(total);
         }
     </script>
+
+    <h2>NaN | infinity</h2>
+    <input type="button" value="실행" onclick="test4();">
+    <script>
+        function test4() {
+            console.log(10/0); //infinity. type : number
+            console.log(10/"a") //NaN. type : number
+
+            var num = prompt("숫자를 입력하세요");
+            if(isNaN(num)) //true : 숫자가 아님.
+                alert("숫자가 아닙니다.");
+            else
+                alert("숫자.");
+        }
+    </script>
+
+
+    <h2>논리형으로의 형변환</h2>
+    <input type="button" value="실행" onclick="test5();">
+    <script>
+        //변수, 리터럴(값)이 boolean형으로 형변환 가능
+
+        //값 존재 : true(new Date(), "zzzz". -100 ...). 값 없음 : false(0, "", '', undefined, null, NaN)
+        function test5() {
+            console.log(Boolean(0)); //false
+            console.log(Boolean(3.14)); //true
+
+
+            var name = prompt("이름을 입력하세요");
+            if(name){
+                // alert("반갑습니다. ["+name+"]님");
+                var result = document.querySelector("h1#result"); // 존재x시 null값 return
+
+                if(result){
+                    console.log("#result가 존재");
+                    result.innerHTML="반갑습니다. ["+name+"]님";
+                }
+                else{
+                    console.log("#result가 존재x")
+                    document.querySelector("body").innerHTML += "<h1>반갑습니다.  ["+name+"]님</h1>";
+                }
+            }
+            else
+                alert("이름을 입력하세요");
+        }
+    </script>
+
+    <!-- <h1 id="result"></h1> -->
 </body>
 </html>
