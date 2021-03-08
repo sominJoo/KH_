@@ -75,8 +75,29 @@
     <input type="button" value="push | pop | unshift | shift 실행" onclick="test9();">
     <input type="button" value="slice 실행" onclick="test10();">
     <input type="button" value="splice 실행" onclick="test11();">
+    <input type="button" value="forEach 실행" onclick="test13();">
 
+
+    <hr>
+    <ul id="drink">
+        <li>coke</li>
+        <li>juice</li>
+        <li>coffee</li>
+        <li>bear</li>
+        <li>wine</li>
+    </ul>
+
+    <input type="button" value="@실습문제" onclick="test15();">
     <script>
+        function test15() {
+            // ul li의 내용을 배열 drink에 추가
+            var drinkArr = [];
+            document.querySelectorAll("ul#drink>li").forEach(function (elem, i) {
+                drinkArr.push(elem.innerText);
+            });
+            console.log(drinkArr);
+            
+        }
         var test4=function(){
             var arr = ["apple", "melon", "banana", "melon"];
 
@@ -168,6 +189,20 @@
             //제거만
             arr.splice(2); //2번 이후 모든 요소를 제거
             console.log(arr);
+        }
+
+        function test13() {
+            //유사배열에서도 사용가능
+            var arr = [1,2,3,4,5];
+
+            var sum = 0;
+            arr.forEach(function (elem, i) {
+                console.log(i,elem);    //인덱스, 요소값
+            });
+
+            document.querySelectorAll("input[type=button]").forEach(function(elem, i){
+                console.log(i, elem);
+            });
         }
     </script>
 
