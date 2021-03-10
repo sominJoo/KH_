@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObjcetArray</title>
+</head>
+<body>
+    <h1>ObjcetArray</h1>
+    <h2>객체배열</h2>
+
+    <input type="button" value="실행" onclick="test1();">
+    <script>
+        function test1() {
+            var pets=[
+                {
+                    name : '구리구리',
+                    breed : '오리',
+                    weight : 2.5
+                },
+                {
+                    name : '콩이',
+                    breed : '페키니즈',
+                    weight : 6
+                },
+                {
+                    name : '달달',
+                    breed : '수달',
+                    weight : 11
+                }
+            ];
+
+            for(var i in pets){
+                // console.log(pets[i]);
+                pets[i].bark = function () {
+                    return this.weight >10 ? '멍멍': '왈왈';
+                };
+                console.log(pets[i].name +"이/가 " + pets[i].bark()+"짖는다");
+            }
+        }
+    </script>
+
+
+    <h2>생성자 함수</h2>
+    <input type="button" value="실행" onclick="test2();">
+    <script>
+        //(this용법 4)생성자 함수 안의 this는 현재 객체를 가리킨다.
+        function Pet(name, breed, weight) {
+            this.name = name;
+            this.breed = breed;
+            this.weight = weight;
+        }
+
+        function test2() {
+            var pet =[ 
+                new Pet('구리','푸들',4.5),
+                new Pet('콩이','페키',6),
+                new Pet('달달','수달',11)
+            ];
+            console.log(pet);
+            for(var i in pet){
+                console.log(pet[i].name +"이/가 "+"짖는다");
+            }
+        }
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>실습 이벤트</title>
+    <style>
+        a{
+            color: black;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>실슴문제_이벤트</h1>
+
+    <!--
+         #btn-generate을 클릭하면, 아래 데이터를 js객체로 먼저 만들고 배열로 관리한다.
+        배열을 순회하면서, button태그를 동적으로 생성한다.
+        생성된 버튼 태그를 클릭하면 각각의 url로 페이지 이동
+
+        버튼 value  이동할 url
+        ---------------------
+        네이버      https://www.naver.com
+        구글        https://www.google.com
+        kh          https://www.iei.or.kr
+        와삼        https://www.w3schools.com
+    -->
+
+    <button type="button" id="btn-generate"> 버튼생성</button>
+    <div class="btn-wrapper"></div>
+
+    <script>
+        function Website(name, url){
+            this.name = name;
+            this.url = url;
+        }
+        Website.prototype.toString = function (){
+            return this.name + ", " + this.url;
+        }
+
+        function makeArr(){
+            var siteArr=[
+                new Website('네이버', 'https://www.naver.com'),
+                new Website('구글', 'https://www.google.com'),
+                new Website('kh', 'https://www.iei.or.kr'),
+                new Website('와삼', 'https://www.w3schools.com'),
+            ];
+            return siteArr;
+        }        
+
+        document.querySelector("#btn-generate").onclick = function(e){
+            var arr = makeArr();
+            for(var i in arr){
+                var btn = document.createElement("button");
+                btn.type = "button";
+                // btn.innerText = ""+arr[i].name;
+                btn.innerHTML = '<a href="' +arr[i].url+ '" target="_blank">'+arr[i].name+ '</a>';
+                document.querySelector(".btn-wrapper").appendChild(btn);
+                document.querySelector(".btn-wrapper").innerHTML += "<br><br>";              
+            }
+        }
+    </script>
+</body>
+</html>

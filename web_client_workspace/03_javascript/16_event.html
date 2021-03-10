@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>event</title>
+    <script>
+        /**
+         * 현재페이지의 모든 설정이 끝난후 실행된다.
+         * 16_event.html:12 Uncaught TypeError: Cannot set property 'onclick' of null
+         */
+        // document.querySelector("#btn2").onclick = function () {
+        //     console.log("btn2 click이벤트 발생")
+        // }
+
+        /**
+         * 탭이 load되었을때 실행
+         */
+        // window.onload = function () {
+        //     document.querySelector("#btn2").onclick = function () {
+        //         console.log("btn2 click이벤트 발생")
+        //     }
+        // }
+    </script>
+</head>
+<body>
+    <h1>Event</h1>
+    <a href="https://www.w3schools.com/jsref/dom_obj_event.asp">W3School - HTML DOM Events</a>
+
+
+    <h2>Event Handler Binding</h2>
+    <input type="button" value="inline event 속성" onclick="test1(); " onmouseover="test1();">
+    <input type="button" value="event 속성 지정" id="btn2">
+    <input type="button" value="addEventListener" id="btn3">
+    <input type="button" value="event객체" onclick="test2(event);">
+    <script>
+        function test1() {
+            console.log("click event 발생");
+        }
+
+
+        // document.querySelector("#btn2").onclick = function () {
+        //     console.log("btn2 click이벤트 발생")
+        // };
+        document.querySelector("#btn2").onclick = test1;
+        // document.querySelector("#btn2").onclick = test1(); => 함수 자체를 전달한다. 함수 호출 불가!!
+        
+        
+        document.querySelector("#btn3").addEventListener("click",function () {
+            alert("#btn3 click");
+        });
+    </script>
+
+
+    <h2>Event | Event Target</h2>
+    <div class="box"></div>
+    <style>
+        .box{
+            width: 100px;
+            height: 100px;
+            border: 3px solid black;
+            background-color: brown;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+
+    <script>
+        /**
+         * Event 객체 : 발생한 이벤트관련 모든 정보를 가진 객체
+         *              이벤트핸들러 함수의 인자로 전달됨
+         * 
+         * offsetX(offsetY) : event가 발생된 div에서의 위치
+         * clientX(clientY) : event가 발생된 browser(해당페이지)에서의 마우스 위치
+         * 
+         * target : event 발생객체를 가리킴
+         * 
+         * 
+         * Event Target 객체 : 이벤트 발생 객체. Event객체의 target속성값.
+         */
+        document.querySelector(".box").onmouseover=function(e){
+            console.log(e);
+            console.log(e.target == document.querySelector(".box")); //true
+
+            e.target.innerHTML ="안녕";
+        }
+
+
+        /**
+         * mouseover <----------->mouseout
+         */
+        document.querySelector(".box").onmouseout=function(e){
+            this.innerHTML ="잘가";
+        }
+
+
+        /**
+         * HTML태그를 inline속서응로 핸들럴를 지정한 경우 this가 window이다.
+         *  => 이 함수는 일반 함수이고, this는 window객체를 가리킨다.
+         */
+        function test2(e) {
+            console.log(e);
+            console.log(e.target == this); //false
+            console.log(this);              //window 객체가 this
+        }
+    </script>
+
+    <h2>Key Event</h2>
+    <input type="text" id="userInput" placeholder="아무말">
+    <div id="text-div"></div>
+    <script>
+        /**
+         * keydown - keypress - keyup
+         */
+        document.querySelector("#userInput").addEventListener('keypress',function (e) {
+            console.log(e);
+            document.querySelector("#text-div").innerHTML = this.value; //value로 받음
+        });
+    </script>
+
+
+    <h2>Submit Event</h2>
+    <form action="">
+        <fieldset style="width: 300px;">
+            <legend> 로그인</legend>
+            <table>
+                <tr>
+                    <th>
+                        <label for="userId">아이디</label>
+                    </th>
+                    <td>
+                        <input type="text" name="userId" id="userId">
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>
+                        <label for="userPwd">비밀번호</label>
+                    </th>
+                    <td>
+                        <input type="current-password" name="userPwd" id="userPwd">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <input type="submit" value="로그인" >
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </form>
+
+
+    <script>
+        /**
+         * 사용자 입력값 유효 검사
+         */
+        document.querySelector("form").onsubmit=function(e){
+            console.log(e);
+            //1.id 검사
+            if(userId.value.length <4){
+                alert("유효한 아이디를 입력하세요");
+                userId.select();
+                return false; //submit 방지
+            }
+
+            //2. 비밀번호
+            if(userPwd.value.length<4){
+                alert("유효한 비밀번호를 입력하세요");
+                userPwd.select();
+                return false;
+            }
+
+            //위 유효성 검사 통시 submit 가능
+            return true;
+        }
+    </script>
+</body>
+</html>

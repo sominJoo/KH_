@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Window</title>
+    <style>
+        #clock{
+            font-size: 2em;
+            text-shadow: 3px 3px 7px #000;
+        }
+        #countDown{
+            border: 3px solid black;
+            font-size: 15em;
+            padding: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<!-- page 실행시 바로 script 실행 -->
+<body onload="test5();">
+    <h1>Window</h1>
+    <h2>웹페이지 구조</h2>
+    <img src="./img/windowObjects.png">
+    <h2>Method</h2>
+    <input type="button" value="open 실행" onclick="test1();">
+    <input type="button" value="popup 닫기" onclick="test2();">
+    <input type="button" value="setTimeout" onclick="test3();">
+    <input type="button" value="@실습문제" onclick="test4();">
+    <input type="button" value="setInterval" onclick="test5();">
+    <input type="button" value="countDown" onclick="test6();">
+    <div id="clock"></div>
+    <div id="countDown"></div>
+
+    <script>
+        //브라우저는 탭마다 단일 스레딩처리됨
+        //open : 새로운 window 생성
+        // - 새탭
+        // - 팝업창
+
+        //open(uwl,name,specs)
+        //specs : 문자열
+        var w;//팝업윈도우 객체
+        function test1() {
+            //팝업창(새탭으로 width,height를 주면 팝업창으로 사용가능)
+            w=open("13_Objcet.html","newWindow","width=800, height = 300, top=300, left=300");
+            console.log(window == w); //false : 다른 window 객체
+
+            //1초이후에 실행
+            setTimeout(function () {
+                w.alert("hello js");
+            },1000);
+        }
+
+        function test2() {
+            w && w.close(); //w가 존재할때만 w close
+        }
+
+
+        //setTimeout(callback함수, millis)
+        //millis초 이후에 콜백함수 실행
+
+        /**
+         * 동기적(위에 서 아래로, 좌에서 우로 순서대로 처리)
+         * timeoutAPI 메소드는 비동기적으로 처리된다.
+        */
+        function test3() {
+            setTimeout(function () {
+                alert('반갑');
+            },3000);
+
+            alert("안녕");
+            //비동기적 처리로 밑에 alert가 먼저 실행된다.
+        }
+
+
+        //실습문제
+        //팝업창에 <h1>3초 팝업</h1> 작성
+        //3초이후에 창이 자동으로 닫힘
+        function test4() {
+            var w=  open("","popup","width=300,  height = 300, top=300, left=300");
+            w.document.write("<h1>3초 팝업</h1>");
+
+            setTimeout(function () {
+                w.close();
+            },3000);
+        }
+
+
+
+        /**
+         * setInerval(callback함수, millis)
+         * millis초마다 콜백함수 실행
+        */
+        function test5() {
+            var foo =function(){
+                var now = new Date();
+                var strFomat = getTimeFomatStr(now);
+                document.querySelector("#clock").innerHTML = strFomat;
+            }
+            foo();
+            setInterval(foo,1000);                                         
+        }
+
+        function getTimeFomatStr(now) {
+            var f= function (n) {
+                return n>9 ? n:"0"+n;
+            }
+            var hh = f(now.getHours());
+            var mi = f(now.getMinutes());
+            var ss = f(now.getSeconds());
+            return (hh+":" + mi +":"+ss);
+        
+        }
+
+
+        /**
+         * countDown
+         */
+        function test6(){
+            var cnt =10;
+            var cd= document.querySelector("#countDown");
+            cd.style.display ="block";
+            var f=function(){
+                cd.innerHTML = cnt--;
+
+                if(cnt <0){
+                    clearInterval(intervalId);
+                    cd.innerHTML="뻥!";
+                }
+            }
+            f();
+            var intervalId = setInterval(f,1000);
+        }
+    </script>
+
+
+
+    <h2>BOM</h2>
+    <h3>Browser Object Model</h3>
+    <input type="button" value="navigator" onclick="test7()">
+    <input type="button" value="location" onclick="test8()">
+    <input type="button" value="history" onclick="test9()">
+    <input type="button" value="screen" onclick="test10()">
+    <script>
+        /**
+         * navigator : 현재 실행중인 browser에 대한 정보를 가진 객체(chrome)
+         */
+        function test7() {
+            console.log(navigator)
+        }
+
+        /**
+         * location : 주소창 관련 정보를 가진객체
+         */
+        function test8() {
+            console.log(location);
+            console.log(location.reload); //새로고침
+
+            //페이지 이동
+            location.href = "https://naver.com";
+        }
+
+
+        /**
+         * history : 방문기록 관련 정보를 가진 객체
+         */
+        function test9() {
+            console.log(history.back());    //뒷페이지로 이동
+            console.log(history.forward()); //앞페이지로 이동
+            console.log(history.go(1));     //하나 앞페이지로 이동(1 | 0 | -1)
+        }
+
+        /**
+         * screen : 모니터 관련 정보를 가진 객체(browser 정보가 아님)
+         * -width
+         * -height
+         * -availWidth : 가용width(widht- 작업줄)
+         * -availHeight
+         */
+        function test10() {
+            console.log(screen.availWidth);
+
+
+            var w =300;
+            var h =300;
+            var left = (screen.availWidth-w)/2 + screen.availLeft; // 듀얼스크린일 경우 숨겨진 부분을 더해줌
+            var top = (screen.availHeight-h)/2;
+
+            open("" ,"popup","width = 300, height=300, top=" +top+ ", left="+ left);
+
+        }
+    </script>
+
+
+    <h2>DOM</h2>
+    <input type="button" value="Node" onclick="test11();">
+    <div class="img-wrapper"></div>
+    <script>
+        /**
+         * Node객체 : 모든 DOM객체가 Node객체를 상속받는다.
+         * 
+         * h2- HTMLHeadingElement - HTMLElement - Element - Node - EventTarget - Objcet
+         * 
+         * -firstChild | lastChild | childNode ... 
+         * -contain() | appendChild() | removeChild()...
+         */
+        function test11() {
+            var h2 = document.querySelector("h2:last-of-type");
+            console.dir(h2);
+
+            //img태그 동적 생성 - 속성추가
+            var img = document.createElement("img");
+            img.src = "img/windowObjects.png";
+            img.style = "width : 200px";
+            //<img src = "" stlye="">
+            
+            document.querySelector(".img-wrapper").appendChild(img);
+
+            //innerHTML 사용해서도 가능 => innerHTML이 Node를 사용하여 제어함
+            // document.querySelector(".img-wrapper").innerHTML +='<img src = "img/windowObjects.png" stlye="width : 200px"/>';
+        }
+    </script>
+
+
+</body>
+</html>
