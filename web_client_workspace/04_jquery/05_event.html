@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>event</title>
+    <script src="js/jquery-3.6.0.js"></script>
+    <style>
+        .outer{
+            width: 200px;
+            height: 200px;
+            background-color: orange;
+            padding: 50px;
+            margin: 20px auto;
+        }
+        .inner{
+            width: 100%;
+            height: 100%;
+            background-color: red;
+        }
+        .bord{
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Event</h1>
+    <h2>mouseover & mouseout | mouseentor & mouseleave</h2>
+    <div class="outer">
+        <div class="inner"></div>
+    </div>
+
+
+    <script>
+        /**
+         * 자식요소 접근시에도 이벤트 발생
+         * 자식요소에서 다시 현재요소로 재진입시에도 이벤트 발생
+         */
+        $(".outer")
+          .mouseover(function(){
+            console.log("mouseover");
+          })
+          .mouseout(function(){
+            console.log("mouseout");
+          });
+      
+        /**
+         * 자식요소 접근시에는 이벤트 발생 안함.
+         */
+        $(".outer")
+          .mouseenter(function(){
+            console.log('mouseenter');
+          })
+          .mouseleave(function(){
+            console.log('mouseleave');
+          });
+
+        
+        /**
+         * mouseenter | mouseleave handler를 한번에 바인딩
+         */
+        $(".outer")
+          .hover(function () {  
+              //mouseenter
+            console.log('hover mouseenter');
+            $(this).addClass("bord");
+              
+          }, function () {
+              //mouseleave
+            console.log('hover mouseleave');
+            $(this).removeClass("bord");
+          })
+    </script>
+
+
+
+
+
+    <h2>Key Event</h2>
+    <form action="javascript:alert('폼제출 성공!')">
+        <fieldset>
+            <legend>메모</legend>
+            <p><span id="counter">0 </span> / 30</p>
+            <textarea name="memo" id="memo" cols="30" rows="10"></textarea>
+            <input type="submit" value="제출">
+        </fieldset>
+    </form>
+
+    <script>
+        $('input[type=submit]').click(function () {
+            if(maxCheck){
+                alert('제출 실패')
+                return false;
+            }
+        });
+
+        var maxCheck = false;
+        //counter 수 변경
+        $('#memo').keyup(function () {
+            var $textarea = $(this);
+            var $strNum =$textarea.val().length;
+            $("#counter").text($strNum); 
+            var num = $strNum;
+            var max = 30;
+            var maxCnt = max;
+            if($strNum >max){
+            maxCheck = true;
+            // var $maxStr = $textarea.val().replace(/{30,num}/g, "<span sytle ='background-color : red'>$&</span>");
+            // $textarea.innerHTML = $maxStr ;
+            }
+        });
+    </script>
+
+
+
+
+    <h2>on | off</h2>
+    <div class="box"></div>
+    <style>
+        .box {
+            width : 300px;
+            height : 300px;
+            background-color: teal;
+            color : white;
+            text-align : center;
+            line-height : 300px;
+        }
+    </style>
+    <script>
+        $(".box")
+        .on('click', function(){
+          $(this).html("<h1>안녕</h1>");
+        })
+        .on('mouseleave', function(){
+          $(this).html("");
+        })
+        .on('dblclick',function (e) {
+            //click이벤트 핸들러 제거
+            $(this).off('cilck');
+        });
+    </script>
+
+
+    <h2>bubbling을 통한 event handling</h2>
+    <div class="wrap">
+        <h2>안녕</h2>
+    </div>
+
+    <script>
+        $('.wrap').on('click','h2' ,function () {
+            //자식요소를 마지막에 추가
+            $('.wrap').append("<h2>안녕2</h2>");
+        })
+    </script>
+
+
+
+    <h2>tirgger</h2>
+    <div class="trg">
+        <h1>0</h1>
+    </div>
+    <input type="button" value="카운터 증가" onclick="test1();">
+    <script>
+        function test1() {
+            $(".trg").trigger('click');            //click이벤트 처리 함수를 호출
+        }
+        (function () {
+            //cnt를 지역변수 처리해줘서 외부에서 절대 접근 불가하게 만듦.
+            var cnt =0;
+            $(".trg").on('click',function (e){
+                $(this).children("h1").text(++cnt);
+            });
+        })();
+        
+    </script>
+</body>
+</html>

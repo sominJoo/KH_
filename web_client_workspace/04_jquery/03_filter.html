@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter</title>
+    <script src="js/jquery-3.6.0.js"></script>
+</head>
+<body>
+    <h1>Filter</h1>
+
+    <input type="button" value="Filter" onclick="test1();">
+    <input type="button" value="first | last | eq | not" onclick="test2();">
+    <div class="wrapper">
+        <p class="test">안녕1</p>
+        <p class="test">안녕22</p>
+        <p class="test">안녕3</p>
+        <p class="test">안녕4</p>
+        <p class="test">안녕52</p>
+        <p class="test">안녕63</p>
+        <p class="test">안녕7</p>
+        <p >안녕8</p>
+        <p >안녕9</p>
+        <p >안녕10</p>
+    </div>
+
+
+    <script>
+
+        /**
+         * filter(selector)
+            -현재 jquery 객체의 요소중이 selector에 부합하는 요소만 추려서 다시 jquery 객체로 반환
+         */
+        function test1() {
+            var $p = $('.wrapper > p');
+            // $p.filter('.test').css('color','deeppink');
+            // $p.filter(':even').css('color','deeppink'); //짝수 인덱스 반환
+            // $p.filter(':odd').css('color','blue');      //홀수 인덱스 반환
+
+
+            //callback 함수를 통한 filtering
+            //p태그안의 text중 안녕을 제외한 숫자가 짝수인 경우만 css적용
+            $p
+                .filter(function (index, p) {
+                    var $pStr = p.innerHTML.replace( /[^\d]/g, '');                    
+                    return $pStr%2 == 0;    //짝수 인덱스 반환
+                })
+                .css('color','blue');
+        }
+
+
+
+        /**
+         * frist*()
+         * last()
+         * eq(index)
+         * not(selector)
+         */
+        function test2() {
+            var $p = $('.wrapper p');
+            $p.first().css('color','green');    //jquery 객체 리턴
+            $p[0];                              //javascript 태그 객체
+            $p.last().css('color','green');
+            $p.eq(5).css('color','green');
+            $p.not('.test').css('color','yellow');
+        }
+    </script>
+</body>
+</html>
