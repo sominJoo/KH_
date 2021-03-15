@@ -29,9 +29,24 @@
     -->
 
     <button type="button" id="btn-generate"> 버튼생성</button>
-    <div class="btn-wrapper"></div>
+    <div class="btn-wrapper">
+        <button type="button" data-url="https://www.naver.com">네이버</button>
+        <button type="button" data-url="https://www.google.com">구글</button>
+        <button type="button" data-url="https://www.iei.or.kr">kh</button>
+        <button type="button" data-url="https://www.w3schools.com">와삼ㄴ</button>
+    </div>
 
     <script>
+        var btns = document.querySelectorAll(".btn-wrapper button");
+
+        btns.forEach(function (btn,i) {
+            console.log(btn.dataset);
+            btn.addEventListener('click',function () {
+                open(btn.dataset.url,"");
+            })
+        });
+
+
         function Website(name, url){
             this.name = name;
             this.url = url;

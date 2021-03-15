@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>selector</title>
+    <script src="js/jquery-3.6.0.js"></script>
+</head>
+<body>
+    <h1>selector</h1>
+    <ul>
+        <li class="foo" id="bar1">안녕1</li>
+        <li class="foo" id="bar2">안녕2</li>
+        <li class="foo" id="bar3">안녕3</li>
+        <li  id="bar4">안녕4</li>
+        <li  id="bar5">안녕5</li>
+    </ul>
+
+
+    <input type="button" value="tag" onclick="test1();">
+
+    <script>
+        /**
+         * tag 
+         * class
+         * id
+         */
+        function test1() {
+            //tag
+            //$변수는 jQuery 객체라는 관행이 있음
+            var $lis=$("ul>li");
+            $lis.css("color","springgreen");
+
+            //in js
+            var lis = document.querySelectorAll("ul>li"); // li는 유사배열이여서 style 속성이 없다.
+            lis.forEach(function(li) {                      //lis의 요소 하나 하나마다 설정해줘야함
+                li.style.color = 'deeppink';
+            });
+
+
+            //class
+            $(".foo").css("font-size", "2em");
+        
+            //id
+            $("#bar1").css("text-decoration", "underline");
+            
+            console.log($('#bar1'));
+            console.log($("#bar1").css("text-decoration", "underline")); //=> #bar1의 객체가 찍힘
+
+            //method를 실행하고 나서 해당 jQuery객체를 return한다.
+            //method chaining
+            $("#bar1").css("text-decoration", "underline")
+                        .css("color","black");
+        }
+    </script>
+
+    <hr>
+    <fieldset onload="test10();">
+        <legend>메뉴</legend>
+        <input type="checkbox" name="menu" id="menu1" value="햄버거">
+        <label for="menu1">햄버거</label>
+        <input type="checkbox" name="menu" id="mene2" value="핫도그">
+        <label for="menu2">핫도그</label>
+        <input type="checkbox" name="menu" id="mene3" value="피자">
+        <label for="menu3">피자</label>
+        <input type="checkbox" id="menuAll">
+        <label for="menuAll">전체선택/해제</label>
+
+        <input type="button" value="get | set" id="checkGetSet"></input>
+        <input type="button" value="확인" id="checkValue"></input>
+    </fieldset>
+
+
+    <script>
+        //jquery 이벤트 핸들링
+        // $('[name=menu]').change(function (e) {
+        //     console.log(e);
+
+        //     //jquery 객체
+        //     console.log($(this).prop("checked"));      //(getter)true, false
+        //     $(e.target).prop("checked","true");      //(setter)true, false 
+        // });
+
+        //전체선택, 해제
+        $('#menuAll').change(function (e) {
+            $('[name=menu]').prop("checked", this.checked);
+        });
+
+        /**
+         * #checkedGetSet Click Event handilng
+         * 복수개의 요소를 가진 jquery 객체         * 
+         * -getter : 첫번째 인자의 속성값 리턴
+         * -setter : 모든 인자의 속성값에 적용
+         */
+         $('#checkedGetSet').click(function (e) {
+            console.log($(this).prop("checked"));      //(getter)true, false
+            $(e.target).prop("checked","true");      //(setter)true, false 
+        });
+
+
+        /**
+         * checked된 요소만 가져오기
+         * 1. menu요소를 각각 가져와 checked 되어있는지 검사 후 출력
+         * 2. menu:checked된 요소를 가져와 출력
+         */
+        $('#checkValue').click(function (e) {
+            //jQuery 객체 요소 순회
+            //1번 방법
+            $('[name=menu]').each(function (index, elem) {
+                // console.log(elem); //elem 순수 js tag 객체
+                var $elem = $(this);
+                if($elem.prop("checked")){
+                    console.log($elem.val()); //val() : 속성의 value값
+                }
+           });
+
+           $('[name=menu] :checked').each(function (index, menu) {
+               console.log( $(this).val());
+           })
+        });
+    </script>
+
+    <img src="/image/flower1.PNG" alt="" style="margin: 50px 20px; width: 300px;">
+
+
+    <script>
+        /**
+         * attr
+         * html 태그상에 기록된 속성을가져오거나 설정할 경우
+         */
+        $("img").click(function (e) {
+            $(this).attr("src"); //getter  src속성을 가져옴          
+            $(this).attr("src","/image/flower2.PNG"); //getter  src속성을 지정         
+        })
+    </script>
+
+
+
+    <div class="wrapper">
+        <p>안녕1</p>
+        <p>안녕2</p>
+        <p>안녕3</p>
+        <p>안녕4</p>
+        <p>안녕5</p>
+        <p>안녕6</p>
+        <p><a href="#">안녕7</a></p>
+        <p>안녕8</p>
+        <p>안녕9</p>
+        <p>안녕10</p>
+    </div>
+    <input type="button" value=":eq()" onclick="test2();">
+    <input type="button" value=":gt() | :lt()" onclick="test3();">
+    <input type="button" value=":contains()" onclick="test4();">
+    <input type="button" value=":has()" onclick="test5();">
+    <input type="button" value=":not()" onclick="test6();">
+
+    <script>
+        /**
+         * :eq(index)
+         */
+        function test2() {
+            $(".wrapper p:eq(3)").css("color", "deeppink"); //0부터 시작
+        }
+
+
+
+        /**
+         * :gt(index) - index 이후로 다(index번호 미포함)
+         * :lt(index) - index 이전으로 다(index번호 미포함)
+         */
+        function test3() {
+            // $(".wrapper p:gt(3)").css("color", "deeppink");  
+            $(".wrapper p:lt(3)").css("color", "deeppink");  
+        }
+
+        function test4() {
+            $(".wrapper p:contains('안녕')").css("color", "deeppink");  
+        }
+
+        function test5() {
+            $(".wrapper p:has(a)").css("color", "deeppink");  
+        }
+
+        function test6() {
+            $(".wrapper p:not(:first-child)").css("color", "lightgray");  
+        }
+
+    </script>
+</body>
+</html>

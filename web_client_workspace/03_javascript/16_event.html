@@ -24,7 +24,7 @@
         // }
     </script>
 </head>
-<body>
+<body data-text="body" onclick="displayMsg(event,this);">
     <h1>Event</h1>
     <a href="https://www.w3schools.com/jsref/dom_obj_event.asp">W3School - HTML DOM Events</a>
 
@@ -83,7 +83,8 @@
             console.log(e);
             console.log(e.target == document.querySelector(".box")); //true
 
-            e.target.innerHTML ="안녕";
+            // e.target.innerHTML ="안녕";
+            this.innerHTML ="안녕";
         }
 
 
@@ -175,6 +176,32 @@
 
             //위 유효성 검사 통시 submit 가능
             return true;
+        }
+    </script>
+
+    <h2>Event Propagation</h2>
+    <div class="boxx box1" data-text="box1" onclick="displayMsg(event,this);">
+        <div class="boxx box2" data-text="box2" onclick="displayMsg(event,this);">
+            <div class="boxx box3" data-text="box3" onclick="displayMsg(event,this);"></div>
+        </div>
+    </div>
+
+    <style>
+        .boxx{
+            border:1px solid black;
+            padding: 20px;
+        }
+        .box1{background-color: darkblue;}
+        .box2{background-color: blue;}
+        .box3{background-color: cornflowerblue;}
+    </style>
+
+    <script>
+        function displayMsg(e, boxx) {
+            console.log(boxx.dataset.text); //부모요소까지 같이 출력
+
+            //전파방지
+            e.stopPropagation();
         }
     </script>
 </body>
