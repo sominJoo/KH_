@@ -6,7 +6,7 @@
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
   
-  
+  <!-- testPerson1 -->
   <servlet>
   	<servlet-name>TestPerson1Servlet</servlet-name>
   	<servlet-class>com.kh.web.servlet.TestPerson1Servlet</servlet-class>
@@ -18,6 +18,7 @@
   </servlet-mapping>
   
   
+  <!-- testPerson2 -->
   <servlet>
 	<servlet-name>TestPerson2Servlet</servlet-name>
 	<servlet-class>com.kh.web.servlet.TestPerson2Servlet</servlet-class>
@@ -27,4 +28,29 @@
   	<servlet-name>TestPerson2Servlet</servlet-name>
   	<url-pattern>/testPerson2.do</url-pattern>
   </servlet-mapping>
+  <!-- testPerson3, testPerson4를 testPerson2servlet과 맵핑가능 -->
+  <!--
+  <servlet-mapping>
+  	<servlet-name>TestPerson2Servlet</servlet-name>
+  	<url-pattern>/testPerson3.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>TestPerson2Servlet</servlet-name>
+  	<url-pattern>/testPerson4.do</url-pattern>
+  </servlet-mapping>
+  -->
+  
+  
+  <!-- menu -->
+  <servlet>
+	<servlet-name>MenuOrderServlet</servlet-name>
+	<servlet-class>com.kh.web.menu.MenuOrderServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>MenuOrderServlet</servlet-name>
+  	<url-pattern>/menu.do</url-pattern>
+  </servlet-mapping>
+
+
 </web-app>
