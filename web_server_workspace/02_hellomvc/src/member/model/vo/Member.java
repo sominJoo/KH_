@@ -2,17 +2,20 @@ package member.model.vo;
 
 import java.sql.Date;
 
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
+
 /**
  * VO클래스
  *  - DB테이블의 한행의 정보를 가지고 있는 객체
  */
-public class Member {
+public class Member  implements HttpSessionBindingListener {
 	private String memberId; 
 	private String password;
 	private String memberName;
 	private String memberRole;
 	private String gender;
-	private String birthday;
+	private Date birthday;
 	private String email;
 	private String phone;
 	private String address;
@@ -23,7 +26,7 @@ public class Member {
 		// TODO Auto-generated constructor stub
 	}
 	public Member(String memberId, String password, String memberName, String memberRole, String gender,
-			String birthday, String email, String phone, String address, String hobby, Date enrollDate) {
+			Date birthday, String email, String phone, String address, String hobby, Date enrollDate) {
 		super();
 		this.memberId = memberId;
 		this.password = password;
@@ -73,10 +76,10 @@ public class Member {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public String getBirthday() {
+	public Date getBirthday() {
 		return birthday;
 	}
-	public void setBirthday(String birthday) {
+	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
 	public String getEmail() {
@@ -110,5 +113,24 @@ public class Member {
 		this.enrollDate = enrollDate;
 	}
 	
+	/**
+	 * Session객체에 현제 객체가 속성으로 등록될 때 호출되는 event listener 
+	 * 	==>login 시
+	 */
+	@Override
+	public void valueBound(HttpSessionBindingEvent ev) {
+		System.out.println(memberName + "[" + memberId + "]님이 로그인했습니다.");
+	}
+	
+	/**
+	 * Session객체에 현제 객체가 속성에서 해제될 때 호출되는 event listener 
+	 * 	==>logout 시 
+	 * Session이 무효화될때도 호출
+	 */
+	@Override
+	public void valueUnbound(HttpSessionBindingEvent ev) {
+		System.out.println(memberName + "[" + memberId + "]님이 로그아웃했습니다.");
+		
+	}
 	
 }

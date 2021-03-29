@@ -5,11 +5,13 @@ import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import common.listener.SessionCounterListener;
 import member.model.service.MemberService;
 import member.model.vo.Member;
 
@@ -34,8 +36,10 @@ public class MemberLoginServlet extends HttpServlet {
 		//1.사용자 입력값 처리
 		String memberId = request.getParameter("memberId");
 		String password = request.getParameter("password");
+		String saveId = request.getParameter("saveId");
 		System.out.println("memberId@servlet = " + memberId);
 		System.out.println("password@servlet = " + password);
+		System.out.println("password@servlet = " + saveId);
 		
 		//3. 업무로직
 		Member member = memberService.selectOne(memberId);
@@ -46,24 +50,45 @@ public class MemberLoginServlet extends HttpServlet {
 		//1. 로그인 성공 : member != null && password.equals(member.getPassword()) 
 		//2. 로그인 실패 : (아이디 존재하지 않을 때) member == null 
 		//				(비번 틀릴때) member != null && !password.equals(member.getPassword()) 
-		
+
+		HttpSession session = request.getSession(true);
 		if(member != null && password.equals(member.getPassword())) {
 			//로그인 성공
-			request.setAttribute("msg", "로그인 성공");
+			//request.setAttribute("msg", "로그인 성공");
 			
 			//로그인한 사용자 정보
-			HttpSession session = request.getSession();
+			//request.getSession(true) : 새로 생성 여부(default : true);
+			System.out.println("sessionId@memberLoginServlet = " + session.getId());
 			session.setAttribute("loginMember", member);
+			
+			//session timeout:web.xml 보다 우선순위가 높음
+			//session.setMaxInactiveInterval(30);
+			
+		
+			Cookie c = new Cookie("saveId", memberId);
+			c.setPath(request.getContextPath()); 			//path 쿠키를 전송할 url
+			//saveId: cookie 처리
+			if(saveId != null) {
+				//saveId 체크 시 
+				c.setMaxAge(60*60*24*7);					// 7일짜리 영속 쿠키로 지정 
+			}else {
+				//saveId 체크  해제 시 
+				c.setMaxAge(0);								// 쿠키를 바로 지움
+			}
+			response.addCookie(c);
+
 		}
 		else {
 			//로그인 실패
-			request.setAttribute("msg", "로그인 실패");
-			request.setAttribute("loc", request.getContextPath());
+//			request.setAttribute("msg", "로그인 실패");					//request는 일회용이기 때문에 리다이랙트로 해주면 request가 초기화된다.
+//			request.setAttribute("loc", request.getContextPath());			
+			
+			session.setAttribute("msg", "로그인 실패");
 		}
 		
-		//4.응답메세지 html
-		RequestDispatcher reqD =  request.getRequestDispatcher("/index.jsp");
-		reqD.forward(request, response);
+		//리다이렉트 : url 변경 => 로그인을 해도  /mvc/member/login로 이동하는것이 아니라 요청받은 주소로 다시 리다이렉트함
+		response.sendRedirect(request.getContextPath());
+
 	}
 
 }

@@ -4,4 +4,10 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+  
+<listener>
+	<listener-class>
+		 common.listener.SessionCounterListener
+	</listener-class>
+</listener>
 </web-app>

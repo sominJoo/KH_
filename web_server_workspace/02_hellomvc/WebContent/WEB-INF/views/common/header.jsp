@@ -2,10 +2,27 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	String msg = (String)request.getAttribute("msg");
-	String loc = (String)request.getAttribute("loc");  // 로그인 실패 시 현재 페이지  path return. 로그인 성공 시 null
+	String msg = (String)session.getAttribute("msg");
+	if(msg != null) session.removeAttribute("msg");			//로그인 실패 후 로그인 성공시 getAttribute가 남아있어 성공해도 msg가 뜨는것을 방지함
+	
+	//String loc = (String)request.getAttribute("loc");  // 로그인 실패 시 현재 페이지  path return. 로그인 성공 시 null
 	Member member  = (Member)session.getAttribute("loginMember");
-	System.out.println("msg@header.jsp = "+msg);
+	
+	
+	// 사용자 쿠키처리
+	String saveId = null;
+	Cookie[] cookies = request.getCookies();		//모든 쿠키값을 배열로 저장
+	if(cookies != null){
+		for(Cookie c : cookies){
+			String name = c.getName();
+			String value = c.getValue();
+			System.out.println(name + " : " + value);
+			if("saveId".equals(name))				//아이디 저장 key와 쿠키 Name과 같은 value를 saveId에 저장함 
+				saveId = value;
+		}
+	}
+	
+	//System.out.println("msg@header.jsp = "+msg);
  %>
 <!DOCTYPE html>
 <html>
@@ -18,9 +35,7 @@
 <% if(msg != null){ %>
 	alert("<%= msg%>"); 
 <% } %>
-<% if(loc != null){ %>
-	location.href ="<%= loc%>";
-<% } %>
+
 $(function(){
 	//로그인폼 유효성검사
 	$('#loginFrm').submit(function(){
@@ -49,7 +64,7 @@ $(function(){
 				<form id="loginFrm" action="<%=request.getContextPath() %>/member/login" method="post">
 					<table>
 						<tr>
-							<td><input type="text" name="memberId" id="memberId" placeholder="아이디"  tabindex="1"></td>
+							<td><input type="text" name="memberId" id="memberId" placeholder="아이디"  tabindex="1" value="<%=saveId !=null ? saveId : "" %>"></td>
 							<td><input type="submit" value="로그인" tabindex="3"></td>
 						</tr>
 						<tr>
@@ -58,9 +73,9 @@ $(function(){
 						</tr>
 						<tr>
 							<td colspan="2">
-								<input type="checkbox" name="saveId" id="saveId" />
+								<input type="checkbox" name="saveId" id="saveId" <%= saveId != null ? "checked" : ""%>/>
 								<label for="saveId">아이디저장</label>&nbsp;&nbsp;
-								<input type="button" value="회원가입">
+								<input type="button" value="회원가입" onclick="location.href='<%= request.getContextPath() %>/member/memberEnroll';">
 							</td>
 						</tr>
 					</table>
@@ -73,8 +88,10 @@ $(function(){
 					</tr>
 					<tr>
 						<td>
-							<input type="button" value="내정보 보기">
-							<input type="button" value="로그아웃">
+							<input type="button" value="내정보 보기" 
+								onclick="location.href='<%= request.getContextPath() %>/member/memberView';" />
+							<input type="button" value="로그아웃" 
+								onclick="location.href='<%= request.getContextPath() %>/member/logout';" />
 						</td>
 					</tr>					
 				</table>
