@@ -7,7 +7,6 @@
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <%
 	String memberId = member.getMemberId();
-	String password = member.getPassword();
 	String memberName = member.getMemberName();
 	String gender = member.getGender() !=null ? member.getGender() : "";
 	Date birthday = member.getBirthday();
@@ -21,6 +20,7 @@
 		String[] arr =hobby.split(",");
 		hobbyList = Arrays.asList(arr);
 	}
+	
 %>
 <section id=enroll-container>
 	<h2>회원 정보</h2>
@@ -32,18 +32,7 @@
 					<input type="text" name="memberId" id="memberId_" value="<%= memberId %>" readonly>
 				</td>
 			</tr>
-			<tr>
-				<th>패스워드</th>
-				<td>
-					<input type="password" name="password" id="password_" value="<%= password %>" required>
-				</td>
-			</tr>
-			<tr>
-				<th>패스워드확인</th>
-				<td>	
-					<input type="password" id="password2" value="<%= password %>" required><br>
-				</td>
-			</tr> 
+
 			<tr>
 				<th>이름</th>
 				<td>	
@@ -109,15 +98,67 @@
 			</tr>
 		</table>
         <input type="button" onclick="updateMember();" value="정보수정"/>
+        <input type="button" onclick="updatePassword();" value="비밀번호 변경"/>
         <input type="button" onclick="deleteMember();" value="탈퇴"/>
 	</form>
 </section>
+
+<form name="memberDelFrm" action="<%= request.getContextPath() %>/member/memberDelete" method="POST">
+	<input type="hidden" name="memberId" value="<%= member.getMemberId() %>" />
+</form>
+
+
 <script type="text/javascript">
 <%-- jsp로 함수선언을 하면 변환된 memberView_jsp.java 파일에도 함수 선언이 된다. --%>
 <%!
 	public String hobbyChecked(List<String> hobbyList, String hobby){
-		return hobbyList != null && hobbyList.contains("등산") ? "checked" : "";
+		return hobbyList != null && hobbyList.contains(hobby) ? "checked" : "";
 	}
 %>
+function updatePassword(){
+	location.href="<%=request.getContextPath() %>/member/updatePassword";
+}
+
+/**
+ * 유효성 검사
+ * memberId를 제외하고, 회원가입과 동일하다. 
+ */
+$("#memberUpdateFrm").submit(function(){
+
+	//memberName
+	var $memberName = $("#memberName");
+	if(/^[가-힣]{2,}$/.test($memberName.val()) == false){
+		alert("이름은 한글 2글자 이상이어야 합니다.");
+		$memberName.select();
+		return false;
+	}
+	
+	//phone
+	var $phone = $("#phone");
+	//-제거하기
+	$phone.val($phone.val().replace(/[^0-9]/g, ""));//숫자아닌 문자(복수개)제거하기
+	
+	if(/^010[0-9]{8}$/.test($phone.val()) == false){
+		alert("유효한 전화번호가 아닙니다.");
+		$phone.select();
+		return false;
+	}
+	
+	return true;
+});
+
+function updateMember(){
+	$("#memberUpdateFrm")
+		.attr("action","<%=request.getContextPath() %>/member/memberUpdate")
+		.submit();
+}
+
+
+function deleteMember(){
+    if(confirm("정말로 탈퇴하시겠습니까?")){
+    	$(document.memberDelFrm).submit();
+    }
+}
+
 </script>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>

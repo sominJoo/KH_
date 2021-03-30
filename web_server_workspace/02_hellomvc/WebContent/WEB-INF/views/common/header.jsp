@@ -7,7 +7,7 @@
 	
 	//String loc = (String)request.getAttribute("loc");  // 로그인 실패 시 현재 페이지  path return. 로그인 성공 시 null
 	Member member  = (Member)session.getAttribute("loginMember");
-	
+	System.out.println("session LoginMember = "+ member);
 	
 	// 사용자 쿠키처리
 	String saveId = null;

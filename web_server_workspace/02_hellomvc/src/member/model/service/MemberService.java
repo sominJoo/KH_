@@ -33,5 +33,46 @@ public class MemberService {
 		close(conn);
 		return result;
 	}
+
+
+
+	public int updateMember(Member member) {
+		// TODO Auto-generated method stub
+		Connection conn = getConnection();
+		int result = memberDao.updateMember(conn, member);
+		if(result > 0) 
+			commit(conn);
+		else
+			rollback(conn);
+		close(conn);
+		return result;
+	}
+
+
+
+	public int deleteMember(String memberId) {
+		// TODO Auto-generated method stub
+		Connection conn = getConnection();
+		int result = memberDao.deleteMember(conn, memberId);
+		if(result > 0) 
+			commit(conn);
+		else
+			rollback(conn);
+		close(conn);
+		return result;
+	}
+
+
+
+	public int updatePassword(String memberId, String newPassword) {
+		Connection conn = getConnection();
+		int result = memberDao.updatePassword(conn, memberId, newPassword);
+		if(result > 0) 
+			commit(conn);
+		else
+			rollback(conn);
+		close(conn);
+		return result;
+	}
 	
 }
