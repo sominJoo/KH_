@@ -7,6 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import common.JDBCTemplate;
@@ -166,7 +169,7 @@ public class MemberDao{
 
 
 
-	public int updatePassword(Connection conn, String memberId, String newPassword) {
+	public int updatePassword(Connection conn, Member member) {
 		int result=0;
 		PreparedStatement pstmt = null;
 		String sql = prop.getProperty("updatePassword");
@@ -174,7 +177,68 @@ public class MemberDao{
 			//미완성쿼리문을 가지고 객체생성.
 			pstmt = conn.prepareStatement(sql);
 			//쿼리문미완성
-			pstmt.setString(1, newPassword);
+			pstmt.setString(1, member.getPassword());
+			pstmt.setString(2, member.getMemberId());
+			//쿼리문실행 : 완성된 쿼리를 가지고 있는 pstmt실행(파라미터 없음)
+			//DML은 executeUpdate()
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+
+
+	public List<Member> selectList(Connection conn) {
+		List<Member> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("selectAll");
+		ResultSet rs = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Member member = new Member();
+				member.setMemberId(rs.getString("member_id"));
+				member.setPassword(rs.getString("password"));
+				member.setMemberName(rs.getString("member_name"));
+				member.setMemberRole(rs.getString("member_role"));
+				member.setGender(rs.getString("gender"));
+				member.setBirthday(rs.getDate("birthday"));
+				member.setEmail(rs.getString("email"));
+				member.setPhone(rs.getString("phone"));
+				member.setAddress(rs.getString("address"));
+				member.setHobby(rs.getString("hobby"));
+				member.setEnrollDate(rs.getDate("enroll_date"));
+				list.add(member);				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rs);
+			close(pstmt);
+		}
+		return list;
+	}
+
+
+
+	public int updateMemberRole(Connection conn, String memberId, String memberRole) {
+		// TODO Auto-generated method stub
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = prop.getProperty("updateMemberRole");
+		try {
+			//미완성쿼리문을 가지고 객체생성.
+			pstmt = conn.prepareStatement(sql);
+			//쿼리문미완성
+			pstmt.setString(1, memberRole);
 			pstmt.setString(2, memberId);
 			//쿼리문실행 : 완성된 쿼리를 가지고 있는 pstmt실행(파라미터 없음)
 			//DML은 executeUpdate()
@@ -187,5 +251,52 @@ public class MemberDao{
 		}
 		
 		return result;
+	}
+
+
+
+	public List<Member> searchMember(Connection conn, Map<String, String> param) {
+		List<Member> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = prop.getProperty("searchMember");
+		//param의 searchType memberId인 경우 : select * from member where member_id like %?%
+		//param의 searchType memberName인 경우 : select * from member where member_name like %?%
+		//param의 searchType gender인 경우 : select * from member where  gender =?
+		switch(String.valueOf(param.get("searchType"))) {
+		case "memberId" 	: sql += " member_id like '%"+ param.get("searchKeyword") + "%'"; break;
+		case "memberName" 	: sql += " member_name like '%"+ param.get("searchKeyword") + "%'";break;
+		case "gender" 		: sql +=  " gender = '"+ param.get("searchKeyword") + "'"; break;
+		}
+		System.out.println("sql@dao = " +sql);
+		
+		
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Member member = new Member();
+				member.setMemberId(rs.getString("member_id"));
+				member.setPassword(rs.getString("password"));
+				member.setMemberName(rs.getString("member_name"));
+				member.setMemberRole(rs.getString("member_role"));
+				member.setGender(rs.getString("gender"));
+				member.setBirthday(rs.getDate("birthday"));
+				member.setEmail(rs.getString("email"));
+				member.setPhone(rs.getString("phone"));
+				member.setAddress(rs.getString("address"));
+				member.setHobby(rs.getString("hobby"));
+				member.setEnrollDate(rs.getDate("enroll_date"));
+				list.add(member);				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rs);
+			close(pstmt);
+		}
+		return list;
 	}
 }

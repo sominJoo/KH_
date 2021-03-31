@@ -12,34 +12,36 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import member.model.service.MemberService;
 import member.model.vo.Member;
 
 /**
- * Servlet Filter implementation class LoginFilter
+ * Servlet Filter implementation class AdminFilter
  */
-@WebFilter({ "/member/memberView"
-			, "/member/memberUpdate"
-			, "/member/memberDelete" 
-			,"/member/updatePassword"
-			,"/member/logout"})
-public class LoginFilter implements Filter {
+@WebFilter({ "/admin/memberList"
+			, "/admin/memberRoleUpdate"
+			, "/admin/memberFinder" })
+public class AdminFilter implements Filter {
+	/**
+	 * admin login없이 접근시 redirect
+	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		// TODO Auto-generated method stub
-		// 로그인여부 확인하기
+		// place your code here
 		HttpServletRequest httpReq = (HttpServletRequest)request;
-		HttpServletResponse httpRes = (HttpServletResponse)response;
+		HttpServletResponse httpReps = (HttpServletResponse)response;
 		
-		//session이 없으면 바로 만든다. => session 유효성 검사 필요없음
 		HttpSession session = httpReq.getSession();
-		Member member = (Member)session.getAttribute("loginMember");		//loginServlet에서 session에 로그인한 member 객체를 저장함
+		Member member = (Member)session.getAttribute("loginMember");
 		
-		
-		//로그인하지않고 url로 접근 시 
-		if(member == null) {			
-			session.setAttribute("msg", "로그인 후 사용 가능");
-			httpRes.sendRedirect(httpReq.getContextPath());
+		//로그인 객체가 없거나, 그 로그인 객체의 memberRole이 ADMIN_ROLE이 아닐때
+		if(member == null || !(member.getMemberRole().equals(MemberService.ADMIN_ROLE))) {
+			session.setAttribute("msg", "관리자만 사용가능합니다.");
+			httpReps.sendRedirect(httpReq.getContextPath());
 			return;
-		}
+		} 
+		
+
 		// pass the request along the filter chain
 		chain.doFilter(request, response);
 	}

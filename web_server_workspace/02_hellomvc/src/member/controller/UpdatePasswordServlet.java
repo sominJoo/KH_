@@ -51,8 +51,10 @@ public class UpdatePasswordServlet extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/member/updatePassword");
 			return;
 		}
-		
-		int result = new MemberService().updatePassword(member.getMemberId(),newPassword);
+
+		//session과 동일하면 member객체를 변경
+		member.setPassword(newPassword);
+		int result = new MemberService().updatePassword(member);
 		if(result > 0) {
 			session.setAttribute("msg", "비밀번호를 성공적으로 변경하였습니다.");
 			response.sendRedirect(request.getContextPath()+"/member/memberView");		
