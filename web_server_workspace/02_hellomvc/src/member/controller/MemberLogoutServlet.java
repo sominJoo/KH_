@@ -30,7 +30,6 @@ public class MemberLogoutServlet extends HttpServlet {
 		// 세션 무효화 : 세션에 저장된 속성값을 모두 폐기
 		// 만약, 세션이 존재하지 않으면 새로만들지 않고 null를 리턴한다.
 		HttpSession session = request.getSession(false);
-		System.out.println("sessionId@memberLogoutServlet = " + session.getId());
 		if(session != null) {
 			session.invalidate();
 		}

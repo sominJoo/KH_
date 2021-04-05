@@ -255,25 +255,17 @@ public class MemberDao{
 
 
 
-	public List<Member> searchMember(Connection conn, Map<String, String> param) {
+
+
+	public List<Member> selectList(Connection conn, int start, int end) {
 		List<Member> list = new ArrayList<>();
 		PreparedStatement pstmt = null;
+		String sql = prop.getProperty("selectPagedList");
 		ResultSet rs = null;
-		String sql = prop.getProperty("searchMember");
-		//param의 searchType memberId인 경우 : select * from member where member_id like %?%
-		//param의 searchType memberName인 경우 : select * from member where member_name like %?%
-		//param의 searchType gender인 경우 : select * from member where  gender =?
-		switch(String.valueOf(param.get("searchType"))) {
-		case "memberId" 	: sql += " member_id like '%"+ param.get("searchKeyword") + "%'"; break;
-		case "memberName" 	: sql += " member_name like '%"+ param.get("searchKeyword") + "%'";break;
-		case "gender" 		: sql +=  " gender = '"+ param.get("searchKeyword") + "'"; break;
-		}
-		System.out.println("sql@dao = " +sql);
-		
-		
-		
 		try {
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, start);
+			pstmt.setInt(2, end);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				Member member = new Member();
@@ -298,5 +290,105 @@ public class MemberDao{
 			close(pstmt);
 		}
 		return list;
+	}
+
+
+
+	public int selectMemberCount(Connection conn) {
+		PreparedStatement pstmt = null;
+		ResultSet rs= null;
+		String sql = prop.getProperty("selectMemberCount");
+		int totalContents =0;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				totalContents = rs.getInt(1);			
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rs);
+			close(pstmt);
+		}
+		return totalContents;
+	}
+
+
+	public List<Member> searchMember(Connection conn, Map<String, String> param, int start, int end) {
+		List<Member> list = new ArrayList<>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql= sql_query(prop.getProperty("searchMember"), param);
+		sql +=  " ) M where rnum between " +  start + " and "+ end;
+		
+		System.out.println("sql@searchMember = "+sql);
+		try {
+			pstmt = conn.prepareStatement(sql);			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Member member = new Member();
+				member.setMemberId(rs.getString("member_id"));
+				member.setPassword(rs.getString("password"));
+				member.setMemberName(rs.getString("member_name"));
+				member.setMemberRole(rs.getString("member_role"));
+				member.setGender(rs.getString("gender"));
+				member.setBirthday(rs.getDate("birthday"));
+				member.setEmail(rs.getString("email"));
+				member.setPhone(rs.getString("phone"));
+				member.setAddress(rs.getString("address"));
+				member.setHobby(rs.getString("hobby"));
+				member.setEnrollDate(rs.getDate("enroll_date"));
+				list.add(member);				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rs);
+			close(pstmt);
+		}
+		return list;
+	}
+
+
+	public int searchMemberCount(Connection conn, Map<String, String> param) {
+		PreparedStatement pstmt = null;
+		ResultSet rs= null;
+		String sql = sql_query(prop.getProperty("searchMemberCount"),param);
+		int totalContents =0;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				totalContents = rs.getInt(1);
+			}
+			System.out.println("totalContens@searchMemberCount = " +totalContents);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rs);
+			close(pstmt);
+		}
+		return totalContents;
+	}
+	
+	
+	
+	public String sql_query(String sql, Map<String, String> param) {
+		//param의 searchType memberId인 경우 : select * from member where member_id like %?%
+		//param의 searchType memberName인 경우 : select * from member where member_name like %?%
+		//param의 searchType gender인 경우 : select * from member where  gender =?
+		
+		switch(String.valueOf(param.get("searchType"))) {
+		case "memberId" 	: sql += " member_id like '%"+ param.get("searchKeyword") + "%'"; break;
+		case "memberName" 	: sql += " member_name like '%"+ param.get("searchKeyword") + "%'";break;
+		case "gender" 		: sql +=  " gender = '"+ param.get("searchKeyword") + "'"; break;
+		}
+		System.out.println(param);
+		System.out.println(sql);
+		return sql;
 	}
 }

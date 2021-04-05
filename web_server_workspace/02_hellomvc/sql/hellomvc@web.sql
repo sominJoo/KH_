@@ -174,3 +174,36 @@ Insert into WEB.MEMBER (MEMBER_ID,PASSWORD,MEMBER_NAME,MEMBER_ROLE,GENDER,BIRTHD
 commit;
 
 select * from member;
+
+
+
+--페이징
+--1. rownum 행추가시 자동으로 부여되는 no
+select *
+from(
+    select rownum rnum, m.*
+    from ( 
+        select *  
+        from  member order by enroll_date desc
+        ) m
+    )m
+where rnum between 11 and 20;
+
+
+
+--window 함수 row_number
+select row_number() over(order by enroll_date desc) rnum,
+    M.*
+from member M
+where M.rnum between 10 and 21;
+
+
+
+select * 
+from ( select row_number() over(order by enroll_date desc) rnum,  M.* 
+    from member M 
+    where gender= 'F' 
+   
+   ) M where rnum between 11 and 20;
+   
+   select * from ( select row_number() over(order by enroll_date desc) rnum, M.* from member M where ) M where rnum between 11 and 20

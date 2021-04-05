@@ -4,8 +4,8 @@
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <%
 	List<Member> list = (List<Member>)request.getAttribute("list");
-	String type = request.getParameter("searchType");
-	String keyword = request.getParameter("searchKeyword");
+	String type = (String)session.getAttribute("searchType");	
+	String keyword = (String)session.getAttribute("searchKeyword");	
 %>
 <!-- 관리자용 admin.css link -->
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/admin.css" />
@@ -14,7 +14,10 @@ div#search-container {margin:0 0 10px 0; padding:3px; background-color: rgba(0, 
 div#search-memberId {display: <%= type == null || "memberId".equals(type) ? "inline-block" : "none" %>;}
 div#search-memberName{display:<%= "memberName".equals(type) ? "inline-block" : "none" %>;}
 div#search-gender{display: <%= "gender".equals(type) ? "inline-block" : "none" %>;}
+div#pageBar a{color : black;}
+div#pageBar a:hover{text-shadow : 1px 1px 2px gray;}
 </style>
+
 <section id="memberList-container">
 	<h2>회원관리</h2>
 	<div id="search-container">
@@ -96,6 +99,9 @@ div#search-gender{display: <%= "gender".equals(type) ? "inline-block" : "none" %
 		%>
 		</tbody>
 	</table>
+	<div id="pageBar">
+		<%=request.getAttribute("pageBar") %>
+	</div>
 </section>
 <form action ="<%=request.getContextPath() %>/admin/memberRoleUpdate"
 	name ="memberRoleUpdateFrm"
@@ -103,6 +109,9 @@ div#search-gender{display: <%= "gender".equals(type) ? "inline-block" : "none" %
 	<input type = "hidden" name ="memberId"/>	
 	<input type = "hidden" name ="memberRole"/>	
 </form>
+
+
+
 <script>
 $(".member-role").on("change", function(){
 	var memberId = $(this).data("memberId");
