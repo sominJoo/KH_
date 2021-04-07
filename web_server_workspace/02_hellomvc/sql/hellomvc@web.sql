@@ -207,3 +207,17 @@ from ( select row_number() over(order by enroll_date desc) rnum,  M.*
    ) M where rnum between 11 and 20;
    
    select * from ( select row_number() over(order by enroll_date desc) rnum, M.* from member M where ) M where rnum between 11 and 20
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   

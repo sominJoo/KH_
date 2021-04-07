@@ -21,7 +21,8 @@ import member.model.vo.Member;
 			, "/member/memberUpdate"
 			, "/member/memberDelete" 
 			,"/member/updatePassword"
-			,"/member/logout"})
+			,"/member/logout"
+			,"/board/boardForm"})
 public class LoginFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		// TODO Auto-generated method stub
