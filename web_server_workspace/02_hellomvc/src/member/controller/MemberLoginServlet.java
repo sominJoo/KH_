@@ -61,10 +61,6 @@ public class MemberLoginServlet extends HttpServlet {
 			//request.getSession(true) : 새로 생성 여부(default : true);
 			System.out.println("sessionId@memberLoginServlet = " + session.getId());
 			session.setAttribute("loginMember", member);
-			
-			//session timeout:web.xml 보다 우선순위가 높음
-			//session.setMaxInactiveInterval(30);
-			
 		
 			Cookie c = new Cookie("saveId", memberId);
 			c.setPath(request.getContextPath()); 			//path 쿠키를 전송할 url
@@ -87,8 +83,11 @@ public class MemberLoginServlet extends HttpServlet {
 			session.setAttribute("msg", "로그인 실패");
 		}
 		
+		//Header referer 가져오기 Referer : 요청을 보낸 페이지를 저장하고있음
+		String referer = request.getHeader("Referer");
+		
 		//리다이렉트 : url 변경 => 로그인을 해도  /mvc/member/login로 이동하는것이 아니라 요청받은 주소로 다시 리다이렉트함
-		response.sendRedirect(request.getContextPath());
+		response.sendRedirect(referer);
 
 	}
 

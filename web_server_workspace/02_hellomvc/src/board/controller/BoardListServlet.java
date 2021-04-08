@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import board.model.service.BoardService;
 import board.model.vo.Board;
+import board.model.vo.BoardCount;
 import common.MvcUtils;
 
 /**
@@ -40,7 +41,7 @@ public class BoardListServlet extends HttpServlet {
 
 		
 		//List, count
-		List<Board> list = boardService.selectList(start, end);
+		List<BoardCount> list = boardService.selectList(start, end);
 
 		int totalContents = boardService.selectBoardCount();
 		

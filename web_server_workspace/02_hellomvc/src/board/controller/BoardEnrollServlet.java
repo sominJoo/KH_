@@ -50,58 +50,66 @@ public class BoardEnrollServlet extends HttpServlet {
 	 * 
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//1.MultipartRequest 객체 생성
-		// /WebContent/upload/board/업로드파일명.jpg
-		// /: web root dir 를 절대경로로 반환
-		String saveDirectory = getServletContext().getRealPath("/upload/board");
-		
-		//파일크기 최대 허용값
-		int maxPostSize = 10* 1024* 1024;
-		
-		String encoding ="utf-8";
-		
-		//파일명 변경 정책 객체
-		MvcFileRenamePolicy policy = new MvcFileRenamePolicy();
-
-		MultipartRequest multipartRequest = 
-				new MultipartRequest(
-								request, 
-								saveDirectory, 
-								maxPostSize, 
-								encoding, 
-								policy
-							);
-		//1. 사용자 입력값
-		String title = multipartRequest.getParameter("title");
-		String writer =  multipartRequest.getParameter("writer");
-		String content =  multipartRequest.getParameter("content");
-		
-		//업로드한 파일명
-		String originalFilename = multipartRequest.getOriginalFileName("upFile");	//전송한 파일 이름이 upFile
-		String renamedFilename = multipartRequest.getFilesystemName("upFile");
-		System.out.println("oFileName = "+originalFilename);
-		System.out.println("reFileName = "+ renamedFilename);
-		Board board = new Board();
-		board.setTitle(title);
-		board.setWriter(writer);
-		board.setContent(content);
-		
-		if(originalFilename !=null) {
-			Attachment attach = new Attachment();
-			attach.setOriginalFilename(originalFilename);
-			attach.setRenameFilename(renamedFilename);
-			board.setAttach(attach);
-		}	
-
-		int result = boardService.insertBoard(board);
-		String msg = (result > 0) ? 
-						"게시글 등록 성공!" :
-							"게시글 등록 실패!";
-
-		HttpSession session = request.getSession();
-		session.setAttribute("msg", msg);
-		response.sendRedirect(request.getContextPath()+"/board/boardList");
-		
+		try {
+			//1.MultipartRequest 객체 생성
+			// /WebContent/upload/board/업로드파일명.jpg
+			// /: web root dir 를 절대경로로 반환
+			String saveDirectory = getServletContext().getRealPath("/upload/board");
+			
+			//파일크기 최대 허용값
+			int maxPostSize = 10* 1024* 1024;
+			
+			String encoding ="utf-8";
+			
+			//파일명 변경 정책 객체
+			MvcFileRenamePolicy policy = new MvcFileRenamePolicy();
+	
+			MultipartRequest multipartRequest = 
+					new MultipartRequest(
+									request, 
+									saveDirectory, 
+									maxPostSize, 
+									encoding, 
+									policy
+								);
+			//1. 사용자 입력값
+			String title = multipartRequest.getParameter("title");
+			String writer =  multipartRequest.getParameter("writer");
+			String content =  multipartRequest.getParameter("content");
+			
+			//업로드한 파일명
+			String originalFilename = multipartRequest.getOriginalFileName("upFile");	//전송한 파일 이름이 upFile
+			String renamedFilename = multipartRequest.getFilesystemName("upFile");
+			System.out.println("oFileName = "+originalFilename);
+			System.out.println("reFileName = "+ renamedFilename);
+			Board board = new Board();
+			board.setTitle(title);
+			board.setWriter(writer);
+			board.setContent(content);
+			
+			if(originalFilename !=null) {
+				Attachment attach = new Attachment();
+				attach.setOriginalFilename(originalFilename);
+				attach.setRenameFilename(renamedFilename);
+				board.setAttach(attach);
+			}	
+	
+			int result = boardService.insertBoard(board);
+			String msg = (result > 0) ? 
+							"게시글 등록 성공!" :
+								"게시글 등록 실패!";
+			String location =request.getContextPath();
+			//등록성공시 게시글 상세페이지로
+			location += (result > 0) ?
+					"/board/boardView?no=" + board.getNo() : 
+						"/board/boardList";
+			HttpSession session = request.getSession();
+			session.setAttribute("msg", msg);
+			response.sendRedirect(location);
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw e; //was한테 던짐 : 에러 페이지 출력
+		}
 	}
 
 }

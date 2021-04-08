@@ -1,10 +1,11 @@
+<%@page import="board.model.vo.BoardCount"%>
 <%@page import="board.model.vo.Board"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <%
-	List<Board> list = (List<Board>) request.getAttribute("list");
+	List<BoardCount> list = (List<BoardCount>) request.getAttribute("list");
 %>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/board.css" />
 <section id="board-container">
@@ -27,11 +28,14 @@
 		</tr>
 		
 		<% } else { 
-				for(Board b : list){
+				for(BoardCount b : list){
 		%>
 			<tr>
 				<td> <%= b.getNo() %> </td>
-				<td> <a href="<%= request.getContextPath() %>/board/boardView?no=<%=b.getNo()%>" style ="color:black"> <%= b.getTitle() %> </a></td>
+				<td> 
+				<a href="<%= request.getContextPath() %>/board/boardView?no=<%=b.getNo()%>" style ="color:black"> <%= b.getTitle() %> </a>
+					(<%= b.getBoardCount() %>)
+				</td>
 				<td> <%= b.getWriter() %> </td>
 				<td> <%= b.getRegDate() %> </td>
 				<td>  
