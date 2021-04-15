@@ -258,7 +258,7 @@ public class BoardDao {
 			pstmt.setInt(3, board.getNo());
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
-			throw new BoardException("게시물 수정 오류", e);
+			throw new RuntimeException("게시물 수정 오류", e);
 		}finally {
 			close(pstmt);
 		}

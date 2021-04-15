@@ -100,7 +100,7 @@ public class BoardService {
 		return result;
 	}
 
-	public int updateBoard(Board board) {
+	public int updateBoard(Board board){
 		Connection conn =getConnection();
 		int result =0;
 		try {

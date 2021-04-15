@@ -409,20 +409,28 @@ select bc.* from board_comment bc where board_no = ? start with comment_level =1
    
    
    
-select bc.* from board_comment bc where board_no = 143 start with comment_level =1  connect by prior no=comment_ref order siblings by reg_date;
+   select bc.* from board_comment bc where board_no = 143 start with comment_level =1  connect by prior no=comment_ref order siblings by reg_date;
 
 select *  
 from ( 
-    select row_number() over(order by reg_date desc) rnum, b.*, a.no attach_no, a.original_filename, a.renamed_filename, a.status ,bc.*
-    from board b  
-        left join attachment a 
-            on b.no = a.board_no
-        and a.status='Y'
-        left join board_comment bc 
-            on b.no = bc.board_no
+ and a.status='Y'
+            
     ) B 
 where rnum between 10 and 20;
-   
-   
-   
-   
+
+
+
+select *
+from board b  
+left join board_comment bc
+on b.no = bc.board_no
+group by bc.board_no;
+select* from board order by reg_date desc; 
+
+
+select row_number() over(order by reg_date desc) rnum, b.*, a.no attach_no, a.original_filename, a.renamed_filename, a.status  , bc.cnt    from board b      left join attachment a    on b.no = a.board_no and a.status='Y'   left join (select board_no, count(board_no) cnt   from board_comment group by board_no) bc  on b.no = bc.board_no) B  where rnum between 1 and 20;
+select *from (select row_number() over(order by reg_date desc) rnum, b.*, a.no attach_no, a.original_filename, a.renamed_filename, a.status  , bc.cnt    from board b      left join attachment a    on b.no = a.board_no and a.status='Y'   left join (select board_no, count(board_no) cnt   from board_comment group by board_no) bc  on b.no = bc.board_no) B  where rnum between 1 and 100;
+select * from attachment;
+select * from board;
+
+select * from attachment where board_no =174;

@@ -85,7 +85,7 @@ public class BoardUpdateServlet extends HttpServlet {
 			
 			//삭제할 첨부파일번호
 			String attachNo = multipartRequest.getParameter("delFile");
-
+	
 			Board board = new Board();
 			board.setNo(no);
 			board.setTitle(title);
@@ -121,7 +121,7 @@ public class BoardUpdateServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setAttribute("msg", msg);
 			response.sendRedirect(location);
-			
+						
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e; // was한테 다시 던져서 에러페이지로 전환함.
