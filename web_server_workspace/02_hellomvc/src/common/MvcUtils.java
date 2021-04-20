@@ -140,11 +140,21 @@ public class MvcUtils {
 	}
 
 
+	/**
+	 * 게시판에서 <br/>태그 입력해줌(content)
+	 * @param content
+	 * @return
+	 */
 	public static String convertLineFeedToBr(String content) {
 		return content.replaceAll("\\n", "<br/>");
 	}
 
 
+	/**
+	 * xss(크로스 사이트 스크립팅)공격 방지
+	 * @param str
+	 * @return
+	 */
 	public static String escapeHtml(String str) {
 		return str.replaceAll("<", "&lt;")
 				  .replaceAll(">", "&gt;");

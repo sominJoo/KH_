@@ -11,6 +11,11 @@ import java.sql.SQLException;
 
 import java.util.Properties;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 /**
  * Service, DAO클래스의 공통부문을 static 메소드로 제공
  * 예외처리를 공통부분에서 작성하므로, 사용(호출)하는 쪽의 코드를 간결화
@@ -47,22 +52,45 @@ public class JDBCTemplate {
 		}
 	}
 	
+//	public static Connection getConnection() {
+//		Connection conn = null;
+//		//1.드라이버클래스 등록
+//		try {
+//			//2.connection
+//			conn = DriverManager.getConnection(url, user, password);
+//			//3.자동커밋 false
+//			conn.setAutoCommit(false);
+//			
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return conn;
+//	}
+	
+	/**
+	 * DBCP 이옹버전
+	 * @return
+	 */
 	public static Connection getConnection() {
 		Connection conn = null;
 		//1.드라이버클래스 등록
 		try {
-			//2.connection
-			conn = DriverManager.getConnection(url, user, password);
-			//3.자동커밋 false
+			Context ct = new InitialContext();
+			/**
+			 * JNDI 구조
+			 * java : /comp/env + jdbc/myoracle
+			 */
+			DataSource ds = (DataSource) ct.lookup("java:/comp/env/jdbc/myoracle");
+			conn=ds.getConnection();
 			conn.setAutoCommit(false);
-			
-		} catch (SQLException e) {
+		} catch (NamingException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		return conn;
 	}
-	
 	public static void close(Connection conn) {
 		try {
 			conn.close();

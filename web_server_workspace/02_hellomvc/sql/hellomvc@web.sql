@@ -357,7 +357,7 @@ comment on column board_comment.content is '게시판댓글';
 comment on column board_comment.board_no is '참조원글번호';
 comment on column board_comment.comment_ref is '게시판댓글 참조번호';
 comment on column board_comment.reg_date is '게시판댓글 작성일';
-
+select * from board_comment;
 create SEQUENCE seq_board_comment_no;
 select *from member;
 --댓글 추가
