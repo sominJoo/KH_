@@ -433,4 +433,4 @@ select *from (select row_number() over(order by reg_date desc) rnum, b.*, a.no a
 select * from attachment;
 select * from board;
 
-select * from attachment where board_no =174;
+select * from attachment;
