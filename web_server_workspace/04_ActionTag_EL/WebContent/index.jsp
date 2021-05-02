@@ -29,7 +29,7 @@ ul {
 	
 	<h2>jstl</h2>
 	<ul>
-		<li><a href="${pageContext.request.contextPath}/jstl/coreBasics.jsp">core basics</a></li>
+		<li><a href="${pageContext.request.contextPath}/jstl/coreBasics.jsp?num1=100&num2=100">core basics</a></li>
 	</ul>
 
 </body>

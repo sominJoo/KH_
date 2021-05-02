@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <jsp:include page="/standard/header.jsp">
+	<%-- include된 페이지에 파라미터값을 넘겨줌 --%>
 	<jsp:param value="INCLUDE" name="title"/>
 </jsp:include>
 

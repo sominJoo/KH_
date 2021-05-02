@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
 <%-- 
 	해당 스코프에서 id와 동일한 속성명으로 저장된 객체를 가져온다. 
 	존재하지 않으면, 해당타입의 객체를 하나 생성한다.
@@ -9,6 +10,7 @@
 	-getter : getter에서 get을 제외하고 소문자로 시작하는 이름
 	-setter : setter에서 set을 제외하고 소문자로 시작하는 이름
 --%>    
+
 <jsp:useBean id="honngd" class="com.kh.person.model.vo.Person" scope="request"/>
 <jsp:useBean id="sinsa" class="com.kh.person.model.vo.Person"></jsp:useBean>
 
@@ -39,6 +41,7 @@
 			<th>id</th>
 			<%-- action tag는 절대 client에 전달되지않는다. --%>
 			<%-- property속성값은 vo객체의 getter에서 get을 제외하고 소문자로 시작하는 나머지 이름 --%>
+			<%-- name은 setProperty의 id값 --%>
 			<td><jsp:getProperty property="id" name="honngd" /></td>
 		</tr>
 		<tr>

@@ -44,8 +44,9 @@ public class ELBasicsServlet extends HttpServlet {
 		session.setAttribute("book", "디지털");
 		
 		//생명주기가 가장 김
-		ServletContext ap = request.getServletContext();
-		ap.setAttribute("app", "내가 제일 길다");
+		ServletContext application = request.getServletContext();
+		application.setAttribute("application", "내가 제일 길다");
+		application.setAttribute("movie", "movie보자");
 		request.getRequestDispatcher("/el/elBasics.jsp").forward(request, response);
 	}
 

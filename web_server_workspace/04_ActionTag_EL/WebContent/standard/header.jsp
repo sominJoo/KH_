@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<%-- <jsp:include> 태그안의 <jsp:param>의 name값 --%>
 <title>${param.title}</title>
 <style>
 header, section, footer{
