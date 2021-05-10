@@ -44,7 +44,7 @@
 		<c:otherwise>꽝</c:otherwise>
 	</c:choose>
 	<script>
-	console.log(${rnd});
+		console.log(${rnd});
 	</script>
 
 
