@@ -36,4 +36,14 @@ public class EmpDaoImpl implements EmpDao {
 		return session.selectList("emp.selectDeptList");
 	}
 
+	@Override
+	public Map<String, Object> selectOneEmp(SqlSession session, String empId) {
+		return session.selectOne("emp.selectOneEmp",empId);
+	}
+
+	@Override
+	public int updateEmp(SqlSession session, Map<String, String> param) {
+		return session.selectOne("emp.updateEmp",param);
+	}
+
 }
