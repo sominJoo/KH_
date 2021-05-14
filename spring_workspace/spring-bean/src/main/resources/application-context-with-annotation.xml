@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- 
+		base-package 하위의 클래스들의 어노테이션을 처리함 
+		- @Component : 해당 클래스를 알아서 빈 등록
+		- @Autowired : 의존 주입(DI) 처리(필드, SETTER, 생성자 레벨에서 사용. class x)
+		
+		어노테이션 처리를 위해 베이스 페키지 설정 꼭 필요
+	-->
+	<context:component-scan base-package="com.kh.spring"/>
+
+</beans>

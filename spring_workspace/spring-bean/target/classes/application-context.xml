@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 기본 namespace는 beans -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 
+		bean 등록
+		ID : bean 이름(고유값)
+		class : bean의 타입
+		lazy-init="true" : 미리 생성하지않고 호출이 되었을때 객체를 생성함(default : default)
+		scope="proptotype" : 호출마다 만든다 (default : sington - 하나의 객체로 운영)
+		
+		property[name=remocon] <- setRemocon
+		constructor-arg <- 파라미터 생성자를 이용해서 객체생성(ref 필수)
+	 -->
+	<bean id="LgTv" class="com.kh.spring.tv.model.vo.LgTv" scope="prototype">
+		<!-- <property name="remocon" ref="LgRemocon"/> -->
+		<constructor-arg ref="LgRemocon"/>
+	</bean>
+	
+	
+	<bean id="samsungTv" class="com.kh.spring.tv.model.vo.SamsungTv" lazy-init="true">
+		<constructor-arg ref="SamsungRemocon"/>
+	</bean>
+	
+	
+	<bean id="LgRemocon" class="com.kh.spring.tv.model.vo.LgRemoteControl"></bean>
+	<bean id="SamsungRemocon" class="com.kh.spring.tv.model.vo.SamsungRemoteControl"></bean>
+
+
+</beans>
