@@ -31,7 +31,10 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 			
 			//로그인 후 최종 이동할 url을 session의 next 속성으로 저장
 			String url = request.getRequestURL().toString();	
-			session.setAttribute("next", url);
+			
+			//쿼리스트링 ?no=64
+			String queryString = request.getQueryString();
+			session.setAttribute("next", url+"?"+queryString);
 
 			response.sendRedirect(request.getContextPath()+"/member/memberLogin.do");
 			return false;

@@ -6,10 +6,15 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,11 +26,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.FlashMap;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.kh.spring.demo.controller.DemoController;
 import com.kh.spring.member.model.service.MemberService;
@@ -65,7 +74,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/member")
 @Slf4j
-@SessionAttributes({"loginMember","next"}) //loginmember가 저장된다면 세션에 저장해주세요
+@SessionAttributes({"loginMember", "next"})//loginmember가 저장된다면 세션에 저장해주세요
 public class MemberController {
 	//Spring용 logging 클래스
 	private static final Logger log = LoggerFactory.getLogger(DemoController.class);
@@ -125,14 +134,17 @@ public class MemberController {
 	/**
 	 * 로그인 페이지로 넘어갈때의 referer을 session에 저장해서 다른 페이지에서 로그인시 그 next에 저장한 페이지로 넘김
 	 */
+
+	
 	@GetMapping("/memberLogin.do")
-	public void memberLogin(@RequestHeader(name="Referer", required =false) String referer,  Model model
-							,@SessionAttribute(required = true) String next) {		
-		log.info("referer={}",referer);
-		log.info("next={}",next);
-		if(referer !=null && next == null)		//next 중첩 방지
-			model.addAttribute("next",referer);
-		
+	public void memberLogin(
+				@SessionAttribute(required = false) String next,
+				@RequestHeader(name = "Referer", required = false) String referer, 
+				Model model) {
+		log.info("referer = {}", referer);
+		log.info("next = {}", next);
+		if(next == null && referer != null)
+			model.addAttribute("next", referer); // sessionScope에 저장
 	}
 	
 	
@@ -190,5 +202,105 @@ public class MemberController {
 		mav.setViewName("member/memberDetail");
 		return mav;
 		
+	}
+	
+	@PostMapping("/memberUpdate.do")
+	public ModelAndView memberUpdate(
+			@ModelAttribute Member member, 
+			@ModelAttribute("loginMember") Member loginMember, 	//입력받은 member을 loginMember로 바로 저장해줌
+			ModelAndView mav, 
+			HttpServletRequest request
+			) {
+		log.debug("member ={} " , member);
+		log.debug("loginMember ={} " , loginMember);
+		try {
+			//속성 저장
+			int result = memberService.updateMember(member);
+			
+			//viewName 설정
+//			mav.setViewName("redirect:/member/memberDetail.do");
+			
+			
+			//리다이렉트시 자동 생성되는 queryString 방지(-속성값이 url으로 자동으로 붙는걸 방지)
+			RedirectView view = new RedirectView(request.getContextPath()+"/member/memberDetail.do");
+			view.setExposeModelAttributes(false); 		
+			mav.setView(view);
+			FlashMap flashMap = RequestContextUtils.getOutputFlashMap(request);
+			flashMap.put("msg", "사용자 수정 성공");
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("회원정보 수정 오류");
+			throw e;
+		}
+		return mav;
+	}
+	
+	/**
+	 * spring ajax(json)
+	 * 1. gson - 응답메세지에 json 문자열 직접 출력 (복잡- 사용 x)
+	 * 2. jsonView 빈을 통해 처리하기 : Model에 담긴 데이터를 json으로 변환, 응답에 출력
+	 * 3. @ResponseBody : return된 자바 객체를 json으로 변환, 응답에 출력함.
+	 * 4. ResponseEntity<Map .... (자바객체)>
+	 * jsonView 방식
+	 * 
+	 */
+	
+	@GetMapping("/memberCheckIdDuplicate1.do")
+	public String CheckIdDuplicate1(@RequestParam String id, Model model) {
+		try {
+			Member member = memberService.selectOneMember(id);
+			boolean available = member == null;		//존재 객체 없으면 true 저장
+			
+			//Model 속성에 저장
+			model.addAttribute("available", available);
+			model.addAttribute("id", id);
+		} catch (Exception e) {
+			log.error("중복 체크 오류");
+			throw e;
+		}
+		return "jsonView";
+	}
+	
+	
+	@GetMapping("/memberCheckIdDuplicate2.do")
+	@ResponseBody
+	public Map<String, Object> CheckIdDuplicate2(@RequestParam String id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			Member member = memberService.selectOneMember(id);
+			boolean available = member == null;		//존재 객체 없으면 true 저장
+			
+			
+			//2. Map 저장
+			map.put("available", available);
+			map.put("id", id);
+		} catch (Exception e) {
+			log.error("중복 체크 오류");
+			throw e;
+		}
+		return map;
+	}
+
+	
+	@GetMapping("/memberCheckIdDuplicate3.do")
+	public ResponseEntity<Map<String, Object>> CheckIdDuplicate3(@RequestParam String id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			Member member = memberService.selectOneMember(id);
+			boolean available = member == null;		//존재 객체 없으면 true 저장
+			
+			
+			//2. Map 저장
+			map.put("available", available);
+			map.put("id", id);
+		} catch (Exception e) {
+			log.error("중복 체크 오류");
+			throw e;
+		}
+		return ResponseEntity
+				.ok()
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE)
+				.body(map);
 	}
 }

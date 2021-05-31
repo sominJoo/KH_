@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>es6 - destructuring assignment</title>
+</head>
+<body>
+  <h1>구조분해할당 destructuring assignment</h1>
+  <h2>배열</h2>
+  <button onclick="koo();">실행</button>
+  <script>
+  function koo(){
+    const arr = [1,2,3,4,5];
+    const a = arr[0];
+    const b = arr[1];
+    const c = arr[2];
+    const d = arr[3];
+    const e = arr[4];
+    console.log(a,b,c,d,e);
+  
+    //해당자리의 값이 undefined : 기본값 지정 가능
+    const [k = 11111,f,x,y,z,m = 123] = arr;
+    console.log(k,f,x,y,z,m); // 1 2 3 4 5 undefined
+    
+    //값교환
+    let n = 10, i = 20;
+    [n, i] = [i, n];
+    console.log(n, i);
+  
+    //나머지 파라미터 rest parameter 
+    const [j, l, ...rest] = ['홍길동', '신사임당', '윤봉준', '세종대왕', '유관순'];
+    console.log(j, l, rest);
+  
+    function foo([v, w, ...rest]){
+      console.log("v = ", v);
+      console.log("w = ", w);
+      console.log("rest = ", rest);             //rest =  Array(1)
+    }
+  
+    foo(['x','y','z']);
+  
+    let [,,xoo] = [1,2,3];
+    console.log(xoo); // 3
+  }
+  </script>
+
+  <h2>객체</h2>
+  <button onclick="zoo();"></button>
+  <script>
+      function zoo(){
+            const user = {
+            id: 'honggd',
+            name: '홍길동',
+            items: {
+            weapon: 'k2',
+            car: {
+                name: '소나타',
+                color: 'black'
+            },
+            phone: {
+                number: '01012341234'
+            }
+            },
+            hobby: ['축구', '당구', '볼링']
+      }
+  
+  };
+  const {id, name, hobby, items: {weapon}} = user;
+  console.log(id, name, hobby, weapon);         //honggd 홍길동 Array(3) k2
+  console.log(user.items.phone.number);         //01012341234
+  
+  //할당된 변수명 바꾸기, 기본값
+  const {id: userId, profile='default.jpg'} = user;
+  console.log(userId, profile);                 //honggd default.jpg
+  console(id);                                  //Uncaught TypeError: console is not a 
+
+  </script>
+  
+</body>
+</html>

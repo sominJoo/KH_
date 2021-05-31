@@ -128,4 +128,21 @@
 		where
 			emp_id = #{empId}
 	</update>
+
+
+<!-- 시험 -->
+<select id="findActiveBlogWithTitleLike" resultType="Blog">
+	select
+		* 
+	from
+		blog 
+	<where>
+		<if test="state eq 'ACTIVE' ">
+			<if test="title != null">
+  				title like '%' || #{title} || '%'
+			</if>
+		</if>
+	</where>
+</select>
+
 </mapper>
