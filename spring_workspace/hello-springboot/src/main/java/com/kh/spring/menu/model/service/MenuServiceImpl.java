@@ -1,6 +1,7 @@
 package com.kh.spring.menu.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -17,5 +18,30 @@ public class MenuServiceImpl implements MenuService {
 	@Override
 	public List<Menu> selectMenuList() {
 		return menuDao.selectMenuList();
+	}
+
+	@Override
+	public List<Menu> selectMenuListByType(String type) {
+		return menuDao.selectMenuListByType(type);
+	}
+
+	@Override
+	public List<Menu> selectMenuListByType(Map<String, String> param) {
+		return menuDao.selectMenuListByType(param);
+	}
+
+	@Override
+	public int inputMenu(Menu menu) {
+		return menuDao.inputMenu(menu);
+	}
+
+	@Override
+	public Menu selectOneMenu(int id) {
+		return menuDao.selectOneMenu(id);
+	}
+
+	@Override
+	public int updateMenu(Menu menu) {
+		return menuDao.updateMenu(menu);
 	} 
 }

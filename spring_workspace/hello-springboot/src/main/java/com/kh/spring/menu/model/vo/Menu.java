@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class Menu {
 	private int id;
 	private String restaurant;
-	private String anem;
+	private String name;
 	private int price;
 	private MenuType type;		//kr, ch, jp
 	private String taste;		//mild, hot
