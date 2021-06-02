@@ -3,49 +3,39 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Menu - RestAPI</title>
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-
-<!-- bootstrap js: jquery load 이후에 작성할것.-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
-<!-- bootstrap css -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-
-<!-- 사용자작성 css -->
-<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/style.css" />
-
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+	<jsp:param value="Menu REST-API" name="menu"/>
+</jsp:include>
 <style>
 div.menu-test{width:50%; margin:0 auto; text-align:center;}
 div.result{width:70%; margin:0 auto;}
 </style>
-</head>
-<body>
-<div id="container">
-	<header>
-		<div id="header-container">
-			<h2>Menu - RestAPI</h2>
-		</div>
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="navbar-brand" href="#">
-				<img src="${pageContext.request.contextPath }/resources/images/logo-spring.png" alt="스프링로고" width="50px" />
-			</a>
-		  	<!-- 반응형으로 width 줄어들경우, collapse버튼관련 -->
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-		  	</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				
-			 </div>
-		</nav>
-	</header>
+<script type="text/javascript">
+const menuRestOrigin = "http://localhost:10000";
+const menuRestContextPath = "/springboot";
+const url = menuRestOrigin + menuRestContextPath;
+</script>
+<!--
+SOP : Same Origin Policy(동일 근원 정책)
+	=> Origin : protocol + host + port (ex. http://localhost:10000)
+	- 비동기 요청시 현재 페이지 Origin과 동일 Origin으로만 요청할 수 있게 제한함
+	
+CORS : Policy Cross Origin Resource Sharing 
+	- 타자원을 공유함
+	- 조건 : 응답 header에 Acess-Control-Allow-Origin : 나의 Origin이 설정되어 있을것!	
+	
+Access to XMLHttpRequest at 'http://localhost:10000/springboot/menus' 
+from origin 'http://localhost:9090' 
+has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
 
-	<section id="content">
+
+ Acess-Control-Allow-Origin이 설정이 안되었을때
+ 	=> 우리 서버를 프록시로 이용하여 요청 처리
+ 
+ -->
+
+
+
        	<!-- 1.GET /menus-->
         <div class="menu-test">
             <h4>전체메뉴조회(GET)</h4>
@@ -55,9 +45,11 @@ div.result{width:70%; margin:0 auto;}
         <script>
 			$("#btn-menus").click(() => {
 				$.ajax({
-					url : "${pageContext.request.contextPath}/menus",
+					//url : `\${url}/menus`,	// 타 rest server로 직접 요청
+					url : "${pageContext.request.contextPath}/menu/selectMenuList.do",
 					method: "GET",
 					success(data){
+						console.log(data);
 						displayResultTable("menus-result", data);
 					},
 					error : console.log
@@ -106,7 +98,7 @@ div.result{width:70%; margin:0 auto;}
 
 					//비동기
 					$.ajax({
-						url : `${pageContext.request.contextPath}/menus/\${type}/\${taste}`,			//\${type} : strint template 변수
+						url : `\${url}/menus/\${type}/\${taste}`,			//\${type} : strint template 변수
 						success(data){
 							console.log(data);
 							displayResultTable("menuRecommendation-result", data);
@@ -164,7 +156,7 @@ div.result{width:70%; margin:0 auto;}
 					taste
 			};
 			$.ajax({
-				url : "${pageContext.request.contextPath}/menu",
+				url : `\${url}/menu`,
 				method : "POST",
 				contentType: "application/json; charset=UTF-8",
 				data :JSON.stringify(menu),			//json 문자열로 바뀌어 text로 날라감
@@ -241,7 +233,7 @@ div.result{width:70%; margin:0 auto;}
 				const $taste  = $updateFrm.find("[name=taste]");
 
 				$.ajax({ 
-					url: `${pageContext.request.contextPath}/menu/\${id}`,
+					url: `\${url}/menu/\${id}`,
 					method : "GET",
 					success(data){
 						console.log(data);
@@ -291,7 +283,7 @@ div.result{width:70%; margin:0 auto;}
 
 				
 				$.ajax({ 
-					url : "${pageContext.request.contextPath}/menu?",
+					url :`\${url}/menu?`,
 					method : "PUT",
 					data : JSON.stringify(menu),
 					contentType: "application/json; charset=UTF-8",
@@ -332,7 +324,7 @@ div.result{width:70%; margin:0 auto;}
 			if(!id) return;
 
 			$.ajax({
-				url : `${pageContext.request.contextPath}/menu/\${id}`,
+				url : `\${url}/menu/\${id}`,
 				method : "DELETE",
 				success(data){
 					console.log(data);
@@ -356,42 +348,37 @@ div.result{width:70%; margin:0 auto;}
 		});
 
 	    </script>
-</section>
-	<footer>
-		<p>&lt;Copyright 2017. <strong>KH정보교육원</strong>. All rights reserved.&gt;</p>
-	</footer>
-<script>
-function displayResultTable(id, data){
-	const $selector = $("#"+id);
-	const table_class = $("."+id);
-	if(table_class.length){
-		table_class.remove();
-	}
-	let html = "<table class='table " + id+ "'>"
-	html += "<th>번호</th> <th>음식점</th> <th>메뉴</th> <th>가격</th> <th>타입</th> <th>맛</th>";
-
-	//마이바이티스 session.selectList는 데이터가 없는경우 빈 list를 리턴함
-	if(data.length > 0){
-		$(data).each((index, menu) =>{
-			const {id, restaurant, name, price, type, taste} = menu;
-			html += `<tr> 
-						<td>\${id}</td>
-						<td>\${restaurant}</td>
-						<td>\${name}</td>
-						<td>\${price}</td>
-						<td>\${type}</td>
-						<td><span class="badge badge-\${taste == 'hot' ? 'danger' : 'warning'}">\${taste}</span></td>
-					</tr>`;
-		});
-		html += "</table>";
-
-		$selector.append(html);
-	}else{
-
-	}
-
-}
-</script>
+		<script>
+		function displayResultTable(id, data){
+			const $selector = $("#"+id);
+			const table_class = $("."+id);
+			if(table_class.length){
+				table_class.remove();
+			}
+			let html = "<table class='table " + id+ "'>"
+			html += "<th>번호</th> <th>음식점</th> <th>메뉴</th> <th>가격</th> <th>타입</th> <th>맛</th>";
+		
+			//마이바이티스 session.selectList는 데이터가 없는경우 빈 list를 리턴함
+			if(data.length > 0){
+				$(data).each((index, menu) =>{
+					const {id, restaurant, name, price, type, taste} = menu;
+					html += `<tr> 
+								<td>\${id}</td>
+								<td>\${restaurant}</td>
+								<td>\${name}</td>
+								<td>\${price}</td>
+								<td>\${type}</td>
+								<td><span class="badge badge-\${taste == 'hot' ? 'danger' : 'warning'}">\${taste}</span></td>
+							</tr>`;
+				});
+				html += "</table>";
+		
+				$selector.append(html);
+			}else{
+		
+			}
+		
+		}
+		</script>
 </div>
-</body>
-</html>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

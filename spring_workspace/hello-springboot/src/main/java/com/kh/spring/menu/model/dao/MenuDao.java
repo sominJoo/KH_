@@ -15,8 +15,10 @@ public interface MenuDao {
 
 	int inputMenu(Menu menu);
 
-	Menu selectOneMenu(int id);
+	Menu selectOneMenu(String id);
 
 	int updateMenu(Menu menu);
+
+	int deleteMenu(String id);
 
 }
